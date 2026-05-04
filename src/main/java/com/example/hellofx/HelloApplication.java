@@ -27,10 +27,13 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        initUI(stage);
+        Scene scene = createScene(500, 500);
+        stage.setTitle("AnimationTimer");
+        stage.setScene(scene);
+        stage.show();
     }
 
-    private void initUI(Stage stage) {
+    public Scene createScene(double width, double height) {
         Label scoreLabel;
         var root = new StackPane();
 
@@ -49,11 +52,7 @@ public class HelloApplication extends Application {
         AnimationTimer timer = new MyTimer();
         timer.start();
 
-        var scene = new Scene(root, 500, 500);
-
-        stage.setTitle("AnimationTimer");
-        stage.setScene(scene);
-        stage.show();
+        return new Scene(root, width, height);
     }
 
     private class MyTimer extends AnimationTimer {
