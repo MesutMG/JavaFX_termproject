@@ -51,6 +51,36 @@ public class SelectLevel extends Application {
         styleMenuButton(levelThreeButton);
         styleMenuButton(backButton);
 
+        levelOneButton.setOnAction(event -> {
+            LevelOneScreen levelOneScreen = new LevelOneScreen();
+            double sceneWidth = stage.getScene().getWidth();
+            double sceneHeight = stage.getScene().getHeight();
+            Scene firstLevelScene = levelOneScreen.createScene(sceneWidth, sceneHeight);
+            stage.setTitle("Level 1");
+            stage.setScene(firstLevelScene);
+            //Implement LevelOneScreen Class;
+        });
+
+        levelTwoButton.setOnAction(event -> {
+            LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
+            double sceneWidth = stage.getScene().getWidth();
+            double sceneHeight = stage.getScene().getHeight();
+            Scene secondLevelScene = levelTwoScreen.createScene(sceneWidth, sceneHeight);
+            stage.setTitle("Level 2");
+            stage.setScene(secondLevelScene);
+            //Implement LevelTwoScreen Class;
+        });
+
+        levelThreeButton.setOnAction(event -> {
+            LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
+            double sceneWidth = stage.getScene().getWidth();
+            double sceneHeight = stage.getScene().getHeight();
+            Scene thirdLevelScene = levelThreeScreen.createScene(sceneWidth, sceneHeight);
+            stage.setTitle("Level 3");
+            stage.setScene(thirdLevelScene);
+            //Implement LevelThreeScreen Class;
+        });
+
         backButton.setOnAction(event -> {
             TitleScreen titleScreen = new TitleScreen();
             double sceneWidth = stage.getScene().getWidth();

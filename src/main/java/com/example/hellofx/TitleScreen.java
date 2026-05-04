@@ -59,7 +59,9 @@ public class TitleScreen extends Application {
 	}
 
 	private void switchToGame(Stage stage) {
-		HelloApplication game = new HelloApplication();
+
+		//hangi levelde kaldigini okuyup o levele yonlendiren fonksiyon yazilacak
+		LevelOneScreen game = new LevelOneScreen();
 		double width = stage.getWidth();
 		double height = stage.getHeight();
 		Scene gameScene = game.createScene(width, height);
