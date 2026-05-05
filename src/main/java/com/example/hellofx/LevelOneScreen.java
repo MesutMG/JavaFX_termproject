@@ -43,8 +43,7 @@ public class LevelOneScreen extends Application {
     public Scene createScene(double width, double height) {
         var root = new StackPane();
 
-        int hBarPercentage = 100;
-        HealthBar hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY, hBarPercentage);
+        HealthBar hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
 
         AnimationTimer timer = new MyTimer();
         timer.start();

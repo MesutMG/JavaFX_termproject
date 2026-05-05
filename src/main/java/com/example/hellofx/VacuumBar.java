@@ -1,14 +1,19 @@
 package com.example.hellofx;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Label;
 
 public class VacuumBar {
     private double posX;
     private double posY;
     private double barPercentage;
+    private Rectangle rectangle = new Rectangle(30, 200, Color.RED);
+    private Label vacuumLabel = new Label("VACUUM: ");
 
-    public VacuumBar(double posX, double posY, double barPercentage) {
+    public VacuumBar (double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
-        this.barPercentage = barPercentage;
+        this.barPercentage = 100;
     }
 
     public double getPosX() {
@@ -33,10 +38,6 @@ public class VacuumBar {
 
     public void setBarPercentage(double barPercentage) {
         this.barPercentage = barPercentage;
+        this.rectangle.setHeight(200*barPercentage);
     }
-
-    public double barHeight(double size){
-        return size*this.getBarPercentage();
-    }
-
 }

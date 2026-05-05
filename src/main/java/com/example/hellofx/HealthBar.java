@@ -1,14 +1,19 @@
 package com.example.hellofx;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Label;
 
 public class HealthBar {
     private double posX;
     private double posY;
     private double barPercentage;
+    private Rectangle rectangle = new Rectangle(30, 200, Color.RED);
+    private Label healthLabel = new Label("HEALTH: ");
 
-    public HealthBar(double posX, double posY, double barPercentage) {
+    public HealthBar(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
-        this.barPercentage = barPercentage;
+        this.barPercentage = 100;
     }
 
     public double getPosX() {
@@ -33,9 +38,6 @@ public class HealthBar {
 
     public void setBarPercentage(double barPercentage) {
         this.barPercentage = barPercentage;
-    }
-
-    public double barHeight(double size){
-        return size*this.getBarPercentage();
+        this.rectangle.setHeight(200*barPercentage);
     }
 }
