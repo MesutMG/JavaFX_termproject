@@ -29,6 +29,8 @@ public class LevelOneScreen extends Application {
     private int totalSecond = 0;
     private static final double DEFAULT_WIDTH = 1280;
     private static final double DEFAULT_HEIGHT = 720;
+    private static final int HEALTHBAR_POSX = 1100;
+    private static final int HEALTHBAR_POSY = 50;
 
     @Override
     public void start(Stage stage) {
@@ -41,7 +43,8 @@ public class LevelOneScreen extends Application {
     public Scene createScene(double width, double height) {
         var root = new StackPane();
 
-        //Level 1
+        int hBarPercentage = 100;
+        HealthBar hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY, hBarPercentage);
 
         AnimationTimer timer = new MyTimer();
         timer.start();
