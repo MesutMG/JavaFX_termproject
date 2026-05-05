@@ -16,7 +16,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
+import javafx.scene.Group;
 import java.time.LocalTime;
 
 public class LevelOneScreen extends Application {
@@ -27,10 +27,12 @@ public class LevelOneScreen extends Application {
     int oldSecond = LocalTime.now().getSecond();
     private int totalMinute = 3;
     private int totalSecond = 0;
-    private static final double DEFAULT_WIDTH = 1280;
-    private static final double DEFAULT_HEIGHT = 720;
-    private static final int HEALTHBAR_POSX = 1100;
-    private static final int HEALTHBAR_POSY = 50;
+    private static final double DEFAULT_WIDTH   = 1280;
+    private static final double DEFAULT_HEIGHT  = 720;
+    private static final int    HEALTHBAR_POSX  = 1100;
+    private static final int    HEALTHBAR_POSY  = 50;
+    private static final int    VACUUMBAR_POSX  = 180;
+    private static final int    VACUUMBAR_POSY  = 50;
 
     @Override
     public void start(Stage stage) {
@@ -41,13 +43,18 @@ public class LevelOneScreen extends Application {
     }
 
     public Scene createScene(double width, double height) {
-        var root = new StackPane();
+        StackPane   root    = new StackPane();
+        Pane        panePane   = new Pane();
+        Group       barsPane   = new Group();
 
         HealthBar hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
+        VacuumBar vBar = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
+        barsPane.getChildren().addAll(hBar.getRectangle(), vBar.getRectangle());
 
         AnimationTimer timer = new MyTimer();
         timer.start();
 
+        root.getChildren().addAll(panePane,barsPane);
         return new Scene(root, width, height);
     }
 

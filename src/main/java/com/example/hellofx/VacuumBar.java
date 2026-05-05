@@ -7,13 +7,15 @@ public class VacuumBar {
     private double posX;
     private double posY;
     private double barPercentage;
-    private Rectangle rectangle = new Rectangle(30, 200, Color.RED);
-    private Label vacuumLabel = new Label("VACUUM: ");
+    private Rectangle rectangle;
+    private Label healthLabel;
 
-    public VacuumBar (double posX, double posY) {
+    public VacuumBar(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
         this.barPercentage = 100;
+        this.setRectangle(new Rectangle(30, 200, Color.RED));
+        this.setVacuumLabel(new Label("HEALTH: "));
     }
 
     public double getPosX() {
@@ -34,6 +36,22 @@ public class VacuumBar {
 
     public double getBarPercentage() {
         return barPercentage;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public Label getVacuumLabel() {
+        return healthLabel;
+    }
+
+    public void setVacuumLabel(Label healthLabel) {
+        this.healthLabel = healthLabel;
     }
 
     public void setBarPercentage(double barPercentage) {

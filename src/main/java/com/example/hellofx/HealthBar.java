@@ -7,13 +7,15 @@ public class HealthBar {
     private double posX;
     private double posY;
     private double barPercentage;
-    private Rectangle rectangle = new Rectangle(30, 200, Color.RED);
-    private Label healthLabel = new Label("HEALTH: ");
+    private Rectangle rectangle;
+    private Label healthLabel;
 
     public HealthBar(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
         this.barPercentage = 100;
+        this.setRectangle(new Rectangle(30, 200, Color.RED));
+        this.setHealthLabel(new Label("HEALTH: "));
     }
 
     public double getPosX() {
@@ -34,6 +36,22 @@ public class HealthBar {
 
     public double getBarPercentage() {
         return barPercentage;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public Label getHealthLabel() {
+        return healthLabel;
+    }
+
+    public void setHealthLabel(Label healthLabel) {
+        this.healthLabel = healthLabel;
     }
 
     public void setBarPercentage(double barPercentage) {
