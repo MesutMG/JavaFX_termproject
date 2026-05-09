@@ -38,6 +38,7 @@ public class LevelOneScreen extends Application {
     private HealthBar hBar;
     private VacuumBar vBar;
     private Character player;
+    private Enemy1 enemy1;
     private boolean goUp, goDown, goLeft, goRight, vacuumState;
     private final int PLAYER_SPEED = 5;
 
@@ -64,6 +65,7 @@ public class LevelOneScreen extends Application {
         );
 
         player= new Character(width/2, height/2);
+        enemy1= new Enemy1(100,100); // FOR TESTING PURPOSES ------------------------------------------
         hBar  = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
         vBar  = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
 
@@ -71,13 +73,15 @@ public class LevelOneScreen extends Application {
         timeRemainingLabel.setFont(Font.font(24));
         scoreLabel.setFont(Font.font(24));
 
-        VBox hudTop = new VBox(15); //15 bosluk
+        VBox hudTop = new VBox(15);
         hudTop.setLayoutX((DEFAULT_WIDTH / 2) - 50);
         hudTop.setLayoutY(15);
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
         root.setBackground(new Background(bgImage));
-        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle(), player.getTriangle(), player.getCircle());
+        root.getChildren().addAll(enemy1.getRectangle(), enemy1.getCircle());
+        root.getChildren().addAll(player.getTriangle(), player.getCircle());
+        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle());
 
         Scene scene = new Scene(root, width, height);
 
@@ -122,6 +126,8 @@ public class LevelOneScreen extends Application {
             handlePlayerMovement();
 
             handleVacuum();
+
+            handleHealth();
         }
 
 
@@ -178,6 +184,16 @@ public class LevelOneScreen extends Application {
             player.setVacuumPerc(player.getVacuumPerc() - 0.5);
             vBar.setBarPercentage(player.getVacuumPerc());
         }
+    }
+
+    private void handleHealth(){
+
+        //-----------------------
+        //COLLISION DETECT-------
+        //-----------------------
+
+        player.setHealth(player.getHealth() - 5);
+        hBar.setBarPercentage(player.getHealth() / 100);
     }
 }
 

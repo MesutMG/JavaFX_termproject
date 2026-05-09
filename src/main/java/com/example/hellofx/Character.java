@@ -28,6 +28,7 @@ public class Character {
         Circle circle = new Circle(CIRCLE_RADIUS, Color.ORANGE);
         circle.setCenterX(posX);
         circle.setCenterY(posY);
+        circle.setStroke(Color.BLACK);
         this.setCircle(circle);
 
         Polygon triangle = new Polygon();
@@ -36,8 +37,9 @@ public class Character {
                 posX + 75, posY - 30,
                 posX + 75, posY + 30
         );
-        triangle.setFill(Color.LIGHTBLUE);
-        triangle.setStroke(Color.BLUE);
+        triangle.setFill(Color.RED);
+        triangle.setStroke(Color.WHITE);
+        triangle.setOpacity(0.7);
         this.setTriangle(triangle);
 
     }
