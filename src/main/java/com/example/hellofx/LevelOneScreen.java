@@ -35,6 +35,9 @@ public class LevelOneScreen extends Application {
     private static final int    HEALTHBAR_POSY  = 160; //defaultheight/2 - 200
     private static final int    VACUUMBAR_POSX  = 30;
     private static final int    VACUUMBAR_POSY  = 160; //defaultheight/2 - 200
+    private Character player;
+    private boolean goUp, goDown, goLeft, goRight;
+    private final int PLAYER_SPEED = 5;
 
     @Override
     public void start(Stage stage) {
@@ -58,13 +61,13 @@ public class LevelOneScreen extends Application {
                 //widthasPercentage, heigthaspercentage, cropping engelleme, scale yardimi
         );
 
-        HealthBar hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
-        VacuumBar vBar = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
-
-        scoreLabel.setFont(Font.font(24));
+        player= new Character(width/2, height/2);
+        HealthBar hBar  = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
+        VacuumBar vBar  = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
 
         timeRemainingLabel = new Label("Time: " + localDeviceMinute + "." + localDeviceSecond);
         timeRemainingLabel.setFont(Font.font(24));
+        scoreLabel.setFont(Font.font(24));
 
         VBox hudTop = new VBox(15); //15 bosluk
         hudTop.setLayoutX((DEFAULT_WIDTH / 2) - 50);
@@ -72,12 +75,32 @@ public class LevelOneScreen extends Application {
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
         root.setBackground(new Background(bgImage));
-        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle());
+        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle(), player.getCircle());
+
+        Scene scene = new Scene(root, width, height);
+
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case W: goUp    = true; break;
+                case S: goDown  = true; break;
+                case A: goLeft  = true; break;
+                case D: goRight = true; break;
+            }
+        });
+
+        scene.setOnKeyReleased(event -> {
+            switch (event.getCode()) {
+                case W: goUp    = false; break;
+                case S: goDown  = false; break;
+                case A: goLeft  = false; break;
+                case D: goRight = false; break;
+            }
+        });
 
         AnimationTimer timer = new MyTimer();
         timer.start();
 
-        return new Scene(root, width, height);
+        return scene;
     }
 
     private class MyTimer extends AnimationTimer {
@@ -91,6 +114,8 @@ public class LevelOneScreen extends Application {
 
             //Level 1
             timeRemainingLabelHandler();
+
+            handlePlayerMovement();
         }
 
 
@@ -118,4 +143,22 @@ public class LevelOneScreen extends Application {
         oldSecond = localDeviceSecond;
     }
 
+    private void handlePlayerMovement() {
+        int moveX = 0;
+        int moveY = 0;
+
+        if (goUp)   { moveY -= PLAYER_SPEED;}
+        if (goDown) { moveY += PLAYER_SPEED;}
+        if (goLeft) { moveX -= PLAYER_SPEED;}
+        if (goRight){ moveX += PLAYER_SPEED;}
+
+        if (moveX != 0 || moveY != 0) {
+            player.setPosX(player.getPosX() + moveX);
+            player.setPosY(player.getPosY() + moveY);
+
+            player.getCircle().setCenterX(player.getPosX());
+            player.getCircle().setCenterY(player.getPosY());
+        }
+    }
 }
+
