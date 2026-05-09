@@ -61,6 +61,6 @@ public class VacuumBar {
 
     public void setBarPercentage(double barPercentage) {
         this.barPercentage = barPercentage;
-        this.rectangle.setHeight(200*barPercentage);
+        this.rectangle.setHeight(200*barPercentage / 100);
     }
 }
