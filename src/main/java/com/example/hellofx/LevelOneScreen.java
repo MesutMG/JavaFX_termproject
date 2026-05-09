@@ -47,6 +47,16 @@ public class LevelOneScreen extends Application {
     public Scene createScene(double width, double height) {
         Label       scoreLabel = new Label("Score: " + scoreText);
         Pane        root       = new Pane();
+        Image       bg = new Image("file:img/bg.jpg");
+
+        BackgroundImage bgImage = new BackgroundImage(
+                bg,
+                BackgroundRepeat.NO_REPEAT, //otherwise tiling yapiyor
+                BackgroundRepeat.NO_REPEAT, //otherwise tiling yapiyor
+                BackgroundPosition.CENTER,
+                new BackgroundSize(width, height, false, false, false, true)
+                //widthasPercentage, heigthaspercentage, cropping engelleme, scale yardimi
+        );
 
         HealthBar hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
         VacuumBar vBar = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
@@ -61,8 +71,8 @@ public class LevelOneScreen extends Application {
         hudTop.setLayoutY(15);
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
+        root.setBackground(new Background(bgImage));
         root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle());
-
 
         AnimationTimer timer = new MyTimer();
         timer.start();
