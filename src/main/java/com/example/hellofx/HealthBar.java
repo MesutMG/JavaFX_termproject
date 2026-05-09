@@ -63,6 +63,11 @@ public class HealthBar {
 
     public void setBarPercentage(double barPercentage) {
         this.barPercentage = barPercentage;
-        this.rectangle.setHeight(BAR_HEIGHT*barPercentage / 100);
+
+        double newHeight = BAR_HEIGHT * (barPercentage / 100.0);
+        this.rectangle.setHeight(newHeight);
+
+        double emptySpace = BAR_HEIGHT - newHeight;
+        this.rectangle.setY(this.posY + emptySpace);
     }
 }
