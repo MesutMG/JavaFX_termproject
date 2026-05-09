@@ -14,8 +14,13 @@ public class VacuumBar {
         this.posX = posX;
         this.posY = posY;
         this.barPercentage = 100;
-        this.setRectangle(new Rectangle(30, 200, Color.RED));
-        this.setVacuumLabel(new Label("HEALTH: "));
+
+        Rectangle rect = new Rectangle(50, 400, Color.RED);
+        rect.setX(posX);
+        rect.setY(posY);
+
+        this.setRectangle(rect);
+        this.setVacuumLabel(new Label("VACUUM: "));
     }
 
     public double getPosX() {

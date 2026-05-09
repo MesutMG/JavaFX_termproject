@@ -14,7 +14,12 @@ public class HealthBar {
         this.posX = posX;
         this.posY = posY;
         this.barPercentage = 100;
-        this.setRectangle(new Rectangle(30, 200, Color.RED));
+
+        Rectangle rect = new Rectangle(50, 400, Color.RED);
+        rect.setX(posX);
+        rect.setY(posY);
+
+        this.setRectangle(rect);
         this.setHealthLabel(new Label("HEALTH: "));
     }
 
