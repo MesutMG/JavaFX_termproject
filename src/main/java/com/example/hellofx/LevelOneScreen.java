@@ -25,6 +25,8 @@ public class LevelOneScreen extends Application {
     private Label timeRemainingLabel;
     int oldMinute = LocalTime.now().getMinute();
     int oldSecond = LocalTime.now().getSecond();
+    int localDeviceMinute;
+    int localDeviceSecond;
     private int totalMinute = 3;
     private int totalSecond = 0;
     private static final double DEFAULT_WIDTH   = 1280;
@@ -43,7 +45,8 @@ public class LevelOneScreen extends Application {
     }
 
     public Scene createScene(double width, double height) {
-        StackPane   root    = new StackPane();
+        Label       scoreLabel = new Label("Score: " + scoreText);
+        StackPane   root       = new StackPane();
         Pane        panePane   = new Pane();
         Group       barsPane   = new Group();
 
@@ -51,10 +54,20 @@ public class LevelOneScreen extends Application {
         VacuumBar vBar = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
         barsPane.getChildren().addAll(hBar.getRectangle(), vBar.getRectangle());
 
+        scoreLabel.setFont(Font.font(24));
+
+        timeRemainingLabel = new Label("Time: " + localDeviceMinute + "." + localDeviceSecond);
+        timeRemainingLabel.setFont(Font.font(24));
+
+        VBox hudTop = new VBox(15); //15 bosluk
+        hudTop.setAlignment(Pos.TOP_CENTER);
+        hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
+
+        root.getChildren().addAll(panePane,barsPane,hudTop);
+
         AnimationTimer timer = new MyTimer();
         timer.start();
 
-        root.getChildren().addAll(panePane,barsPane);
         return new Scene(root, width, height);
     }
 
@@ -75,10 +88,8 @@ public class LevelOneScreen extends Application {
     }
 
     private void timeRemainingLabelHandler() {
-
-        int localDeviceMinute = LocalTime.now().getMinute();
-        int localDeviceSecond = LocalTime.now().getSecond();
-
+        localDeviceMinute = LocalTime.now().getMinute();
+        localDeviceSecond = LocalTime.now().getSecond();
         if (localDeviceSecond != oldSecond) {
             if (totalSecond == 0) {
                 if (totalMinute == 0) {

@@ -58,7 +58,6 @@ public class SelectLevel extends Application {
             Scene firstLevelScene = levelOneScreen.createScene(sceneWidth, sceneHeight);
             stage.setTitle("Level 1");
             stage.setScene(firstLevelScene);
-            //Implement LevelOneScreen Class;
         });
 
         levelTwoButton.setOnAction(event -> {
@@ -68,7 +67,6 @@ public class SelectLevel extends Application {
             Scene secondLevelScene = levelTwoScreen.createScene(sceneWidth, sceneHeight);
             stage.setTitle("Level 2");
             stage.setScene(secondLevelScene);
-            //Implement LevelTwoScreen Class;
         });
 
         levelThreeButton.setOnAction(event -> {
@@ -78,7 +76,6 @@ public class SelectLevel extends Application {
             Scene thirdLevelScene = levelThreeScreen.createScene(sceneWidth, sceneHeight);
             stage.setTitle("Level 3");
             stage.setScene(thirdLevelScene);
-            //Implement LevelThreeScreen Class;
         });
 
         backButton.setOnAction(event -> {
