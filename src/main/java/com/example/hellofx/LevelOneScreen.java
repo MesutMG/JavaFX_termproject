@@ -41,7 +41,7 @@ public class LevelOneScreen extends Application {
     private Enemy1 enemy1;
     private boolean goUp, goDown, goLeft, goRight, vacuumState;
     private final int PLAYER_SPEED = 5;
-
+    private long lastDamageTime = 0;
     @Override
     public void start(Stage stage) {
         Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -186,14 +186,22 @@ public class LevelOneScreen extends Application {
         }
     }
 
-    private void handleHealth(){
+    private void handleHealth() {
+        long currentTime = System.nanoTime();
 
-        //-----------------------
-        //COLLISION DETECT-------
-        //-----------------------
-
-        player.setHealth(player.getHealth() - 5);
-        hBar.setBarPercentage(player.getHealth() / 100);
+        if (player.getCircle().getBoundsInParent().intersects(enemy1.getCircle().getBoundsInParent())) {
+            if (currentTime - lastDamageTime >= 1000000000L) {
+                player.setHealth(player.getHealth() - 5);
+                
+                if (player.getHealth() < 0) {
+                    player.setHealth(0);
+                }
+                hBar.setBarPercentage(player.getHealth());
+            
+                // Reset the damage timer
+                lastDamageTime = currentTime;
+            }
+        }
     }
 }
 
