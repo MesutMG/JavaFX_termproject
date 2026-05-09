@@ -8,16 +8,18 @@ public class Character {
     private double  posX;
     private double  posY;
     private int     score;
+    private double  vacuumPerc;
     private boolean isAlive;
     private Circle  circle;
     private final int CIRCLE_RADIUS = 20;
 
     Character(double posX, double posY){
-        this.health = 100;
-        this.posX   = posX;
-        this.posY   = posY;
-        this.score  = 0;
-        this.isAlive= true;
+        this.health     = 100;
+        this.posX       = posX;
+        this.posY       = posY;
+        this.score      = 0;
+        this.isAlive    = true;
+        this.vacuumPerc = 100;
 
         Circle circle = new Circle(CIRCLE_RADIUS, Color.ORANGE);
         circle.setCenterX(posX);
@@ -64,6 +66,14 @@ public class Character {
 
     public void setCircle(Circle circle) {
         this.circle = circle;
+    }
+
+    public double getVacuumPerc() {
+        return vacuumPerc;
+    }
+
+    public void setVacuumPerc(double vacuumPerc) {
+        this.vacuumPerc = vacuumPerc;
     }
 
     public boolean isAlive() {

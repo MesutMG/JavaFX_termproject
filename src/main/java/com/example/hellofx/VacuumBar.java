@@ -9,13 +9,15 @@ public class VacuumBar {
     private double barPercentage;
     private Rectangle rectangle;
     private Label healthLabel;
+    private final double BAR_HEIGHT = 400;
+    private final double BAR_WIDTH  = 50;
 
     public VacuumBar(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
         this.barPercentage = 100;
 
-        Rectangle rect = new Rectangle(50, 400, Color.RED);
+        Rectangle rect = new Rectangle(BAR_WIDTH, BAR_HEIGHT, Color.RED);
         rect.setX(posX);
         rect.setY(posY);
 
@@ -61,6 +63,6 @@ public class VacuumBar {
 
     public void setBarPercentage(double barPercentage) {
         this.barPercentage = barPercentage;
-        this.rectangle.setHeight(200*barPercentage / 100);
+        this.rectangle.setHeight(BAR_HEIGHT*barPercentage / 100);
     }
 }
