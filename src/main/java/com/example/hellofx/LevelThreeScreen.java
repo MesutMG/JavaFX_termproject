@@ -35,8 +35,10 @@ public class LevelThreeScreen extends Application {
     private static final int    HEALTHBAR_POSY  = 160; //defaultheight/2 - 200
     private static final int    VACUUMBAR_POSX  = 30;
     private static final int    VACUUMBAR_POSY  = 160; //defaultheight/2 - 200
+    private HealthBar hBar;
+    private VacuumBar vBar;
     private Character player;
-    private boolean goUp, goDown, goLeft, goRight;
+    private boolean goUp, goDown, goLeft, goRight, vacuumState;
     private final int PLAYER_SPEED = 5;
 
     @Override
@@ -62,8 +64,8 @@ public class LevelThreeScreen extends Application {
         );
 
         player= new Character(width/2, height/2);
-        HealthBar hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
-        VacuumBar vBar = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
+        hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
+        vBar = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
 
         scoreLabel.setFont(Font.font(24));
 
@@ -76,25 +78,27 @@ public class LevelThreeScreen extends Application {
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
         root.setBackground(new Background(bgImage));
-        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle(), player.getCircle());
+        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle(), player.getTriangle(), player.getCircle());
 
         Scene scene = new Scene(root, width, height);
 
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case W: goUp    = true; break;
-                case S: goDown  = true; break;
-                case A: goLeft  = true; break;
-                case D: goRight = true; break;
+                case W: goUp        = true; break;
+                case S: goDown      = true; break;
+                case A: goLeft      = true; break;
+                case D: goRight     = true; break;
+                case V: vacuumState = true; break;
             }
         });
 
         scene.setOnKeyReleased(event -> {
             switch (event.getCode()) {
-                case W: goUp    = false; break;
-                case S: goDown  = false; break;
-                case A: goLeft  = false; break;
-                case D: goRight = false; break;
+                case W: goUp        = false; break;
+                case S: goDown      = false; break;
+                case A: goLeft      = false; break;
+                case D: goRight     = false; break;
+                case V: vacuumState = false; break;
             }
         });
 
@@ -117,6 +121,8 @@ public class LevelThreeScreen extends Application {
             timeRemainingLabelHandler();
 
             handlePlayerMovement();
+
+            handleVacuum();
         }
 
 
@@ -157,8 +163,21 @@ public class LevelThreeScreen extends Application {
             player.setPosX(player.getPosX() + moveX);
             player.setPosY(player.getPosY() + moveY);
 
+            player.getTriangle().getPoints().setAll(
+                    player.getPosX(), player.getPosY(),
+                    player.getPosX() + 75, player.getPosY() - 30,
+                    player.getPosX() + 75, player.getPosY() + 30
+            );
+
             player.getCircle().setCenterX(player.getPosX());
             player.getCircle().setCenterY(player.getPosY());
+        }
+    }
+
+    private void handleVacuum() {
+        if (vacuumState) {
+            player.setVacuumPerc(player.getVacuumPerc() - 0.5);
+            vBar.setBarPercentage(player.getVacuumPerc());
         }
     }
 

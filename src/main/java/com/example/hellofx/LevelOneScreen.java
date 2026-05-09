@@ -77,7 +77,7 @@ public class LevelOneScreen extends Application {
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
         root.setBackground(new Background(bgImage));
-        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle(), player.getCircle());
+        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle(), player.getTriangle(), player.getCircle());
 
         Scene scene = new Scene(root, width, height);
 
@@ -161,6 +161,12 @@ public class LevelOneScreen extends Application {
         if (moveX != 0 || moveY != 0) {
             player.setPosX(player.getPosX() + moveX);
             player.setPosY(player.getPosY() + moveY);
+
+            player.getTriangle().getPoints().setAll(
+                    player.getPosX(), player.getPosY(),
+                    player.getPosX() + 75, player.getPosY() - 30,
+                    player.getPosX() + 75, player.getPosY() + 30
+            );
 
             player.getCircle().setCenterX(player.getPosX());
             player.getCircle().setCenterY(player.getPosY());

@@ -2,6 +2,7 @@ package com.example.hellofx;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Polygon;
 
 public class Character {
     private double  health;
@@ -9,8 +10,10 @@ public class Character {
     private double  posY;
     private int     score;
     private double  vacuumPerc;
+    private double  rotAngle;
     private boolean isAlive;
     private Circle  circle;
+    private Polygon triangle;
     private final int CIRCLE_RADIUS = 20;
 
     Character(double posX, double posY){
@@ -20,12 +23,23 @@ public class Character {
         this.score      = 0;
         this.isAlive    = true;
         this.vacuumPerc = 100;
+        this.rotAngle   = 0;
 
         Circle circle = new Circle(CIRCLE_RADIUS, Color.ORANGE);
         circle.setCenterX(posX);
         circle.setCenterY(posY);
-
         this.setCircle(circle);
+
+        Polygon triangle = new Polygon();
+        triangle.getPoints().addAll(
+                posX, posY,
+                posX + 75, posY - 30,
+                posX + 75, posY + 30
+        );
+        triangle.setFill(Color.LIGHTBLUE);
+        triangle.setStroke(Color.BLUE);
+        this.setTriangle(triangle);
+
     }
 
     public double getHealth() {
@@ -66,6 +80,22 @@ public class Character {
 
     public void setCircle(Circle circle) {
         this.circle = circle;
+    }
+
+    public Polygon getTriangle() {
+        return triangle;
+    }
+
+    public void setTriangle(Polygon triangle) {
+        this.triangle = triangle;
+    }
+
+    public double getRotAngle() {
+        return rotAngle;
+    }
+
+    public void setRotAngle(double rotAngle) {
+        this.rotAngle = rotAngle;
     }
 
     public double getVacuumPerc() {
