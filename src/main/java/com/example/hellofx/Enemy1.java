@@ -1,4 +1,5 @@
 package com.example.hellofx;
+import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -88,4 +89,9 @@ public class Enemy1 {
     public void setAlive(boolean alive) {
         isAlive = alive;
     }
+
+    public Node[] draw() {
+        return new Node[]{this.rectangle, this.circle};
+    }
+
 }

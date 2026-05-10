@@ -39,6 +39,7 @@ public class LevelOneScreen extends Application {
     private VacuumBar vBar;
     private Character player;
     private Enemy1 enemy1;
+    private Enemy2 enemy2;
     private boolean goUp, goDown, goLeft, goRight, vacuumState;
     private final int PLAYER_SPEED = 5;
     private long lastDamageTime = 0;
@@ -66,6 +67,7 @@ public class LevelOneScreen extends Application {
 
         player= new Character(width/2, height/2);
         enemy1= new Enemy1(100,100); // FOR TESTING PURPOSES ------------------------------------------
+        enemy2= new Enemy2(300,300); // FOR TESTING PURPOSES ------------------------------------------
         hBar  = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
         vBar  = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
 
@@ -79,7 +81,8 @@ public class LevelOneScreen extends Application {
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
         root.setBackground(new Background(bgImage));
-        root.getChildren().addAll(enemy1.getRectangle(), enemy1.getCircle());
+        root.getChildren().addAll(enemy1.draw());
+        root.getChildren().addAll(enemy2.draw());
         root.getChildren().addAll(player.getTriangle(), player.getCircle());
         root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle());
 
@@ -192,7 +195,7 @@ public class LevelOneScreen extends Application {
         if (player.getCircle().getBoundsInParent().intersects(enemy1.getCircle().getBoundsInParent())) {
             if (currentTime - lastDamageTime >= 1000000000L) {
                 player.setHealth(player.getHealth() - 5);
-                
+
                 if (player.getHealth() < 0) {
                     player.setHealth(0);
                 }
