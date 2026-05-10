@@ -42,8 +42,8 @@ public class Enemy3 {
         this.setCircleEye2(circleEye2);
 
         rays = new Line[6];
-        double innerRadius = 25;
-        double outerRadius = 35;
+        double innerRadius = 30;
+        double outerRadius = 40;
 
         for (int i = 0; i < 6; i++) {
             double angle = i * (Math.PI / 3); //60 derece arayla
@@ -125,7 +125,7 @@ public class Enemy3 {
     }
 
     public void spinRays() {
-        this.raysGroup.setRotate(this.raysGroup.getRotate() + 2); //2 derece donduruyor
+        this.raysGroup.setRotate(this.raysGroup.getRotate() + 1); //1 derece donduruyor
     }
 
     public Node[] draw() {

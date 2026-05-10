@@ -134,6 +134,8 @@ public class LevelOneScreen extends Application {
             handleVacuum();
 
             handleHealth();
+
+            enemy3.spinRays();
         }
 
 
