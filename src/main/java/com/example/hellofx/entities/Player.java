@@ -13,7 +13,7 @@ public class Player extends Entity {
     private Polygon triangle;
     private final int CIRCLE_RADIUS = 20;
 
-    public Player(double posX, double posY){
+    public Player(double posX, double posY) {
         super(posX, posY);
         this.maxHealth  = 100;
         this.health     = 100;

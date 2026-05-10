@@ -13,7 +13,7 @@ public class Ripper extends Enemy {
     private Polygon triangle1;
     private Polygon triangle2;
 
-    public Ripper(double posX, double posY){
+    public Ripper(double posX, double posY) {
         super(posX, posY);
         this.maxHealth = 150;
         this.attackDamage = 0.2;

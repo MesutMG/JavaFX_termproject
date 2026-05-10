@@ -64,11 +64,11 @@ public class LevelOneScreen extends Application {
 
         BackgroundImage bgImage = new BackgroundImage(
                 bg,
-                BackgroundRepeat.NO_REPEAT, //otherwise tiling yapiyor
-                BackgroundRepeat.NO_REPEAT, //otherwise tiling yapiyor
+                BackgroundRepeat.NO_REPEAT, // otherwise tiling yapiyor
+                BackgroundRepeat.NO_REPEAT, // otherwise tiling yapiyor
                 BackgroundPosition.CENTER,
                 new BackgroundSize(width, height, false, false, false, true)
-                //widthasPercentage, heigthaspercentage, cropping engelleme, scale yardimi
+                // widthasPercentage, heigthaspercentage, cropping engelleme, scale yardimi
         );
 
         player = new Player(width/2, height/2);
@@ -190,8 +190,8 @@ public class LevelOneScreen extends Application {
         if (rotateL){ angle -= 0.1;}
         if (rotateR){ angle += 0.1;}
 
+        // Check if anything changed
         if (moveX != 0 || moveY != 0 || angle != 0) {
-
             double newX = player.getPosX() + moveX;
             double newY = player.getPosY() + moveY;
 
@@ -250,9 +250,7 @@ public class LevelOneScreen extends Application {
     private void handleCheat() {
         if (cheat) {
             playableArea.setStroke(Color.RED);
-            for (Enemy e : enemies) {
-                e.getBody().setVisible(true);
-            }
+            for (Enemy e : enemies) e.getBody().setVisible(true);
         } else {
             playableArea.setStroke(Color.TRANSPARENT);
         }

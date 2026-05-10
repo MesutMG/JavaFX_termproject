@@ -10,7 +10,7 @@ public class Ghost extends Enemy {
     private Rectangle rectangle;
     private final int CIRCLE_RADIUS = 15;
 
-    public Ghost(double posX, double posY){
+    public Ghost(double posX, double posY) {
         super(posX, posY);
         this.maxHealth = 100;
         this.attackDamage = 0.1;

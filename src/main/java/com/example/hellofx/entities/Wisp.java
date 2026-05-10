@@ -12,7 +12,7 @@ public class Wisp extends Enemy {
     private Line[]  rays;
     private Group raysGroup;
 
-    public Wisp(double posX, double posY){
+    public Wisp(double posX, double posY) {
         super(posX, posY);
         this.maxHealth = 200;
         this.attackDamage = 0.3;
@@ -41,7 +41,7 @@ public class Wisp extends Enemy {
         double outerRadius = 40;
 
         for (int i = 0; i < 6; i++) {
-            double angle = i * (Math.PI / 3); //60 derece arayla
+            double angle = i * (Math.PI / 3); // 60 derece arayla
 
             double startX = innerRadius * Math.cos(angle);
             double startY = innerRadius * Math.sin(angle);
