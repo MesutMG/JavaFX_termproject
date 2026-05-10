@@ -105,7 +105,13 @@ public class Character {
     }
 
     public void setVacuumPerc(double vacuumPerc) {
-        this.vacuumPerc = vacuumPerc;
+        if (vacuumPerc > 100) {
+            this.vacuumPerc = 100;
+        } else if (vacuumPerc < 0){
+            this.vacuumPerc = 0;
+        } else {
+            this.vacuumPerc = vacuumPerc;
+        }
     }
 
     public double getFacingAngle() {

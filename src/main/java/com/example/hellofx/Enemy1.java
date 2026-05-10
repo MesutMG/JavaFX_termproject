@@ -38,7 +38,24 @@ public class Enemy1 {
     }
 
     public void setHealth(double health) {
-        this.health = health;
+        this.health = Math.max(0, health);
+        
+        double scale = this.health / 100.0;
+        
+        if (this.circle != null) {
+            this.circle.setRadius(CIRCLE_RADIUS * scale);
+        }
+        
+        if (this.rectangle != null) {
+            this.rectangle.setWidth(30 * scale);
+            this.rectangle.setHeight(15 * scale);
+            this.rectangle.setX(this.posX - (15 * scale));
+        }
+
+        if (this.health < 0) {
+            this.health = 0;
+            this.isAlive = false;
+        }
     }
 
     public double getPosX() {

@@ -29,7 +29,7 @@ public class LevelOneScreen extends Application {
     int oldSecond = LocalTime.now().getSecond();
     int localDeviceMinute;
     int localDeviceSecond;
-    private int totalMinute = 3;
+    private int totalMinute = 1;
     private int totalSecond = 0;
     private static final int    DEFAULT_WIDTH   = 1280;
     private static final int    DEFAULT_HEIGHT  = 720;
@@ -44,11 +44,11 @@ public class LevelOneScreen extends Application {
     private HealthBar hBar;
     private VacuumBar vBar;
     private Character player;
-    private Enemy1 enemy1;
-    private Enemy2 enemy2;
-    private Enemy3 enemy3;
+    private Enemy1[] enemies = new Enemy1[5];
+    private Rectangle playableArea;
     private boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
     private final int PLAYER_SPEED = 5;
+    private boolean cheat = false;
     @Override
     public void start(Stage stage) {
         Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -72,15 +72,17 @@ public class LevelOneScreen extends Application {
         );
 
         player= new Character(width/2, height/2);
-        enemy1= new Enemy1(400,200); // FOR TESTING PURPOSES ------------------------------------------
-        enemy2= new Enemy2(300,300); // FOR TESTING PURPOSES ------------------------------------------
-        enemy3= new Enemy3(500,500); // same
+
+        for (int i = 0; i < 5; i++) {
+            enemies[i] = new Enemy1((Math.random() * PLAY_AREA_W) + PLAY_AREA_X, 
+                                        (Math.random() * PLAY_AREA_H) + PLAY_AREA_Y);
+        }
         hBar  = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
         vBar  = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
 
-        Rectangle playableArea = new Rectangle(PLAY_AREA_X, PLAY_AREA_Y, PLAY_AREA_W, PLAY_AREA_H);
+        playableArea = new Rectangle(PLAY_AREA_X, PLAY_AREA_Y, PLAY_AREA_W, PLAY_AREA_H);
         playableArea.setFill(Color.TRANSPARENT);
-        playableArea.setStroke(Color.WHITE);
+        playableArea.setStroke(Color.TRANSPARENT);
         playableArea.setStrokeWidth(3);
 
         timeRemainingLabel = new Label("Time: " + localDeviceMinute + "." + localDeviceSecond);
@@ -94,9 +96,9 @@ public class LevelOneScreen extends Application {
 
         root.setBackground(new Background(bgImage));
         root.getChildren().add(playableArea);
-        root.getChildren().addAll(enemy1.draw());
-        root.getChildren().addAll(enemy2.draw());
-        root.getChildren().addAll(enemy3.draw());
+        for (Enemy1 e : enemies) {
+            root.getChildren().addAll(e.draw());
+        }
         root.getChildren().addAll(player.getTriangle(), player.getCircle());
         root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle());
 
@@ -110,7 +112,8 @@ public class LevelOneScreen extends Application {
                 case D: goRight     = true; break;
                 case LEFT:  rotateL = true; break;
                 case RIGHT: rotateR = true; break;
-                case V: vacuumState = true; break;
+                case SPACE: vacuumState = true; break;
+                case C: cheat = true; break;
             }
         });
 
@@ -122,7 +125,8 @@ public class LevelOneScreen extends Application {
                 case D: goRight     = false; break;
                 case LEFT:  rotateL = false; break;
                 case RIGHT: rotateR = false; break;
-                case V: vacuumState = false; break;
+                case SPACE: vacuumState = false; break;
+                case C: cheat = false; break;
             }
         });
 
@@ -150,7 +154,7 @@ public class LevelOneScreen extends Application {
 
             handleHealth();
 
-            enemy3.spinRays();
+            handleCheat();
         }
 
 
@@ -218,34 +222,57 @@ public class LevelOneScreen extends Application {
 
     private void handleVacuum() {
         if (vacuumState) {
-            player.setVacuumPerc(player.getVacuumPerc() - 0.5);
+            if (player.getVacuumPerc() <= 0) {
+                player.setVacuumPerc(0);
+                vBar.setBarPercentage(0);
+                player.getTriangle().setVisible(false);
+                for (Enemy1 e : enemies) {
+                    for (Node n : e.draw()) n.setVisible(false);
+                }
+                return;
+            } 
+            player.setVacuumPerc(player.getVacuumPerc() - 1);
             vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setVisible(true);
             
-            boolean e1Collision = player.getTriangle().getBoundsInParent().intersects(enemy1.getCircle().getBoundsInParent());
-            for (Node n : enemy1.draw()) n.setVisible(e1Collision);
-
-            boolean e2Collision = player.getTriangle().getBoundsInParent().intersects(enemy2.getCircleOuter().getBoundsInParent());
-            for (Node n : enemy2.draw()) n.setVisible(e2Collision);
-
-            boolean e3Collision = player.getTriangle().getBoundsInParent().intersects(enemy3.getCircleFace().getBoundsInParent());
-            for (Node n : enemy3.draw()) n.setVisible(e3Collision);
+            for (Enemy1 e : enemies) {
+                boolean collision = player.getTriangle().getBoundsInParent().intersects(e.getCircle().getBoundsInParent());
+                for (Node n : e.draw()) n.setVisible(collision);
+                if (collision) {
+                    e.setHealth(e.getHealth() - 1);
+                }
+            }
         } else {
+            player.setVacuumPerc(Math.min(100, player.getVacuumPerc() + 0.1));
+            vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setVisible(false);
-            for (Node n : enemy1.draw()) n.setVisible(false);
-            for (Node n : enemy2.draw()) n.setVisible(false);
-            for (Node n : enemy3.draw()) n.setVisible(false);
+            for (Enemy1 e : enemies) {
+                for (Node n : e.draw()) n.setVisible(false);
+            }
         }
     }
 
     private void handleHealth() {
-        if (player.getCircle().getBoundsInParent().intersects(enemy1.getCircle().getBoundsInParent())) {
+        for (Enemy1 e : enemies) {
+            if (player.getCircle().getBoundsInParent().intersects(e.getCircle().getBoundsInParent())) {
                 player.setHealth(player.getHealth() - 0.1);
 
                 if (player.getHealth() < 0) {
                     player.setHealth(0);
                 }
                 hBar.setBarPercentage(player.getHealth());
+            }
+        }
+    }
+
+    private void handleCheat() {
+        if (cheat) {
+            playableArea.setStroke(Color.RED);
+            for (Enemy1 e : enemies) {
+                for (Node n : e.draw()) n.setVisible(true);
+            }
+        } else {
+            playableArea.setStroke(Color.TRANSPARENT);
         }
     }
 }
