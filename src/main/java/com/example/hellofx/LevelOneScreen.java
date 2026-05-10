@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +18,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.Group;
+import javafx.scene.shape.Rectangle;
 import java.time.LocalTime;
 
 public class LevelOneScreen extends Application {
@@ -35,6 +37,10 @@ public class LevelOneScreen extends Application {
     private static final int    HEALTHBAR_POSY  = 160; //defaultheight/2 - 200
     private static final int    VACUUMBAR_POSX  = 30;
     private static final int    VACUUMBAR_POSY  = 160; //defaultheight/2 - 200
+    private static final int    PLAY_AREA_X     = 240;
+    private static final int    PLAY_AREA_Y     = 60;
+    private static final int    PLAY_AREA_W     = 800;
+    private static final int    PLAY_AREA_H     = 600;
     private HealthBar hBar;
     private VacuumBar vBar;
     private Character player;
@@ -43,7 +49,6 @@ public class LevelOneScreen extends Application {
     private Enemy3 enemy3;
     private boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
     private final int PLAYER_SPEED = 5;
-    private long lastDamageTime = 0;
     @Override
     public void start(Stage stage) {
         Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -67,11 +72,16 @@ public class LevelOneScreen extends Application {
         );
 
         player= new Character(width/2, height/2);
-        enemy1= new Enemy1(100,100); // FOR TESTING PURPOSES ------------------------------------------
+        enemy1= new Enemy1(400,200); // FOR TESTING PURPOSES ------------------------------------------
         enemy2= new Enemy2(300,300); // FOR TESTING PURPOSES ------------------------------------------
         enemy3= new Enemy3(500,500); // same
         hBar  = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
         vBar  = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
+
+        Rectangle playableArea = new Rectangle(PLAY_AREA_X, PLAY_AREA_Y, PLAY_AREA_W, PLAY_AREA_H);
+        playableArea.setFill(Color.TRANSPARENT);
+        playableArea.setStroke(Color.WHITE);
+        playableArea.setStrokeWidth(3);
 
         timeRemainingLabel = new Label("Time: " + localDeviceMinute + "." + localDeviceSecond);
         timeRemainingLabel.setFont(Font.font(24));
@@ -83,6 +93,7 @@ public class LevelOneScreen extends Application {
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
         root.setBackground(new Background(bgImage));
+        root.getChildren().add(playableArea);
         root.getChildren().addAll(enemy1.draw());
         root.getChildren().addAll(enemy2.draw());
         root.getChildren().addAll(enemy3.draw());
@@ -181,7 +192,15 @@ public class LevelOneScreen extends Application {
 
         if (moveX != 0 || moveY != 0 || angle != 0) {
 
-            player.updatePosition(player.getPosX() + moveX, player.getPosY() + moveY, angle);
+            double newX = player.getPosX() + moveX;
+            double newY = player.getPosY() + moveY;
+
+            if (newX < PLAY_AREA_X + 20) newX = PLAY_AREA_X + 20;
+            if (newX > PLAY_AREA_X + PLAY_AREA_W - 20) newX = PLAY_AREA_X + PLAY_AREA_W - 20;
+            if (newY < PLAY_AREA_Y + 20) newY = PLAY_AREA_Y + 20;
+            if (newY > PLAY_AREA_Y + PLAY_AREA_H - 20) newY = PLAY_AREA_Y + PLAY_AREA_H - 20;
+
+            player.updatePosition(newX, newY, angle);
 
             /*player.setPosX(player.getPosX() + moveX);
             player.setPosY(player.getPosY() + moveY);
@@ -201,24 +220,32 @@ public class LevelOneScreen extends Application {
         if (vacuumState) {
             player.setVacuumPerc(player.getVacuumPerc() - 0.5);
             vBar.setBarPercentage(player.getVacuumPerc());
+            player.getTriangle().setVisible(true);
+            
+            boolean e1Collision = player.getTriangle().getBoundsInParent().intersects(enemy1.getCircle().getBoundsInParent());
+            for (Node n : enemy1.draw()) n.setVisible(e1Collision);
+
+            boolean e2Collision = player.getTriangle().getBoundsInParent().intersects(enemy2.getCircleOuter().getBoundsInParent());
+            for (Node n : enemy2.draw()) n.setVisible(e2Collision);
+
+            boolean e3Collision = player.getTriangle().getBoundsInParent().intersects(enemy3.getCircleFace().getBoundsInParent());
+            for (Node n : enemy3.draw()) n.setVisible(e3Collision);
+        } else {
+            player.getTriangle().setVisible(false);
+            for (Node n : enemy1.draw()) n.setVisible(false);
+            for (Node n : enemy2.draw()) n.setVisible(false);
+            for (Node n : enemy3.draw()) n.setVisible(false);
         }
     }
 
     private void handleHealth() {
-        long currentTime = System.nanoTime();
-
         if (player.getCircle().getBoundsInParent().intersects(enemy1.getCircle().getBoundsInParent())) {
-            if (currentTime - lastDamageTime >= 1000000000L) {
-                player.setHealth(player.getHealth() - 5);
+                player.setHealth(player.getHealth() - 0.1);
 
                 if (player.getHealth() < 0) {
                     player.setHealth(0);
                 }
                 hBar.setBarPercentage(player.getHealth());
-            
-                // Reset the damage timer
-                lastDamageTime = currentTime;
-            }
         }
     }
 }
