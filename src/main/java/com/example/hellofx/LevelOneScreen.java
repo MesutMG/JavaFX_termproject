@@ -41,7 +41,7 @@ public class LevelOneScreen extends Application {
     private Enemy1 enemy1;
     private Enemy2 enemy2;
     private Enemy3 enemy3;
-    private boolean goUp, goDown, goLeft, goRight, vacuumState;
+    private boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
     private final int PLAYER_SPEED = 5;
     private long lastDamageTime = 0;
     @Override
@@ -97,6 +97,8 @@ public class LevelOneScreen extends Application {
                 case S: goDown      = true; break;
                 case A: goLeft      = true; break;
                 case D: goRight     = true; break;
+                case LEFT:  rotateL = true; break;
+                case RIGHT: rotateR = true; break;
                 case V: vacuumState = true; break;
             }
         });
@@ -107,6 +109,8 @@ public class LevelOneScreen extends Application {
                 case S: goDown      = false; break;
                 case A: goLeft      = false; break;
                 case D: goRight     = false; break;
+                case LEFT:  rotateL = false; break;
+                case RIGHT: rotateR = false; break;
                 case V: vacuumState = false; break;
             }
         });
@@ -164,16 +168,22 @@ public class LevelOneScreen extends Application {
     }
 
     private void handlePlayerMovement() {
-        int moveX = 0;
-        int moveY = 0;
+        int moveX    = 0;
+        int moveY    = 0;
+        double angle = player.getRotAngle();
 
         if (goUp)   { moveY -= PLAYER_SPEED;}
         if (goDown) { moveY += PLAYER_SPEED;}
         if (goLeft) { moveX -= PLAYER_SPEED;}
         if (goRight){ moveX += PLAYER_SPEED;}
+        if (rotateL){ angle -= 0.1;}
+        if (rotateR){ angle += 0.1;}
 
-        if (moveX != 0 || moveY != 0) {
-            player.setPosX(player.getPosX() + moveX);
+        if (moveX != 0 || moveY != 0 || angle != 0) {
+
+            player.updatePosition(player.getPosX() + moveX, player.getPosY() + moveY, angle);
+
+            /*player.setPosX(player.getPosX() + moveX);
             player.setPosY(player.getPosY() + moveY);
 
             player.getTriangle().getPoints().setAll(
@@ -183,7 +193,7 @@ public class LevelOneScreen extends Application {
             );
 
             player.getCircle().setCenterX(player.getPosX());
-            player.getCircle().setCenterY(player.getPosY());
+            player.getCircle().setCenterY(player.getPosY());*/
         }
     }
 

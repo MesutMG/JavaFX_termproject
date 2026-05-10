@@ -108,6 +108,14 @@ public class Character {
         this.vacuumPerc = vacuumPerc;
     }
 
+    public double getFacingAngle() {
+        return rotAngle;
+    }
+
+    public void setFacingAngle(double angle) {
+        this.rotAngle = angle;
+    }
+
     public boolean isAlive() {
         return isAlive;
     }
@@ -115,4 +123,25 @@ public class Character {
     public void setAlive(boolean alive) {
         isAlive = alive;
     }
+
+    public void updatePosition(double newX, double newY, double angle) {
+        this.posX = newX;
+        this.posY = newY;
+
+        this.circle.setCenterX(newX);
+        this.circle.setCenterY(newY);
+
+        this.rotAngle = angle;
+
+        this.triangle.getPoints().setAll(
+                posX, posY,
+
+                posX + (75 * Math.cos(rotAngle)) - (-30 * Math.sin(rotAngle)),
+                posY + (75 * Math.sin(rotAngle)) + (-30 * Math.cos(rotAngle)),
+
+                posX + (75 * Math.cos(rotAngle)) - (30 * Math.sin(rotAngle)),
+                posY + (75 * Math.sin(rotAngle)) + (30 * Math.cos(rotAngle))
+        );
+    }
+
 }
