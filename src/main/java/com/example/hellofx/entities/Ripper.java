@@ -1,57 +1,53 @@
-package com.example.hellofx;
+package com.example.hellofx.entities;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.Group;
 
-public class Enemy2 {
-    private double  health;
-    private double  posX;
-    private double  posY;
-    private boolean isAlive;
+public class Ripper extends Enemy {
     private Circle  circleFace;
     private Circle  circleOuter;
     private Circle  circleEye1;
     private Circle circleEye2;
     private Polygon triangle1;
     private Polygon triangle2;
-    private double opacity;
 
-    Enemy2(double posX, double posY){
-        this.health     = 100;
-        this.posX       = posX;
-        this.posY       = posY;
-        this.isAlive    = true;
+    public Ripper(double posX, double posY){
+        super(posX, posY);
+        this.maxHealth = 150;
+        this.attackDamage = 0.2;
+        this.health = this.maxHealth;
 
         Circle circleFace = new Circle(20, Color.BLACK);
-        circleFace.setCenterX(posX);
-        circleFace.setCenterY(posY);
+        circleFace.setCenterX(0);
+        circleFace.setCenterY(0);
         circleFace.setOpacity(1);
         this.setCircleFace(circleFace);
 
         Circle circleEye1 = new Circle(3, Color.RED);
-        circleEye1.setCenterX(posX + 6);
-        circleEye1.setCenterY(posY - 2);
+        circleEye1.setCenterX(6);
+        circleEye1.setCenterY(-2);
         circleEye1.setOpacity(1);
         this.setCircleEye1(circleEye1);
 
         Circle circleEye2 = new Circle(3, Color.RED);
-        circleEye2.setCenterX(posX - 6);
-        circleEye2.setCenterY(posY - 2);
+        circleEye2.setCenterX(-6);
+        circleEye2.setCenterY(-2);
         circleEye2.setOpacity(1);
         this.setCircleEye2(circleEye2);
 
         Circle circleOuter = new Circle(35, Color.PURPLE);
-        circleOuter.setCenterX(posX);
-        circleOuter.setCenterY(posY);
+        circleOuter.setCenterX(0);
+        circleOuter.setCenterY(0);
         circleOuter.setOpacity(1);
         this.setCircleOuter(circleOuter);
 
         Polygon triangle1 = new Polygon();
         triangle1.getPoints().addAll(
-                posX, posY - 50,
-                posX + 50, posY + 25,
-                posX - 50, posY + 25
+                0.0, -50.0,
+                50.0, 25.0,
+                -50.0, 25.0
         );
         triangle1.setFill(Color.PURPLE);
         triangle1.setOpacity(1);
@@ -59,45 +55,18 @@ public class Enemy2 {
 
         Polygon triangle2 = new Polygon();
         triangle2.getPoints().addAll(
-                posX, posY + 50,
-                posX + 50, posY - 25,
-                posX - 50, posY - 25
+                0.0, 50.0,
+                50.0, -25.0,
+                -50.0, -25.0
         );
         triangle2.setFill(Color.PURPLE);
         triangle2.setOpacity(1);
         this.setTriangle2(triangle2);
 
-    }
-
-    public double getHealth() {
-        return health;
-    }
-
-    public void setHealth(double health) {
-        this.health = health;
-    }
-
-    public double getPosX() {
-        return posX;
-    }
-
-    public void setPosX(double posX) {
-        this.posX = posX;
-    }
-
-    public double getPosY() {
-        return posY;
-    }
-
-    public void setPosY(double posY) {
-        this.posY = posY;
-    }
-
-    public double getOpacity() {
-        return opacity;
-    }
-
-    public void setOpacity(double opacity) {
+        this.group = new Group(this.triangle1, this.triangle2, this.circleOuter,
+                this.circleFace, this.circleEye1, this.circleEye2);
+        this.group.setTranslateX(posX);
+        this.group.setTranslateY(posY);
     }
 
     public Circle getCircleFace() {
@@ -146,19 +115,6 @@ public class Enemy2 {
 
     public void setTriangle2(Polygon triangle2) {
         this.triangle2 = triangle2;
-    }
-
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
-
-    public Node[] draw() {
-        return new Node[]{this.triangle1, this.triangle2, this.circleOuter,
-                        this.circleFace, this.circleEye1, this.circleEye2};
     }
 
 }

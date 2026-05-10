@@ -1,5 +1,6 @@
 package com.example.hellofx;
 
+import com.example.hellofx.entities.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,7 +22,6 @@ import java.time.LocalTime;
 
 public class LevelTwoScreen extends Application {
     private int scoreText = 0;
-    private double opacity = 1;
     private Label timeRemainingLabel;
     int oldMinute = LocalTime.now().getMinute();
     int oldSecond = LocalTime.now().getSecond();
@@ -37,7 +37,7 @@ public class LevelTwoScreen extends Application {
     private static final int    VACUUMBAR_POSY  = 160; //defaultheight/2 - 200
     private HealthBar hBar;
     private VacuumBar vBar;
-    private Character player;
+    private Player player;
     private boolean goUp, goDown, goLeft, goRight, vacuumState;
     private final int PLAYER_SPEED = 5;
 
@@ -63,7 +63,7 @@ public class LevelTwoScreen extends Application {
                 //widthasPercentage, heigthaspercentage, cropping engelleme, scale yardimi
         );
 
-        player= new Character(width/2, height/2);
+        player = new Player(width/2, height/2);
         hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
         vBar = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
 
@@ -78,7 +78,7 @@ public class LevelTwoScreen extends Application {
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
         root.setBackground(new Background(bgImage));
-        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle(), player.getTriangle(), player.getCircle());
+        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle(), player.getGroup());
 
         Scene scene = new Scene(root, width, height);
 
@@ -160,17 +160,9 @@ public class LevelTwoScreen extends Application {
         if (goRight){ moveX += PLAYER_SPEED;}
 
         if (moveX != 0 || moveY != 0) {
-            player.setPosX(player.getPosX() + moveX);
-            player.setPosY(player.getPosY() + moveY);
-
-            player.getTriangle().getPoints().setAll(
-                    player.getPosX(), player.getPosY(),
-                    player.getPosX() + 75, player.getPosY() - 30,
-                    player.getPosX() + 75, player.getPosY() + 30
-            );
-
-            player.getCircle().setCenterX(player.getPosX());
-            player.getCircle().setCenterY(player.getPosY());
+            double newX = player.getPosX() + moveX;
+            double newY = player.getPosY() + moveY;
+            player.updatePosition(newX, newY, player.getRotAngle());
         }
     }
 

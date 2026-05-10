@@ -101,7 +101,7 @@ public class TitleScreen extends Application {
 	}
 
 	private Background buildBackgroundImage() {
-		var imageUrl = getClass().getResource("./images/background.png");
+		var imageUrl = getClass().getResource("src/main/java/com/example/hellofx/images/background.png");
 		if (imageUrl != null) {
 			Image image = new Image(imageUrl.toExternalForm());
 			BackgroundImage backgroundImage = new BackgroundImage(

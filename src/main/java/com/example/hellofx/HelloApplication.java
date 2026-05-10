@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 
 public class HelloApplication extends Application {
     private int scoreText = 0;
-    private double opacity = 1;
     private Label timeRemainingLabel;
     int oldMinute = LocalTime.now().getMinute();
     int oldSecond = LocalTime.now().getSecond();
@@ -66,15 +65,6 @@ public class HelloApplication extends Application {
             timeRemainingLabelHandler();
 
             //scoreText++;
-            //timeRemainingLabel.opacityProperty().set(opacity);
-
-            if (opacity <= 0) {
-
-                stop();
-                System.out.println("Animation stopped");
-            }
-
-
         }
     }
 

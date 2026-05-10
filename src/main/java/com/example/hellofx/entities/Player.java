@@ -1,22 +1,21 @@
-package com.example.hellofx;
+package com.example.hellofx.entities;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.Group;
 
-public class Character {
-    private double  health;
-    private double  posX;
-    private double  posY;
+public class Player extends Entity {
     private int     score;
     private double  vacuumPerc;
     private double  rotAngle;
-    private boolean isAlive;
     private Circle  circle;
     private Polygon triangle;
     private final int CIRCLE_RADIUS = 20;
 
-    Character(double posX, double posY){
+    public Player(double posX, double posY){
+        super(posX, posY);
+        this.maxHealth  = 100;
         this.health     = 100;
         this.posX       = posX;
         this.posY       = posY;
@@ -26,46 +25,29 @@ public class Character {
         this.rotAngle   = 0;
 
         Circle circle = new Circle(CIRCLE_RADIUS, Color.ORANGE);
-        circle.setCenterX(posX);
-        circle.setCenterY(posY);
+        circle.setCenterX(0);
+        circle.setCenterY(0);
         circle.setStroke(Color.BLACK);
         this.setCircle(circle);
 
         Polygon triangle = new Polygon();
         triangle.getPoints().addAll(
-                posX, posY,
-                posX + 75, posY - 30,
-                posX + 75, posY + 30
+                0.0, 0.0,
+                75.0, -30.0,
+                75.0, 30.0
         );
         triangle.setFill(Color.RED);
         triangle.setStroke(Color.WHITE);
         triangle.setOpacity(0.7);
         this.setTriangle(triangle);
 
+        this.group = new Group(this.triangle, this.circle);
+        this.group.setTranslateX(posX);
+        this.group.setTranslateY(posY);
     }
 
-    public double getHealth() {
-        return health;
-    }
-
-    public void setHealth(double health) {
-        this.health = health;
-    }
-
-    public double getPosX() {
-        return posX;
-    }
-
-    public void setPosX(double posX) {
-        this.posX = posX;
-    }
-
-    public double getPosY() {
-        return posY;
-    }
-
-    public void setPosY(double posY) {
-        this.posY = posY;
+    public Group getGroup() {
+        return group;
     }
 
     public int getScore() {
@@ -122,31 +104,22 @@ public class Character {
         this.rotAngle = angle;
     }
 
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
-
     public void updatePosition(double newX, double newY, double angle) {
         this.posX = newX;
         this.posY = newY;
-
-        this.circle.setCenterX(newX);
-        this.circle.setCenterY(newY);
-
         this.rotAngle = angle;
 
+        this.group.setTranslateX(newX);
+        this.group.setTranslateY(newY);
+
         this.triangle.getPoints().setAll(
-                posX, posY,
+                0.0, 0.0,
 
-                posX + (75 * Math.cos(rotAngle)) - (-30 * Math.sin(rotAngle)),
-                posY + (75 * Math.sin(rotAngle)) + (-30 * Math.cos(rotAngle)),
+                (75 * Math.cos(rotAngle)) - (-30 * Math.sin(rotAngle)),
+                (75 * Math.sin(rotAngle)) + (-30 * Math.cos(rotAngle)),
 
-                posX + (75 * Math.cos(rotAngle)) - (30 * Math.sin(rotAngle)),
-                posY + (75 * Math.sin(rotAngle)) + (30 * Math.cos(rotAngle))
+                (75 * Math.cos(rotAngle)) - (30 * Math.sin(rotAngle)),
+                (75 * Math.sin(rotAngle)) + (30 * Math.cos(rotAngle))
         );
     }
 
