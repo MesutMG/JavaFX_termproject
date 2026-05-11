@@ -32,10 +32,7 @@ public abstract class Entity {
 
     public void setHealth(double health) {
         this.health = Math.max(0, health);
-        if (this.health <= 0) {
-            this.health = 0;
-            this.isAlive = false;
-        }
+        this.isAlive = this.health > 0;
     }
 
     public double getPosX() { return posX; }
