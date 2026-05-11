@@ -9,12 +9,24 @@ public abstract class Entity {
     protected double posY;
     protected boolean isAlive;
     protected Group group;
+    protected double angle;
+    protected double speed;
+    protected double attackDamage;
 
     public Entity(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
         this.isAlive = true;
     }
+
+    public double getAngle() { return angle; }
+    public void setAngle(double angle) { this.angle = angle; }
+    
+    public double getSpeed() { return speed; }
+    public void setSpeed(double speed) { this.speed = speed; }
+
+    public double getAttackDamage() { return attackDamage; }
+    public void setAttackDamage(double attackDamage) { this.attackDamage = attackDamage; }
 
     public double getHealth() { return health; }
 

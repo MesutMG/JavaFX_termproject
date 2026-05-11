@@ -8,7 +8,6 @@ import javafx.scene.Group;
 public class Player extends Entity {
     private int     score;
     private double  vacuumPerc;
-    private double  rotAngle;
     private Circle  circle;
     private Polygon triangle;
     private final int CIRCLE_RADIUS = 20;
@@ -22,7 +21,9 @@ public class Player extends Entity {
         this.score      = 0;
         this.isAlive    = true;
         this.vacuumPerc = 100;
-        this.rotAngle   = 0;
+        this.angle      = 0;
+        this.speed      = 5;
+        this.attackDamage = 1;
 
         Circle circle = new Circle(CIRCLE_RADIUS, Color.ORANGE);
         circle.setCenterX(0);
@@ -74,13 +75,7 @@ public class Player extends Entity {
         this.triangle = triangle;
     }
 
-    public double getRotAngle() {
-        return rotAngle;
-    }
 
-    public void setRotAngle(double rotAngle) {
-        this.rotAngle = rotAngle;
-    }
 
     public double getVacuumPerc() {
         return vacuumPerc;
@@ -96,18 +91,10 @@ public class Player extends Entity {
         }
     }
 
-    public double getFacingAngle() {
-        return rotAngle;
-    }
-
-    public void setFacingAngle(double angle) {
-        this.rotAngle = angle;
-    }
-
-    public void updatePosition(double newX, double newY, double angle) {
+    public void updatePosition(double newX, double newY, double newAngle) {
         this.posX = newX;
         this.posY = newY;
-        this.rotAngle = angle;
+        this.angle = newAngle;
 
         this.group.setTranslateX(newX);
         this.group.setTranslateY(newY);
@@ -115,11 +102,11 @@ public class Player extends Entity {
         this.triangle.getPoints().setAll(
                 0.0, 0.0,
 
-                (75 * Math.cos(rotAngle)) - (-30 * Math.sin(rotAngle)),
-                (75 * Math.sin(rotAngle)) + (-30 * Math.cos(rotAngle)),
+                (75 * Math.cos(angle)) - (-30 * Math.sin(angle)),
+                (75 * Math.sin(angle)) + (-30 * Math.cos(angle)),
 
-                (75 * Math.cos(rotAngle)) - (30 * Math.sin(rotAngle)),
-                (75 * Math.sin(rotAngle)) + (30 * Math.cos(rotAngle))
+                (75 * Math.cos(angle)) - (30 * Math.sin(angle)),
+                (75 * Math.sin(angle)) + (30 * Math.cos(angle))
         );
     }
 

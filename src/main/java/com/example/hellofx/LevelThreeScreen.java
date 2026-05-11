@@ -39,7 +39,6 @@ public class LevelThreeScreen extends Application {
     private VacuumBar vBar;
     private Player player;
     private boolean goUp, goDown, goLeft, goRight, vacuumState;
-    private final int PLAYER_SPEED = 5;
 
     @Override
     public void start(Stage stage) {
@@ -154,15 +153,15 @@ public class LevelThreeScreen extends Application {
         int moveX = 0;
         int moveY = 0;
 
-        if (goUp)   { moveY -= PLAYER_SPEED;}
-        if (goDown) { moveY += PLAYER_SPEED;}
-        if (goLeft) { moveX -= PLAYER_SPEED;}
-        if (goRight){ moveX += PLAYER_SPEED;}
+        if (goUp)   { moveY -= player.getSpeed();}
+        if (goDown) { moveY += player.getSpeed();}
+        if (goLeft) { moveX -= player.getSpeed();}
+        if (goRight){ moveX += player.getSpeed();}
 
         if (moveX != 0 || moveY != 0) {
             double newX = player.getPosX() + moveX;
             double newY = player.getPosY() + moveY;
-            player.updatePosition(newX, newY, player.getRotAngle());
+            player.updatePosition(newX, newY, player.getAngle());
         }
     }
 

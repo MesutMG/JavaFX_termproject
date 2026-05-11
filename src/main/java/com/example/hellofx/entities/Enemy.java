@@ -4,10 +4,21 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 
 public abstract class Enemy extends Entity {
-    protected double  attackDamage;
-
     public Enemy(double posX, double posY) {
         super(posX, posY);
+        this.angle = Math.random() * Math.PI * 2;
+        this.speed = 1.5;
+    }
+
+    public void updatePosition(double newX, double newY, double newAngle) {
+        this.posX = newX;
+        this.posY = newY;
+        this.angle = newAngle;
+        
+        if (this.group != null) {
+            this.group.setTranslateX(newX);
+            this.group.setTranslateY(newY);
+        }
     }
 
     public double getHealth() {
@@ -24,14 +35,10 @@ public abstract class Enemy extends Entity {
             this.group.setScaleY(scale);
         }
 
-        if (this.health <= 0) {
+        if (this.health <= 5) {
             this.health = 0;
             this.isAlive = false;
         }
-    }
-
-    public double getAttackDamage() {
-        return attackDamage;
     }
 
     public void update() {}

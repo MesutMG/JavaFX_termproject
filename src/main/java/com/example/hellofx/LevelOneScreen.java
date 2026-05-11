@@ -47,7 +47,6 @@ public class LevelOneScreen extends Application {
     private Enemy[] enemies = new Enemy[5];
     private Rectangle playableArea;
     private boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
-    private final int PLAYER_SPEED = 5;
     private boolean cheat = false;
     @Override
     public void start(Stage stage) {
@@ -150,9 +149,43 @@ public class LevelOneScreen extends Application {
                 e.update();
             }
 
+            handleEnemyMovement();
+
             handleHealth();
 
             handleCheat();
+
+            if (hasWon()) {
+                this.stop();
+                Pane root = (Pane) player.getGroup().getScene().getRoot();
+                
+                Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
+                overlay.setOpacity(0.5);
+                
+                Label winLabel = new Label("You Won!");
+                winLabel.setFont(Font.font(72));
+                winLabel.setTextFill(Color.GREEN);
+                winLabel.setLayoutX(DEFAULT_WIDTH / 2 - 150);
+                winLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 50);
+                
+                root.getChildren().addAll(overlay, winLabel);
+            }
+
+            if (hasLost()) {
+                this.stop();
+                Pane root = (Pane) player.getGroup().getScene().getRoot();
+                
+                Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
+                overlay.setOpacity(0.5);
+                
+                Label lostLabel = new Label("You Lost!");
+                lostLabel.setFont(Font.font(72));
+                lostLabel.setTextFill(Color.RED);
+                lostLabel.setLayoutX(DEFAULT_WIDTH / 2 - 150);
+                lostLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 50);
+
+                root.getChildren().addAll(overlay, lostLabel);
+            }
         }
     }
 
@@ -171,7 +204,7 @@ public class LevelOneScreen extends Application {
             } else {
                 totalSecond -= 1;
             }
-            timeRemainingLabel.setText("Time: " + Integer.toString(totalMinute) + "." + Integer.toString(totalSecond));
+            timeRemainingLabel.setText("Time: " + Integer.toString(totalMinute) + ":" + Integer.toString(totalSecond));
         }
 
         oldMinute = localDeviceMinute;
@@ -181,12 +214,12 @@ public class LevelOneScreen extends Application {
     private void handlePlayerMovement() {
         int moveX    = 0;
         int moveY    = 0;
-        double angle = player.getRotAngle();
+        double angle = player.getAngle();
 
-        if (goUp)   { moveY -= PLAYER_SPEED;}
-        if (goDown) { moveY += PLAYER_SPEED;}
-        if (goLeft) { moveX -= PLAYER_SPEED;}
-        if (goRight){ moveX += PLAYER_SPEED;}
+        if (goUp)   { moveY -= player.getSpeed();}
+        if (goDown) { moveY += player.getSpeed();}
+        if (goLeft) { moveX -= player.getSpeed();}
+        if (goRight){ moveX += player.getSpeed();}
         if (rotateL){ angle -= 0.1;}
         if (rotateR){ angle += 0.1;}
 
@@ -201,6 +234,34 @@ public class LevelOneScreen extends Application {
             if (newY > PLAY_AREA_Y + PLAY_AREA_H - 20) newY = PLAY_AREA_Y + PLAY_AREA_H - 20;
 
             player.updatePosition(newX, newY, angle);
+        }
+    }
+
+    private void handleEnemyMovement() {
+        for (Enemy e : enemies) {
+            if (e.isAlive()) {
+                double newX = e.getPosX() + Math.cos(e.getAngle()) * e.getSpeed();
+                double newY = e.getPosY() + Math.sin(e.getAngle()) * e.getSpeed();
+                double newAngle = e.getAngle();
+
+                if (newX < PLAY_AREA_X + 20) {
+                    newX = PLAY_AREA_X + 20;
+                    newAngle = Math.PI - newAngle;
+                } else if (newX > PLAY_AREA_X + PLAY_AREA_W - 20) {
+                    newX = PLAY_AREA_X + PLAY_AREA_W - 20;
+                    newAngle = Math.PI - newAngle;
+                }
+
+                if (newY < PLAY_AREA_Y + 20) {
+                    newY = PLAY_AREA_Y + 20;
+                    newAngle = -newAngle;
+                } else if (newY > PLAY_AREA_Y + PLAY_AREA_H - 20) {
+                    newY = PLAY_AREA_Y + PLAY_AREA_H - 20;
+                    newAngle = -newAngle;
+                }
+
+                e.updatePosition(newX, newY, newAngle);
+            }
         }
     }
 
@@ -221,7 +282,7 @@ public class LevelOneScreen extends Application {
                 boolean collision = player.getTriangle().localToScene(player.getTriangle().getBoundsInLocal()).intersects(e.getBody().localToScene(e.getBody().getBoundsInLocal()));
                 e.getBody().setVisible(collision);
                 if (collision) {
-                    e.setHealth(e.getHealth() - 1);
+                    e.setHealth(e.getHealth() - player.getAttackDamage());
                 }
             }
         } else {
@@ -254,6 +315,22 @@ public class LevelOneScreen extends Application {
         } else {
             playableArea.setStroke(Color.TRANSPARENT);
         }
+    }
+
+    private boolean hasWon() {
+        boolean all_dead = true;
+        for (Enemy e : enemies) {
+            if (e.isAlive()) {
+                all_dead = false;
+                break;
+            }
+        }
+
+        return all_dead;
+    }
+
+    private boolean hasLost() {
+        return !(player.isAlive()) || (totalMinute == 0 && totalSecond == 0);
     }
 }
 
