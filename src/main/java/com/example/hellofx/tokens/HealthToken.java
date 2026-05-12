@@ -2,7 +2,7 @@ package com.example.hellofx.tokens;
 
 import com.example.hellofx.entities.Player;
 
-public class HealthToken extends Token{
+public class HealthToken extends Token {
     public HealthToken(double posX, double posY){
         super(posX, posY);
     }
