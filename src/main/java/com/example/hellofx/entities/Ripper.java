@@ -18,6 +18,7 @@ public class Ripper extends Enemy {
         this.maxHealth = 150;
         this.attackDamage = 0.2;
         this.health = this.maxHealth;
+        this.score = 20;
 
         Circle circleFace = new Circle(20, Color.BLACK);
         circleFace.setCenterX(0);
@@ -116,5 +117,4 @@ public class Ripper extends Enemy {
     public void setTriangle2(Polygon triangle2) {
         this.triangle2 = triangle2;
     }
-
 }

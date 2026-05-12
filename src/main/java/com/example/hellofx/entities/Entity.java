@@ -12,6 +12,7 @@ public abstract class Entity {
     protected double angle;
     protected double speed;
     protected double attackDamage;
+    protected int score;
 
     public Entity(double posX, double posY) {
         this.posX = posX;
@@ -27,6 +28,9 @@ public abstract class Entity {
 
     public double getAttackDamage() { return attackDamage; }
     public void setAttackDamage(double attackDamage) { this.attackDamage = attackDamage; }
+
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
 
     public double getHealth() { return health; }
 

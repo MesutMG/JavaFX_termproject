@@ -65,7 +65,7 @@ public class TitleScreen extends Application {
 		double width = stage.getWidth();
 		double height = stage.getHeight();
 		Scene gameScene = game.createScene(width, height);
-		stage.setTitle("AnimationTimer");
+		stage.setTitle("Level 1");
 		stage.setScene(gameScene);
 	}
 

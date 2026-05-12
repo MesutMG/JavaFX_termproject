@@ -6,7 +6,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.Group;
 
 public class Player extends Entity {
-    private int     score;
     private double  vacuumPerc;
     private Circle  circle;
     private Polygon triangle;

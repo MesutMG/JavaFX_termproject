@@ -15,6 +15,7 @@ public class Ghost extends Enemy {
         this.maxHealth = 100;
         this.attackDamage = 0.1;
         this.health = this.maxHealth;
+        this.score = 10;
 
         Circle circle = new Circle(CIRCLE_RADIUS, Color.WHITE);
         circle.setCenterX(0);
@@ -48,7 +49,4 @@ public class Ghost extends Enemy {
     public void setRectangle(Rectangle rectangle) {
         this.rectangle = rectangle;
     }
-
-
-
 }

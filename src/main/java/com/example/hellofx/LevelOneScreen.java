@@ -19,6 +19,7 @@ import java.time.LocalTime;
 
 public class LevelOneScreen extends Application {
     private int scoreText = 0;
+    private Label scoreLabel;
     private Label timeRemainingLabel;
     int oldMinute = LocalTime.now().getMinute();
     int oldSecond = LocalTime.now().getSecond();
@@ -43,6 +44,7 @@ public class LevelOneScreen extends Application {
     private Rectangle playableArea;
     private boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
     private boolean cheat = false;
+    
     @Override
     public void start(Stage stage) {
         Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -53,7 +55,7 @@ public class LevelOneScreen extends Application {
     }
 
     public Scene createScene(double width, double height) {
-        Label       scoreLabel = new Label("Score: " + scoreText);
+        scoreLabel = new Label("Score: " + scoreText);
         Pane        root       = new Pane();
         Image       bg10 = new Image("file:img/bg30.png");
         Image       bg11 = new Image("file:img/bg31.png", false);
@@ -164,23 +166,43 @@ public class LevelOneScreen extends Application {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
                 
-                Rectangle overlay = new Rectangle(DEFAULT_WIDTH, DEFAULT_HEIGHT, Color.BLACK);
+                Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
+                overlay.setX(DEFAULT_WIDTH / 4);
+                overlay.setY(DEFAULT_HEIGHT / 4);
                 overlay.setOpacity(0.5);
                 
                 Label winLabel = new Label("You Won!");
                 winLabel.setFont(Font.font(72));
                 winLabel.setTextFill(Color.GREEN);
-                winLabel.setLayoutX(DEFAULT_WIDTH);
-                winLabel.setLayoutY(DEFAULT_HEIGHT);
+                winLabel.setLayoutX(DEFAULT_WIDTH / 2 - 150);
+                winLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 50);
                 
-                root.getChildren().addAll(overlay, winLabel);
+                Button nextLevelBtn = new Button("Next Level");
+                nextLevelBtn.setPrefWidth(240);
+                nextLevelBtn.setPrefHeight(60);
+                nextLevelBtn.setLayoutX(DEFAULT_WIDTH / 2 - 120);
+                nextLevelBtn.setLayoutY(DEFAULT_HEIGHT / 2 + 50);
+                applyButtonStyle(nextLevelBtn, false);
+                nextLevelBtn.setOnMouseEntered(e -> applyButtonStyle(nextLevelBtn, true));
+                nextLevelBtn.setOnMouseExited(e -> applyButtonStyle(nextLevelBtn, false));
+                nextLevelBtn.setOnAction(e -> {
+                    Stage stage = (Stage) root.getScene().getWindow();
+                    LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
+                    Scene secondLevelScene = levelTwoScreen.createScene(stage.getScene().getWidth(), stage.getScene().getHeight());
+                    stage.setTitle("Level 2");
+                    stage.setScene(secondLevelScene);
+                });
+                
+                root.getChildren().addAll(overlay, winLabel, nextLevelBtn);
             }
 
             if (hasLost()) {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
                 
-                Rectangle overlay = new Rectangle(DEFAULT_WIDTH, DEFAULT_HEIGHT, Color.BLACK);
+                Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
+                overlay.setX(DEFAULT_WIDTH / 4);
+                overlay.setY(DEFAULT_HEIGHT / 4);
                 overlay.setOpacity(0.5);
                 
                 Label lostLabel = new Label("You Lost!");
@@ -291,7 +313,13 @@ public class LevelOneScreen extends Application {
                 boolean collision = player.getTriangle().localToScene(player.getTriangle().getBoundsInLocal()).intersects(e.getBody().localToScene(e.getBody().getBoundsInLocal()));
                 e.getBody().setVisible(collision);
                 if (collision) {
+                    boolean wasAlive = e.isAlive();
                     e.setHealth(e.getHealth() - player.getAttackDamage());
+                    if (wasAlive && !e.isAlive()) {
+                        player.setScore(player.getScore() + e.getScore());
+                        scoreText = player.getScore();
+                        scoreLabel.setText("Score: " + scoreText);
+                    }
                 }
             }
         } else {
@@ -340,6 +368,22 @@ public class LevelOneScreen extends Application {
 
     private boolean hasLost() {
         return !(player.isAlive()) || (totalMinute == 0 && totalSecond == 0);
+    }
+
+	private void applyButtonStyle(Button button, boolean hover) {
+	String backgroundColor = hover ? "#b416e8" : "#8e10bf";
+	String borderColor = hover ? "#5e0b8a" : "#4f007a";
+	button.setStyle(
+			"-fx-background-color: " + backgroundColor + ";" +
+			"-fx-border-color: " + borderColor + ";" +
+			"-fx-border-width: 3;" +
+			"-fx-text-fill: white;" +
+			"-fx-font-size: 26px;" +
+			"-fx-font-weight: 800;" +
+			"-fx-letter-spacing: 2px;" +
+			"-fx-background-radius: 6;" +
+			"-fx-border-radius: 6;"
+	);
     }
 }
 

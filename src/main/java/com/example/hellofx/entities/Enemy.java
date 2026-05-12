@@ -35,7 +35,7 @@ public abstract class Enemy extends Entity {
             this.group.setScaleY(scale);
         }
 
-        if (this.health <= 5) {
+        if (this.health <= 0) {
             this.health = 0;
             this.isAlive = false;
         }

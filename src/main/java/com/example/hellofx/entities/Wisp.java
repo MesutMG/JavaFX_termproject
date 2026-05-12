@@ -17,6 +17,7 @@ public class Wisp extends Enemy {
         this.maxHealth = 200;
         this.attackDamage = 0.3;
         this.health = this.maxHealth;
+        this.score = 30;
 
         circleFace = new Circle(20, Color.RED);
         circleFace.setCenterX(0);
