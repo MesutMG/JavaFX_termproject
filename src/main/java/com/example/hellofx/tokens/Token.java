@@ -1,4 +1,6 @@
-package com.example.hellofx.entities;
+package com.example.hellofx.tokens;
+
+import com.example.hellofx.entities.Player;
 
 import javafx.scene.Group;
 

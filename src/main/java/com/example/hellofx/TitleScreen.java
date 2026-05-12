@@ -101,26 +101,15 @@ public class TitleScreen extends Application {
 	}
 
 	private Background buildBackgroundImage() {
-		var imageUrl = getClass().getResource("images/background.png");
-		if (imageUrl != null) {
-			Image image = new Image(imageUrl.toExternalForm());
-			BackgroundImage backgroundImage = new BackgroundImage(
-					image,
-					BackgroundRepeat.NO_REPEAT,
-					BackgroundRepeat.NO_REPEAT,
-					BackgroundPosition.CENTER,
-					new BackgroundSize(100, 100, true, true, true, true)
-			);
-			return new Background(backgroundImage);
-		}
-
-		LinearGradient gradient = new LinearGradient(
-				0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
-				new Stop(0, Color.web("#3a1f6b")),
-				new Stop(1, Color.web("#2a124f"))
+		Image image = new Image("file:img/mainmenu.png");
+		BackgroundImage backgroundImage = new BackgroundImage(
+				image,
+				BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.CENTER,
+				new BackgroundSize(100, 100, true, true, true, true)
 		);
-
-		return new Background(new BackgroundFill(gradient, CornerRadii.EMPTY, Insets.EMPTY));
+		return new Background(backgroundImage);
 	}
 
 	public Button getStartGameButton() {

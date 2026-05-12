@@ -1,6 +1,8 @@
-package com.example.hellofx.entities;
+package com.example.hellofx.tokens;
 
-public class RangeToken extends Token{
+import com.example.hellofx.entities.Player;
+
+public class RangeToken extends Token {
     public RangeToken(double posX, double posY){
         super(posX, posY);
     }

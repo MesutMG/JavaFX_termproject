@@ -3,6 +3,7 @@ package com.example.hellofx;
 import com.example.hellofx.entities.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -162,6 +163,8 @@ public class LevelOneScreen extends Application {
 
             handleCheat();
 
+            handleToken();
+
             if (hasWon()) {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
@@ -205,13 +208,30 @@ public class LevelOneScreen extends Application {
                 overlay.setY(DEFAULT_HEIGHT / 4);
                 overlay.setOpacity(0.5);
                 
-                Label lostLabel = new Label("You Lost!");
+                Label lostLabel = new Label("Game Over\nFinal Score: " + player.getScore());
+                lostLabel.setAlignment(Pos.CENTER);
                 lostLabel.setFont(Font.font(72));
                 lostLabel.setTextFill(Color.RED);
-                lostLabel.setLayoutX(DEFAULT_WIDTH / 2 - 150);
-                lostLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 50);
+                lostLabel.setLayoutX(DEFAULT_WIDTH / 2 - 180);
+                lostLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 150);
 
-                root.getChildren().addAll(overlay, lostLabel);
+                Button nextLevelBtn = new Button("Try Again");
+                nextLevelBtn.setPrefWidth(240);
+                nextLevelBtn.setPrefHeight(60);
+                nextLevelBtn.setLayoutX(DEFAULT_WIDTH / 2 - 120);
+                nextLevelBtn.setLayoutY(DEFAULT_HEIGHT / 2 + 50);
+                applyButtonStyle(nextLevelBtn, false);
+                nextLevelBtn.setOnMouseEntered(e -> applyButtonStyle(nextLevelBtn, true));
+                nextLevelBtn.setOnMouseExited(e -> applyButtonStyle(nextLevelBtn, false));
+                nextLevelBtn.setOnAction(e -> {
+                    Stage stage = (Stage) root.getScene().getWindow();
+                    LevelOneScreen levelOneScreen = new LevelOneScreen();
+                    Scene firstLevelScene = levelOneScreen.createScene(stage.getScene().getWidth(), stage.getScene().getHeight());
+                    stage.setTitle("Level 1");
+                    stage.setScene(firstLevelScene);
+                });
+
+                root.getChildren().addAll(overlay, lostLabel, nextLevelBtn);
             }
         }
     }
@@ -368,6 +388,14 @@ public class LevelOneScreen extends Application {
 
     private boolean hasLost() {
         return !(player.isAlive()) || (totalMinute == 0 && totalSecond == 0);
+    }
+
+    private void handleToken() {
+        long time = System.currentTimeMillis();
+
+        if (System.currentTimeMillis() - time >= 5000) {
+            // TODO: Implement tokens
+        }
     }
 
 	private void applyButtonStyle(Button button, boolean hover) {
