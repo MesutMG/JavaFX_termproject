@@ -3,19 +3,14 @@ package com.example.hellofx;
 import com.example.hellofx.entities.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.Group;
@@ -52,6 +47,7 @@ public class LevelOneScreen extends Application {
     public void start(Stage stage) {
         Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         stage.setTitle("Level 1");
+        stage.setResizable(false); //bunu cozmemiz lazim !!_1-1--1-1-1------------------------------------
         stage.setScene(scene);
         stage.show();
     }
@@ -59,16 +55,22 @@ public class LevelOneScreen extends Application {
     public Scene createScene(double width, double height) {
         Label       scoreLabel = new Label("Score: " + scoreText);
         Pane        root       = new Pane();
-        Image       bg = new Image("file:img/bg.jpg");
+        Image       bg10 = new Image("file:img/bg30.png");
+        Image       bg11 = new Image("file:img/bg31.png", false);
+        Image       bg12 = new Image("file:img/bg32.png", false);
 
-        BackgroundImage bgImage = new BackgroundImage(
-                bg,
+        BackgroundImage bg = new BackgroundImage(
+                bg10,
                 BackgroundRepeat.NO_REPEAT, // otherwise tiling yapiyor
                 BackgroundRepeat.NO_REPEAT, // otherwise tiling yapiyor
                 BackgroundPosition.CENTER,
                 new BackgroundSize(width, height, false, false, false, true)
                 // widthasPercentage, heigthaspercentage, cropping engelleme, scale yardimi
         );
+
+        ImageView imageView = new ImageView(bg11);
+        ImageView imageView2 = new ImageView(bg12);
+
 
         player = new Player(width/2, height/2);
 
@@ -93,13 +95,14 @@ public class LevelOneScreen extends Application {
         hudTop.setLayoutY(15);
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
-        root.setBackground(new Background(bgImage));
+        root.setBackground(new Background(bg));
         root.getChildren().add(playableArea);
         for (Enemy e : enemies) {
             root.getChildren().add(e.getBody());
         }
         root.getChildren().addAll(player.getGroup());
         root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle());
+        root.getChildren().addAll(imageView, imageView2);
 
         Scene scene = new Scene(root, width, height);
 
@@ -139,6 +142,8 @@ public class LevelOneScreen extends Application {
 
         @Override
         public void handle(long now) {
+            scoreHandler();
+
             timeRemainingLabelHandler();
 
             handlePlayerMovement();
@@ -159,14 +164,14 @@ public class LevelOneScreen extends Application {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
                 
-                Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
+                Rectangle overlay = new Rectangle(DEFAULT_WIDTH, DEFAULT_HEIGHT, Color.BLACK);
                 overlay.setOpacity(0.5);
                 
                 Label winLabel = new Label("You Won!");
                 winLabel.setFont(Font.font(72));
                 winLabel.setTextFill(Color.GREEN);
-                winLabel.setLayoutX(DEFAULT_WIDTH / 2 - 150);
-                winLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 50);
+                winLabel.setLayoutX(DEFAULT_WIDTH);
+                winLabel.setLayoutY(DEFAULT_HEIGHT);
                 
                 root.getChildren().addAll(overlay, winLabel);
             }
@@ -175,7 +180,7 @@ public class LevelOneScreen extends Application {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
                 
-                Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
+                Rectangle overlay = new Rectangle(DEFAULT_WIDTH, DEFAULT_HEIGHT, Color.BLACK);
                 overlay.setOpacity(0.5);
                 
                 Label lostLabel = new Label("You Lost!");
@@ -187,6 +192,10 @@ public class LevelOneScreen extends Application {
                 root.getChildren().addAll(overlay, lostLabel);
             }
         }
+    }
+
+    private void scoreHandler(){
+        timeRemainingLabel.setText("Score: " + Integer.toString(scoreText));
     }
 
     private void timeRemainingLabelHandler() {
