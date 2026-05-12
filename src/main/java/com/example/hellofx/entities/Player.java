@@ -75,8 +75,6 @@ public class Player extends Entity {
         this.triangle = triangle;
     }
 
-
-
     public double getVacuumPerc() {
         return vacuumPerc;
     }

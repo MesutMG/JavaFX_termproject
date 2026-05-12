@@ -7,16 +7,19 @@ public abstract class Token {
     protected double posY;
     protected Group group;
     protected double speed;
+    protected double angle;
 
     public Token(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
+        this.angle = Math.random() * Math.PI * 2;
         this.speed = 2.5;
     }
 
     public void updatePosition(double newX, double newY, double newAngle) {
         this.posX = newX;
         this.posY = newY;
+        this.angle = newAngle;
 
         if (this.group != null) {
             this.group.setTranslateX(newX);
