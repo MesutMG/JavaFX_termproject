@@ -7,7 +7,8 @@ public abstract class Enemy extends Entity {
     public Enemy(double posX, double posY) {
         super(posX, posY);
         this.angle = Math.random() * Math.PI * 2;
-        this.speed = 1.5;
+        this.speed = Math.random() * 2;
+        this.attackDamage = 2.0;
     }
 
     public void updatePosition(double newX, double newY, double newAngle) {

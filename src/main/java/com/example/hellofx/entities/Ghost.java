@@ -13,7 +13,6 @@ public class Ghost extends Enemy {
     public Ghost(double posX, double posY) {
         super(posX, posY);
         this.maxHealth = 100;
-        this.attackDamage = 0.1;
         this.health = this.maxHealth;
         this.score = 10;
 
