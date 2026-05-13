@@ -7,6 +7,7 @@ import javafx.scene.Group;
 
 public class Player extends Entity {
     private double  vacuumPerc;
+    private double  vacuumWidth = 30;
     private Circle  circle;
     private Polygon triangle;
     private final int CIRCLE_RADIUS = 20;
@@ -33,8 +34,8 @@ public class Player extends Entity {
         Polygon triangle = new Polygon();
         triangle.getPoints().addAll(
                 0.0, 0.0,
-                75.0, -30.0,
-                75.0, 30.0
+                75.0, -vacuumWidth,
+                75.0, vacuumWidth
         );
         triangle.setFill(Color.RED);
         triangle.setStroke(Color.WHITE);
@@ -78,6 +79,10 @@ public class Player extends Entity {
         return vacuumPerc;
     }
 
+    public double getVacuumWidth() { return vacuumWidth; }
+
+    public void setVacuumWidth(double vacuumWidth) { this.vacuumWidth = vacuumWidth; }
+
     public void setVacuumPerc(double vacuumPerc) {
         if (vacuumPerc > 100) {
             this.vacuumPerc = 100;
@@ -99,11 +104,11 @@ public class Player extends Entity {
         this.triangle.getPoints().setAll(
                 0.0, 0.0,
 
-                (75 * Math.cos(angle)) - (-30 * Math.sin(angle)),
-                (75 * Math.sin(angle)) + (-30 * Math.cos(angle)),
+                (75 * Math.cos(angle)) - (-vacuumWidth * Math.sin(angle)),
+                (75 * Math.sin(angle)) + (-vacuumWidth * Math.cos(angle)),
 
-                (75 * Math.cos(angle)) - (30 * Math.sin(angle)),
-                (75 * Math.sin(angle)) + (30 * Math.cos(angle))
+                (75 * Math.cos(angle)) - (vacuumWidth * Math.sin(angle)),
+                (75 * Math.sin(angle)) + (vacuumWidth * Math.cos(angle))
         );
     }
 

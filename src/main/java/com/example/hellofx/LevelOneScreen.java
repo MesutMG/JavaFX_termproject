@@ -1,6 +1,7 @@
 package com.example.hellofx;
 
 import com.example.hellofx.entities.*;
+import com.example.hellofx.tokens.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class LevelOneScreen extends Application {
     private int scoreText = 0;
@@ -41,10 +43,14 @@ public class LevelOneScreen extends Application {
     private HealthBar hBar;
     private VacuumBar vBar;
     private Player player;
-    private Enemy[] enemies = new Enemy[5];
+    private ArrayList<Enemy> enemies = new ArrayList<>();
     private Rectangle playableArea;
     private boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
     private boolean cheat = false;
+    private Pane gameRoot;
+    private ArrayList<Token> tokens = new ArrayList<>();
+    private long lastTokenSpawnTime;
+    private long eyeRevealEndTime = 0;
     
     @Override
     public void start(Stage stage) {
@@ -58,6 +64,8 @@ public class LevelOneScreen extends Application {
     public Scene createScene(double width, double height) {
         scoreLabel = new Label("Score: " + scoreText);
         Pane        root       = new Pane();
+        this.gameRoot = root;
+        this.lastTokenSpawnTime = System.currentTimeMillis();
         Image       bg10 = new Image("file:img/bg30.png");
         Image       bg11 = new Image("file:img/bg31.png", false);
         Image       bg12 = new Image("file:img/bg32.png", false);
@@ -78,8 +86,8 @@ public class LevelOneScreen extends Application {
         player = new Player(width/2, height/2);
 
         for (int i = 0; i < 5; i++) {
-            enemies[i] = new Ghost((Math.random() * PLAY_AREA_W) + PLAY_AREA_X, 
-                                        (Math.random() * PLAY_AREA_H) + PLAY_AREA_Y);
+            enemies.add(new Ghost((Math.random() * PLAY_AREA_W) + PLAY_AREA_X, 
+                                        (Math.random() * PLAY_AREA_H) + PLAY_AREA_Y));
         }
         hBar  = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
         vBar  = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
@@ -290,29 +298,27 @@ public class LevelOneScreen extends Application {
 
     private void handleEnemyMovement() {
         for (Enemy e : enemies) {
-            if (e.isAlive()) {
-                double newX = e.getPosX() + Math.cos(e.getAngle()) * e.getSpeed();
-                double newY = e.getPosY() + Math.sin(e.getAngle()) * e.getSpeed();
-                double newAngle = e.getAngle();
+            double newX = e.getPosX() + Math.cos(e.getAngle()) * e.getSpeed();
+            double newY = e.getPosY() + Math.sin(e.getAngle()) * e.getSpeed();
+            double newAngle = e.getAngle();
 
-                if (newX < PLAY_AREA_X + 20) {
-                    newX = PLAY_AREA_X + 20;
-                    newAngle = Math.PI - newAngle;
-                } else if (newX > PLAY_AREA_X + PLAY_AREA_W - 20) {
-                    newX = PLAY_AREA_X + PLAY_AREA_W - 20;
-                    newAngle = Math.PI - newAngle;
-                }
-
-                if (newY < PLAY_AREA_Y + 20) {
-                    newY = PLAY_AREA_Y + 20;
-                    newAngle = -newAngle;
-                } else if (newY > PLAY_AREA_Y + PLAY_AREA_H - 20) {
-                    newY = PLAY_AREA_Y + PLAY_AREA_H - 20;
-                    newAngle = -newAngle;
-                }
-
-                e.updatePosition(newX, newY, newAngle);
+            if (newX < PLAY_AREA_X + 20) {
+                newX = PLAY_AREA_X + 20;
+                newAngle = Math.PI - newAngle;
+            } else if (newX > PLAY_AREA_X + PLAY_AREA_W - 20) {
+                newX = PLAY_AREA_X + PLAY_AREA_W - 20;
+                newAngle = Math.PI - newAngle;
             }
+
+            if (newY < PLAY_AREA_Y + 20) {
+                newY = PLAY_AREA_Y + 20;
+                newAngle = -newAngle;
+            } else if (newY > PLAY_AREA_Y + PLAY_AREA_H - 20) {
+                newY = PLAY_AREA_Y + PLAY_AREA_H - 20;
+                newAngle = -newAngle;
+            }
+
+            e.updatePosition(newX, newY, newAngle);
         }
     }
 
@@ -329,16 +335,18 @@ public class LevelOneScreen extends Application {
             vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setVisible(true);
             
-            for (Enemy e : enemies) {
+            for (int i = enemies.size() - 1; i >= 0; i--) {
+                Enemy e = enemies.get(i);
                 boolean collision = player.getTriangle().localToScene(player.getTriangle().getBoundsInLocal()).intersects(e.getBody().localToScene(e.getBody().getBoundsInLocal()));
                 e.getBody().setVisible(collision);
                 if (collision) {
-                    boolean wasAlive = e.isAlive();
                     e.setHealth(e.getHealth() - player.getAttackDamage());
-                    if (wasAlive && !e.isAlive()) {
+                    if (!e.isAlive()) {
                         player.setScore(player.getScore() + e.getScore());
                         scoreText = player.getScore();
                         scoreLabel.setText("Score: " + scoreText);
+                        gameRoot.getChildren().remove(e.getBody());
+                        enemies.remove(i);
                     }
                 }
             }
@@ -375,15 +383,7 @@ public class LevelOneScreen extends Application {
     }
 
     private boolean hasWon() {
-        boolean all_dead = true;
-        for (Enemy e : enemies) {
-            if (e.isAlive()) {
-                all_dead = false;
-                break;
-            }
-        }
-
-        return all_dead;
+        return enemies.isEmpty();
     }
 
     private boolean hasLost() {
@@ -391,10 +391,53 @@ public class LevelOneScreen extends Application {
     }
 
     private void handleToken() {
-        long time = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
 
-        if (System.currentTimeMillis() - time >= 5000) {
-            // TODO: Implement tokens
+        // Spawn a new random token every 5 seconds
+        if (currentTime - lastTokenSpawnTime >= 5000) {
+            lastTokenSpawnTime = currentTime;
+            double x = (Math.random() * (PLAY_AREA_W - 40)) + PLAY_AREA_X + 20;
+            double y = (Math.random() * (PLAY_AREA_H - 40)) + PLAY_AREA_Y + 20;
+
+            int type = (int) (Math.random() * 3);
+            Token token;
+            switch (type) {
+                case 0:  token = new HealthToken(x, y); break;
+                case 1:  token = new RangeToken(x, y);  break;
+                default: token = new EyeToken(x, y);    break;
+            }
+
+            tokens.add(token);
+            gameRoot.getChildren().add(token.getBody());
+        }
+
+        // Check collision with player and collect tokens
+        for (int i = tokens.size() - 1; i >= 0; i--) {
+            Token token = tokens.get(i);
+            boolean collision = player.getCircle()
+                    .localToScene(player.getCircle().getBoundsInLocal())
+                    .intersects(token.getBody().localToScene(token.getBody().getBoundsInLocal()));
+
+            if (collision) {
+                token.tokenUsed(player);
+
+                if (token instanceof HealthToken) {
+                    hBar.setBarPercentage(player.getHealth());
+                }
+                if (token instanceof EyeToken) {
+                    eyeRevealEndTime = currentTime + 5000;
+                }
+
+                gameRoot.getChildren().remove(token.getBody());
+                tokens.remove(i);
+            }
+        }
+
+        // Eye reveal effect: show all alive enemies for 5 seconds
+        if (currentTime < eyeRevealEndTime) {
+            for (Enemy e : enemies) {
+                e.getBody().setVisible(true);
+            }
         }
     }
 

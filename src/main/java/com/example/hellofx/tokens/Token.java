@@ -10,6 +10,7 @@ public abstract class Token {
     protected Group group;
     protected double speed;
     protected double angle;
+    protected boolean collected = false;
 
     public Token(double posX, double posY) {
         this.posX = posX;
@@ -29,9 +30,7 @@ public abstract class Token {
         }
     }
 
-    public void tokenUsed(Player player) {
-        return;
-    }
+    public abstract void tokenUsed(Player player);
 
     public void update() {
     }
@@ -39,4 +38,10 @@ public abstract class Token {
     public Group getBody() {
         return group;
     }
+
+    public double getPosX() { return posX; }
+    public double getPosY() { return posY; }
+
+    public boolean isCollected() { return collected; }
+    public void setCollected(boolean collected) { this.collected = collected; }
 }
