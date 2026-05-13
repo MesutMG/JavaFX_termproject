@@ -27,16 +27,16 @@ public abstract class Level extends Application {
     protected int oldSecond = LocalTime.now().getSecond();
     protected int localDeviceMinute;
     protected int localDeviceSecond;
-    protected int totalMinute;
-    protected int totalSecond;
+    protected int totalMinute; //config.txt'den alinacak--------------------------------------------------------------
+    protected int totalSecond; //config.txt'den alinacak--------------------------------------------------------------
     protected static final int DEFAULT_WIDTH   = 1280;
     protected static final int DEFAULT_HEIGHT  = 720;
     protected static final int HEALTHBAR_POSX  = DEFAULT_WIDTH - 80;
     protected static final int HEALTHBAR_POSY  = 160;
     protected static final int VACUUMBAR_POSX  = 30;
     protected static final int VACUUMBAR_POSY  = 160;
-    protected int playAreaX = 240;
-    protected int playAreaY = 60;
+    protected int playAreaX = 240; //config.txt'den alinacak----------------------------------------------------------
+    protected int playAreaY = 60;//config.txt'den alinacak------------------------------------------------------------
     protected int playAreaW = getPlayAreaW();
     protected int playAreaH = getPlayAreaH();
     protected HealthBar hBar;
@@ -70,11 +70,13 @@ public abstract class Level extends Application {
     // Utility for subclasses to generate random X inside the play area
     protected double randomX() {
         return (Math.random() * playAreaW) + playAreaX;
+        //config.txt'den alinacak-----------------------------------------------------------------------------------
     }
 
     // Utility for subclasses to generate random Y inside the play area
     protected double randomY() {
         return (Math.random() * playAreaH) + playAreaY;
+        //config.txt'den alinacak-----------------------------------------------------------------------------------
     }
 
     @Override
@@ -129,6 +131,7 @@ public abstract class Level extends Application {
         root.getChildren().add(playableArea);
         for (Enemy e : enemies) {
             root.getChildren().add(e.getBody());
+            //config.txt'den alinacak-----------------------------------------------------------------------------
         }
         root.getChildren().addAll(player.getGroup());
         root.getChildren().addAll(hudTop, hBar.getRectangle(), vBar.getRectangle());
@@ -140,6 +143,15 @@ public abstract class Level extends Application {
             root.getChildren().add(iv);
         }
 
+        Scene scene = getScene(width, height, root);
+
+        AnimationTimer timer = new GameTimer();
+        timer.start();
+
+        return scene;
+    }
+
+    private Scene getScene(double width, double height, Pane root) {
         Scene scene = new Scene(root, width, height);
 
         scene.setOnKeyPressed(event -> {
@@ -167,10 +179,6 @@ public abstract class Level extends Application {
                 case C: cheat = false; break;
             }
         });
-
-        AnimationTimer timer = new GameTimer();
-        timer.start();
-
         return scene;
     }
 
@@ -263,7 +271,7 @@ public abstract class Level extends Application {
     }
 
     private void scoreHandler() {
-        scoreLabel.setText("Score: " + Integer.toString(scoreText));
+        scoreLabel.setText("Score: " + scoreText);
     }
 
     private void timeRemainingLabelHandler() {
@@ -280,7 +288,7 @@ public abstract class Level extends Application {
             } else {
                 totalSecond -= 1;
             }
-            timeRemainingLabel.setText("Time: " + Integer.toString(totalMinute) + ":" + Integer.toString(totalSecond));
+            timeRemainingLabel.setText("Time: " + totalMinute + ":" + totalSecond);
         }
 
         oldMinute = localDeviceMinute;
@@ -380,7 +388,7 @@ public abstract class Level extends Application {
                 }
             }
         } else {
-            player.setVacuumPerc(Math.min(100, player.getVacuumPerc() + 0.1));
+            player.setVacuumPerc(Math.min(100, player.getVacuumPerc() + 0.1)); //config.txt'den alinacak--------------
             vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setVisible(false);
             for (Enemy e : enemies) {
@@ -429,12 +437,11 @@ public abstract class Level extends Application {
             double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
 
             int type = (int) (Math.random() * 3);
-            Token token;
-            switch (type) {
-                case 0:  token = new HealthToken(x, y); break;
-                case 1:  token = new RangeToken(x, y);  break;
-                default: token = new EyeToken(x, y);    break;
-            }
+            Token token = switch (type) {
+                case 0 -> new HealthToken(x, y);
+                case 1 -> new RangeToken(x, y);
+                default -> new EyeToken(x, y);
+            };
 
             tokens.add(token);
             gameRoot.getChildren().add(token.getBody());
@@ -455,6 +462,7 @@ public abstract class Level extends Application {
                 }
                 if (token instanceof EyeToken) {
                     eyeRevealEndTime = currentTime + 5000;
+                    //config.txt'den alinacak------------------------------------------------------------------------
                 }
 
                 gameRoot.getChildren().remove(token.getBody());

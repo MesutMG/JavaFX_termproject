@@ -30,5 +30,6 @@ public class HealthToken extends Token {
     @Override
     public void tokenUsed(Player player) {
         player.setHealth(Math.min(player.getHealth() + 10, 100));
+        //config.txt'den alinacak--------------------------------------------------------------------------------------
     }
 }

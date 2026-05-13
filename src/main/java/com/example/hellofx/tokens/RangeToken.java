@@ -30,5 +30,6 @@ public class RangeToken extends Token {
     @Override
     public void tokenUsed(Player player) {
         player.setVacuumWidth(player.getVacuumWidth() + 20);
+        //config.txt'den alinacak------------------------------------------------------------------------------------
     }
 }

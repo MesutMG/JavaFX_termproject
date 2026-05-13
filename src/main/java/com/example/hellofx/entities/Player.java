@@ -14,13 +14,13 @@ public class Player extends Entity {
 
     public Player(double posX, double posY) {
         super(posX, posY);
-        this.maxHealth  = 100;
+        this.maxHealth  = 100;//config.txt'den alinacak---------------------------------------------------------------
         this.health     = 100;
         this.posX       = posX;
         this.posY       = posY;
         this.score      = 0;
         this.isAlive    = true;
-        this.vacuumPerc = 100;
+        this.vacuumPerc = 100;//config.txt'den alinacak (bu 100 kalsin ama decreasing amountu degistirsin)-------------
         this.angle      = 0;
         this.speed      = 5;
         this.attackDamage = 1;

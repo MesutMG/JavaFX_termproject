@@ -29,6 +29,6 @@ public class EyeToken extends Token {
 
     @Override
     public void tokenUsed(Player player) {
-        // Eye reveal effect is handled in LevelOneScreen
+        // Eye reveal effect is handled in Level Class
     }
 }
