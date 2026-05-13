@@ -12,6 +12,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+import com.example.hellofx.levels.*;
 
 public class SelectLevel extends Application {
     private static final double DEFAULT_WIDTH = 1280;
@@ -55,7 +56,7 @@ public class SelectLevel extends Application {
             LevelOneScreen levelOneScreen = new LevelOneScreen();
             double sceneWidth = stage.getScene().getWidth();
             double sceneHeight = stage.getScene().getHeight();
-            Scene firstLevelScene = levelOneScreen.createScene(sceneWidth, sceneHeight);
+            Scene firstLevelScene = levelOneScreen.createScene(sceneWidth, sceneHeight, levelOneScreen.getGhostCount(), levelOneScreen.getRipperCount(), levelOneScreen.getWispCount());
             stage.setTitle("Level 1");
             stage.setScene(firstLevelScene);
         });
@@ -64,7 +65,7 @@ public class SelectLevel extends Application {
             LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
             double sceneWidth = stage.getScene().getWidth();
             double sceneHeight = stage.getScene().getHeight();
-            Scene secondLevelScene = levelTwoScreen.createScene(sceneWidth, sceneHeight);
+            Scene secondLevelScene = levelTwoScreen.createScene(sceneWidth, sceneHeight, levelTwoScreen.getGhostCount(), levelTwoScreen.getRipperCount(), levelTwoScreen.getWispCount());
             stage.setTitle("Level 2");
             stage.setScene(secondLevelScene);
         });
@@ -73,7 +74,7 @@ public class SelectLevel extends Application {
             LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
             double sceneWidth = stage.getScene().getWidth();
             double sceneHeight = stage.getScene().getHeight();
-            Scene thirdLevelScene = levelThreeScreen.createScene(sceneWidth, sceneHeight);
+            Scene thirdLevelScene = levelThreeScreen.createScene(sceneWidth, sceneHeight, levelThreeScreen.getGhostCount(), levelThreeScreen.getRipperCount(), levelThreeScreen.getWispCount());
             stage.setTitle("Level 3");
             stage.setScene(thirdLevelScene);
         });

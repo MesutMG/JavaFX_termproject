@@ -13,6 +13,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+import com.example.hellofx.levels.*;
 
 public class TitleScreen extends Application {
 	private static final double DEFAULT_WIDTH = 1280;
@@ -64,7 +65,7 @@ public class TitleScreen extends Application {
 		LevelOneScreen game = new LevelOneScreen();
 		double width = stage.getWidth();
 		double height = stage.getHeight();
-		Scene gameScene = game.createScene(width, height);
+		Scene gameScene = game.createScene(width, height, game.getGhostCount(), game.getRipperCount(), game.getWispCount());
 		stage.setTitle("Level 1");
 		stage.setScene(gameScene);
 	}

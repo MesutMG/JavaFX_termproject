@@ -1,11 +1,11 @@
-package com.example.hellofx;
+package com.example.hellofx.levels;
 
+import com.example.hellofx.*;
 import com.example.hellofx.entities.*;
 import com.example.hellofx.tokens.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,84 +15,103 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class LevelOneScreen extends Application {
-    private int scoreText = 0;
-    private Label scoreLabel;
-    private Label timeRemainingLabel;
-    int oldMinute = LocalTime.now().getMinute();
-    int oldSecond = LocalTime.now().getSecond();
-    int localDeviceMinute;
-    int localDeviceSecond;
-    private int totalMinute = 1;
-    private int totalSecond = 0;
-    private static final int    DEFAULT_WIDTH   = 1280;
-    private static final int    DEFAULT_HEIGHT  = 720;
-    private static final int    HEALTHBAR_POSX  = DEFAULT_WIDTH - 80;
-    private static final int    HEALTHBAR_POSY  = 160; // defaultheight/2 - 200
-    private static final int    VACUUMBAR_POSX  = 30;
-    private static final int    VACUUMBAR_POSY  = 160; // defaultheight/2 - 200
-    private static final int    PLAY_AREA_X     = 240;
-    private static final int    PLAY_AREA_Y     = 60;
-    private static final int    PLAY_AREA_W     = 800;
-    private static final int    PLAY_AREA_H     = 600;
-    private HealthBar hBar;
-    private VacuumBar vBar;
-    private Player player;
-    private ArrayList<Enemy> enemies = new ArrayList<>();
-    private Rectangle playableArea;
-    private boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
-    private boolean cheat = false;
-    private Pane gameRoot;
-    private ArrayList<Token> tokens = new ArrayList<>();
-    private long lastTokenSpawnTime;
-    private long eyeRevealEndTime = 0;
-    
+public abstract class Level extends Application {
+    protected int scoreText = 0;
+    protected Label scoreLabel;
+    protected Label timeRemainingLabel;
+    protected int oldMinute = LocalTime.now().getMinute();
+    protected int oldSecond = LocalTime.now().getSecond();
+    protected int localDeviceMinute;
+    protected int localDeviceSecond;
+    protected int totalMinute;
+    protected int totalSecond;
+    protected static final int DEFAULT_WIDTH   = 1280;
+    protected static final int DEFAULT_HEIGHT  = 720;
+    protected static final int HEALTHBAR_POSX  = DEFAULT_WIDTH - 80;
+    protected static final int HEALTHBAR_POSY  = 160;
+    protected static final int VACUUMBAR_POSX  = 30;
+    protected static final int VACUUMBAR_POSY  = 160;
+    protected int playAreaX = 240;
+    protected int playAreaY = 60;
+    protected int playAreaW = getPlayAreaW();
+    protected int playAreaH = getPlayAreaH();
+    protected HealthBar hBar;
+    protected VacuumBar vBar;
+    protected Player player;
+    protected ArrayList<Enemy> enemies = new ArrayList<>();
+    protected Rectangle playableArea;
+    protected boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
+    protected boolean cheat = false;
+    protected Pane gameRoot;
+    protected ArrayList<Token> tokens = new ArrayList<>();
+    protected long lastTokenSpawnTime;
+    protected long eyeRevealEndTime = 0;
+
+    // Abstract methods subclasses must implement
+
+    public abstract String getLevelTitle();
+    public abstract int getTimeLimitMinutes();
+    public abstract int getTimeLimitSeconds();
+    public abstract String getBackgroundImagePath();
+    public abstract String[] getOverlayImagePaths();
+    public abstract int getGhostCount();
+    public abstract int getRipperCount();
+    public abstract int getWispCount();
+    public abstract Level createNextLevel();
+    public abstract Level createRetryLevel();
+    public abstract String getNextLevelTitle();
+    public abstract int getPlayAreaW();
+    public abstract int getPlayAreaH();
+
+    // Utility for subclasses to generate random X inside the play area
+    protected double randomX() {
+        return (Math.random() * playAreaW) + playAreaX;
+    }
+
+    // Utility for subclasses to generate random Y inside the play area
+    protected double randomY() {
+        return (Math.random() * playAreaH) + playAreaY;
+    }
+
     @Override
     public void start(Stage stage) {
-        Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        stage.setTitle("Level 1");
-        stage.setResizable(false); //bunu cozmemiz lazim !!_1-1--1-1-1------------------------------------
+        Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, getGhostCount(), getRipperCount(), getWispCount());
+        stage.setTitle(getLevelTitle());
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
 
-    public Scene createScene(double width, double height) {
+    public Scene createScene(double width, double height, int ghosts, int rippers, int wisps) {
+        totalMinute = getTimeLimitMinutes();
+        totalSecond = getTimeLimitSeconds();
+
         scoreLabel = new Label("Score: " + scoreText);
-        Pane        root       = new Pane();
+        Pane root = new Pane();
         this.gameRoot = root;
         this.lastTokenSpawnTime = System.currentTimeMillis();
-        Image       bg10 = new Image("file:img/bg30.png");
-        Image       bg11 = new Image("file:img/bg31.png", false);
-        Image       bg12 = new Image("file:img/bg32.png", false);
 
+        Image bgImage = new Image(getBackgroundImagePath());
         BackgroundImage bg = new BackgroundImage(
-                bg10,
-                BackgroundRepeat.NO_REPEAT, // otherwise tiling yapiyor
-                BackgroundRepeat.NO_REPEAT, // otherwise tiling yapiyor
+                bgImage,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
                 new BackgroundSize(width, height, false, false, false, true)
-                // widthasPercentage, heigthaspercentage, cropping engelleme, scale yardimi
         );
 
-        ImageView imageView = new ImageView(bg11);
-        ImageView imageView2 = new ImageView(bg12);
+        player = new Player(width / 2, height / 2);
 
+        spawnEnemies(ghosts, rippers, wisps);
 
-        player = new Player(width/2, height/2);
+        hBar = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
+        vBar = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
 
-        for (int i = 0; i < 5; i++) {
-            enemies.add(new Ghost((Math.random() * PLAY_AREA_W) + PLAY_AREA_X, 
-                                        (Math.random() * PLAY_AREA_H) + PLAY_AREA_Y));
-        }
-        hBar  = new HealthBar(HEALTHBAR_POSX, HEALTHBAR_POSY);
-        vBar  = new VacuumBar(VACUUMBAR_POSX, VACUUMBAR_POSY);
-
-        playableArea = new Rectangle(PLAY_AREA_X, PLAY_AREA_Y, PLAY_AREA_W, PLAY_AREA_H);
+        playableArea = new Rectangle(playAreaX, playAreaY, playAreaW, playAreaH);
         playableArea.setFill(Color.TRANSPARENT);
         playableArea.setStroke(Color.TRANSPARENT);
         playableArea.setStrokeWidth(3);
@@ -112,8 +131,14 @@ public class LevelOneScreen extends Application {
             root.getChildren().add(e.getBody());
         }
         root.getChildren().addAll(player.getGroup());
-        root.getChildren().addAll(hudTop,hBar.getRectangle(), vBar.getRectangle());
-        root.getChildren().addAll(imageView, imageView2);
+        root.getChildren().addAll(hudTop, hBar.getRectangle(), vBar.getRectangle());
+
+        // Add overlay images if any
+        String[] overlays = getOverlayImagePaths();
+        for (String path : overlays) {
+            ImageView iv = new ImageView(new Image(path, false));
+            root.getChildren().add(iv);
+        }
 
         Scene scene = new Scene(root, width, height);
 
@@ -143,22 +168,18 @@ public class LevelOneScreen extends Application {
             }
         });
 
-        AnimationTimer timer = new MyTimer();
+        AnimationTimer timer = new GameTimer();
         timer.start();
 
         return scene;
     }
 
-    private class MyTimer extends AnimationTimer {
-
+    private class GameTimer extends AnimationTimer {
         @Override
         public void handle(long now) {
             scoreHandler();
-
             timeRemainingLabelHandler();
-
             handlePlayerMovement();
-
             handleVacuum();
 
             for (Enemy e : enemies) {
@@ -166,28 +187,25 @@ public class LevelOneScreen extends Application {
             }
 
             handleEnemyMovement();
-
             handleHealth();
-
             handleCheat();
-
             handleToken();
 
             if (hasWon()) {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
-                
+
                 Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
                 overlay.setX(DEFAULT_WIDTH / 4);
                 overlay.setY(DEFAULT_HEIGHT / 4);
                 overlay.setOpacity(0.5);
-                
+
                 Label winLabel = new Label("You Won!");
                 winLabel.setFont(Font.font(72));
                 winLabel.setTextFill(Color.GREEN);
                 winLabel.setLayoutX(DEFAULT_WIDTH / 2 - 150);
                 winLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 50);
-                
+
                 Button nextLevelBtn = new Button("Next Level");
                 nextLevelBtn.setPrefWidth(240);
                 nextLevelBtn.setPrefHeight(60);
@@ -198,24 +216,24 @@ public class LevelOneScreen extends Application {
                 nextLevelBtn.setOnMouseExited(e -> applyButtonStyle(nextLevelBtn, false));
                 nextLevelBtn.setOnAction(e -> {
                     Stage stage = (Stage) root.getScene().getWindow();
-                    LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
-                    Scene secondLevelScene = levelTwoScreen.createScene(stage.getScene().getWidth(), stage.getScene().getHeight());
-                    stage.setTitle("Level 2");
-                    stage.setScene(secondLevelScene);
+                    Level nextLevel = createNextLevel();
+                    Scene nextScene = nextLevel.createScene(stage.getScene().getWidth(), stage.getScene().getHeight(), nextLevel.getGhostCount(), nextLevel.getRipperCount(), nextLevel.getWispCount());
+                    stage.setTitle(getNextLevelTitle());
+                    stage.setScene(nextScene);
                 });
-                
+
                 root.getChildren().addAll(overlay, winLabel, nextLevelBtn);
             }
 
             if (hasLost()) {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
-                
+
                 Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
                 overlay.setX(DEFAULT_WIDTH / 4);
                 overlay.setY(DEFAULT_HEIGHT / 4);
                 overlay.setOpacity(0.5);
-                
+
                 Label lostLabel = new Label("Game Over\nFinal Score: " + player.getScore());
                 lostLabel.setAlignment(Pos.CENTER);
                 lostLabel.setFont(Font.font(72));
@@ -223,29 +241,29 @@ public class LevelOneScreen extends Application {
                 lostLabel.setLayoutX(DEFAULT_WIDTH / 2 - 180);
                 lostLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 150);
 
-                Button nextLevelBtn = new Button("Try Again");
-                nextLevelBtn.setPrefWidth(240);
-                nextLevelBtn.setPrefHeight(60);
-                nextLevelBtn.setLayoutX(DEFAULT_WIDTH / 2 - 120);
-                nextLevelBtn.setLayoutY(DEFAULT_HEIGHT / 2 + 50);
-                applyButtonStyle(nextLevelBtn, false);
-                nextLevelBtn.setOnMouseEntered(e -> applyButtonStyle(nextLevelBtn, true));
-                nextLevelBtn.setOnMouseExited(e -> applyButtonStyle(nextLevelBtn, false));
-                nextLevelBtn.setOnAction(e -> {
+                Button retryBtn = new Button("Try Again");
+                retryBtn.setPrefWidth(240);
+                retryBtn.setPrefHeight(60);
+                retryBtn.setLayoutX(DEFAULT_WIDTH / 2 - 120);
+                retryBtn.setLayoutY(DEFAULT_HEIGHT / 2 + 50);
+                applyButtonStyle(retryBtn, false);
+                retryBtn.setOnMouseEntered(e -> applyButtonStyle(retryBtn, true));
+                retryBtn.setOnMouseExited(e -> applyButtonStyle(retryBtn, false));
+                retryBtn.setOnAction(e -> {
                     Stage stage = (Stage) root.getScene().getWindow();
-                    LevelOneScreen levelOneScreen = new LevelOneScreen();
-                    Scene firstLevelScene = levelOneScreen.createScene(stage.getScene().getWidth(), stage.getScene().getHeight());
-                    stage.setTitle("Level 1");
-                    stage.setScene(firstLevelScene);
+                    Level retry = createRetryLevel();
+                    Scene retryScene = retry.createScene(stage.getScene().getWidth(), stage.getScene().getHeight(), retry.getGhostCount(), retry.getRipperCount(), retry.getWispCount());
+                    stage.setTitle(getLevelTitle());
+                    stage.setScene(retryScene);
                 });
 
-                root.getChildren().addAll(overlay, lostLabel, nextLevelBtn);
+                root.getChildren().addAll(overlay, lostLabel, retryBtn);
             }
         }
     }
 
-    private void scoreHandler(){
-        timeRemainingLabel.setText("Score: " + Integer.toString(scoreText));
+    private void scoreHandler() {
+        scoreLabel.setText("Score: " + Integer.toString(scoreText));
     }
 
     private void timeRemainingLabelHandler() {
@@ -259,7 +277,6 @@ public class LevelOneScreen extends Application {
                     totalMinute -= 1;
                     totalSecond = 59;
                 }
-
             } else {
                 totalSecond -= 1;
             }
@@ -268,6 +285,18 @@ public class LevelOneScreen extends Application {
 
         oldMinute = localDeviceMinute;
         oldSecond = localDeviceSecond;
+    }
+
+    protected void spawnEnemies(int n, int m, int k) {
+        for (int i = 0; i < n; i++) {
+            enemies.add(new Ghost(randomX(), randomY()));
+        }
+        for (int i = 0; i < m; i++) {
+            enemies.add(new Ripper(randomX(), randomY()));
+        }
+        for (int i = 0; i < k; i++) {
+            enemies.add(new Wisp(randomX(), randomY()));
+        }
     }
 
     private void handlePlayerMovement() {
@@ -287,10 +316,10 @@ public class LevelOneScreen extends Application {
             double newX = player.getPosX() + moveX;
             double newY = player.getPosY() + moveY;
 
-            if (newX < PLAY_AREA_X + 20) newX = PLAY_AREA_X + 20;
-            if (newX > PLAY_AREA_X + PLAY_AREA_W - 20) newX = PLAY_AREA_X + PLAY_AREA_W - 20;
-            if (newY < PLAY_AREA_Y + 20) newY = PLAY_AREA_Y + 20;
-            if (newY > PLAY_AREA_Y + PLAY_AREA_H - 20) newY = PLAY_AREA_Y + PLAY_AREA_H - 20;
+            if (newX < playAreaX + 20) newX = playAreaX + 20;
+            if (newX > playAreaX + playAreaW - 20) newX = playAreaX + playAreaW - 20;
+            if (newY < playAreaY + 20) newY = playAreaY + 20;
+            if (newY > playAreaY + playAreaH - 20) newY = playAreaY + playAreaH - 20;
 
             player.updatePosition(newX, newY, angle);
         }
@@ -302,19 +331,19 @@ public class LevelOneScreen extends Application {
             double newY = e.getPosY() + Math.sin(e.getAngle()) * e.getSpeed();
             double newAngle = e.getAngle();
 
-            if (newX < PLAY_AREA_X + 20) {
-                newX = PLAY_AREA_X + 20;
+            if (newX < playAreaX + 20) {
+                newX = playAreaX + 20;
                 newAngle = Math.PI - newAngle;
-            } else if (newX > PLAY_AREA_X + PLAY_AREA_W - 20) {
-                newX = PLAY_AREA_X + PLAY_AREA_W - 20;
+            } else if (newX > playAreaX + playAreaW - 20) {
+                newX = playAreaX + playAreaW - 20;
                 newAngle = Math.PI - newAngle;
             }
 
-            if (newY < PLAY_AREA_Y + 20) {
-                newY = PLAY_AREA_Y + 20;
+            if (newY < playAreaY + 20) {
+                newY = playAreaY + 20;
                 newAngle = -newAngle;
-            } else if (newY > PLAY_AREA_Y + PLAY_AREA_H - 20) {
-                newY = PLAY_AREA_Y + PLAY_AREA_H - 20;
+            } else if (newY > playAreaY + playAreaH - 20) {
+                newY = playAreaY + playAreaH - 20;
                 newAngle = -newAngle;
             }
 
@@ -330,11 +359,11 @@ public class LevelOneScreen extends Application {
                 player.getTriangle().setVisible(false);
                 for (Enemy e : enemies) e.getBody().setVisible(false);
                 return;
-            } 
+            }
             player.setVacuumPerc(player.getVacuumPerc() - 1);
             vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setVisible(true);
-            
+
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 Enemy e = enemies.get(i);
                 boolean collision = player.getTriangle().localToScene(player.getTriangle().getBoundsInLocal()).intersects(e.getBody().localToScene(e.getBody().getBoundsInLocal()));
@@ -396,8 +425,8 @@ public class LevelOneScreen extends Application {
         // Spawn a new random token every 5 seconds
         if (currentTime - lastTokenSpawnTime >= 5000) {
             lastTokenSpawnTime = currentTime;
-            double x = (Math.random() * (PLAY_AREA_W - 40)) + PLAY_AREA_X + 20;
-            double y = (Math.random() * (PLAY_AREA_H - 40)) + PLAY_AREA_Y + 20;
+            double x = (Math.random() * (playAreaW - 40)) + playAreaX + 20;
+            double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
 
             int type = (int) (Math.random() * 3);
             Token token;
@@ -441,20 +470,19 @@ public class LevelOneScreen extends Application {
         }
     }
 
-	private void applyButtonStyle(Button button, boolean hover) {
-	String backgroundColor = hover ? "#b416e8" : "#8e10bf";
-	String borderColor = hover ? "#5e0b8a" : "#4f007a";
-	button.setStyle(
-			"-fx-background-color: " + backgroundColor + ";" +
-			"-fx-border-color: " + borderColor + ";" +
-			"-fx-border-width: 3;" +
-			"-fx-text-fill: white;" +
-			"-fx-font-size: 26px;" +
-			"-fx-font-weight: 800;" +
-			"-fx-letter-spacing: 2px;" +
-			"-fx-background-radius: 6;" +
-			"-fx-border-radius: 6;"
-	);
+    protected void applyButtonStyle(Button button, boolean hover) {
+        String backgroundColor = hover ? "#b416e8" : "#8e10bf";
+        String borderColor = hover ? "#5e0b8a" : "#4f007a";
+        button.setStyle(
+                "-fx-background-color: " + backgroundColor + ";" +
+                "-fx-border-color: " + borderColor + ";" +
+                "-fx-border-width: 3;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-size: 26px;" +
+                "-fx-font-weight: 800;" +
+                "-fx-letter-spacing: 2px;" +
+                "-fx-background-radius: 6;" +
+                "-fx-border-radius: 6;"
+        );
     }
 }
-
