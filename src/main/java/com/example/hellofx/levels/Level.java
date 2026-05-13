@@ -120,7 +120,9 @@ public abstract class Level extends Application {
 
         timeRemainingLabel = new Label("Time: " + localDeviceMinute + "." + localDeviceSecond);
         timeRemainingLabel.setFont(Font.font(24));
+        timeRemainingLabel.setStyle("-fx-text-fill: white; ");
         scoreLabel.setFont(Font.font(24));
+        scoreLabel.setStyle("-fx-text-fill: white; ");
 
         VBox hudTop = new VBox(15);
         hudTop.setLayoutX((DEFAULT_WIDTH >> 1) - 50);
@@ -129,19 +131,20 @@ public abstract class Level extends Application {
 
         root.setBackground(new Background(bg));
         root.getChildren().add(playableArea);
+
         for (Enemy e : enemies) {
             root.getChildren().add(e.getBody());
             //config.txt'den alinacak-----------------------------------------------------------------------------
         }
         root.getChildren().addAll(player.getGroup());
-        root.getChildren().addAll(hudTop, hBar.getRectangle(), vBar.getRectangle());
 
-        // Add overlay images if any
         String[] overlays = getOverlayImagePaths();
         for (String path : overlays) {
             ImageView iv = new ImageView(new Image(path, false));
             root.getChildren().add(iv);
         }
+
+        root.getChildren().addAll(hudTop, hBar.getRectangle(), vBar.getRectangle());
 
         Scene scene = getScene(width, height, root);
 
@@ -298,12 +301,15 @@ public abstract class Level extends Application {
     protected void spawnEnemies(int n, int m, int k) {
         for (int i = 0; i < n; i++) {
             enemies.add(new Ghost(randomX(), randomY()));
+            //config.txt'den alinacak -----------------------------------------------------------------------------
         }
         for (int i = 0; i < m; i++) {
             enemies.add(new Ripper(randomX(), randomY()));
+            //config.txt'den alinacak -----------------------------------------------------------------------------
         }
         for (int i = 0; i < k; i++) {
             enemies.add(new Wisp(randomX(), randomY()));
+            //config.txt'den alinacak -----------------------------------------------------------------------------
         }
     }
 
