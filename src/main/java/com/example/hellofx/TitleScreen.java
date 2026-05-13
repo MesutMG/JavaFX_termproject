@@ -24,6 +24,11 @@ public class TitleScreen extends Application {
 
 	@Override
 	public void start(Stage stage) {
+		ConfigReader config = new ConfigReader();
+		if(config.readConfig("src/main/java/com/example/hellofx/config.txt")){ //if config file doesn't exist
+			//Please upload config.txt file and restart game
+			Platform.exit();
+		}
 		Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, stage);
 		stage.setTitle("Title Screen");
 		stage.setScene(scene);

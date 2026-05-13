@@ -1,5 +1,4 @@
 package com.example.hellofx.entities;
-import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -15,6 +14,7 @@ public class Ghost extends Enemy {
         this.maxHealth = 100;
         this.health = this.maxHealth;
         this.score = 10;
+        this.attackDamage = 0.5;
 
         Circle circle = new Circle(CIRCLE_RADIUS, Color.WHITE);
         circle.setCenterX(0);

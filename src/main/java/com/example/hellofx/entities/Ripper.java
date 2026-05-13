@@ -15,6 +15,7 @@ public class Ripper extends Enemy {
 
     public Ripper(double posX, double posY) {
         super(posX, posY);
+        super.attackDamage = 3;
         this.maxHealth = 150;
         this.health = this.maxHealth;
         this.score = 20;

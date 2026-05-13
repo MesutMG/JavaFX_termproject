@@ -26,7 +26,7 @@ public abstract class Entity {
     public double getSpeed() { return speed; }
     public void setSpeed(double speed) { this.speed = speed; }
 
-    public double getAttackDamage() { return attackDamage; }
+    public double getAttackDamage() { return this.attackDamage; }
     public void setAttackDamage(double attackDamage) { this.attackDamage = attackDamage; }
 
     public int getScore() { return score; }
@@ -36,7 +36,6 @@ public abstract class Entity {
 
     public void setHealth(double health) {
         this.health = Math.max(0, health);
-        this.isAlive = this.health > 0;
     }
 
     public double getPosX() { return posX; }

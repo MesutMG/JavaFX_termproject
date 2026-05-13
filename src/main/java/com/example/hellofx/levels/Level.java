@@ -193,9 +193,9 @@ public abstract class Level extends Application {
             handlePlayerMovement();
             handleVacuum();
 
-            for (Enemy e : enemies) {
+            /*for (Enemy e : enemies) {
                 e.update();
-            }
+            }*/
 
             handleEnemyMovement();
             handleHealth();
@@ -408,8 +408,9 @@ public abstract class Level extends Application {
             if (player.getCircle().localToScene(player.getCircle().getBoundsInLocal()).intersects(e.getBody().localToScene(e.getBody().getBoundsInLocal()))) {
                 player.setHealth(player.getHealth() - e.getAttackDamage());
 
-                if (player.getHealth() < 0) {
+                if (player.getHealth() <= 0) {
                     player.setHealth(0);
+                    player.setAlive(false);
                 }
                 hBar.setBarPercentage(player.getHealth());
             }

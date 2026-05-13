@@ -14,6 +14,7 @@ public class Wisp extends Enemy {
 
     public Wisp(double posX, double posY) {
         super(posX, posY);
+        super.attackDamage = 5;
         this.maxHealth = 200;
         this.health = this.maxHealth;
         this.score = 30;

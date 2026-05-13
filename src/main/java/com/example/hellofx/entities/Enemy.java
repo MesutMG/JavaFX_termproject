@@ -1,6 +1,5 @@
 package com.example.hellofx.entities;
 
-import javafx.scene.Node;
 import javafx.scene.Group;
 
 public abstract class Enemy extends Entity {
@@ -8,7 +7,6 @@ public abstract class Enemy extends Entity {
         super(posX, posY);
         this.angle = Math.random() * Math.PI * 2;
         this.speed = Math.random() * 2;
-        this.attackDamage = 2.0;
     }
 
     public void updatePosition(double newX, double newY, double newAngle) {
@@ -36,7 +34,7 @@ public abstract class Enemy extends Entity {
             this.group.setScaleY(scale);
         }
 
-        if (this.health <= 0) {
+        if (this.health <= 30) { //30%
             this.health = 0;
             this.isAlive = false;
         }
