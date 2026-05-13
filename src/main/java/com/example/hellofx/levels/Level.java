@@ -121,7 +121,7 @@ public abstract class Level extends Application {
         scoreLabel.setFont(Font.font(24));
 
         VBox hudTop = new VBox(15);
-        hudTop.setLayoutX((DEFAULT_WIDTH / 2) - 50);
+        hudTop.setLayoutX((DEFAULT_WIDTH >> 1) - 50);
         hudTop.setLayoutY(15);
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
@@ -195,22 +195,22 @@ public abstract class Level extends Application {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
 
-                Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
-                overlay.setX(DEFAULT_WIDTH / 4);
-                overlay.setY(DEFAULT_HEIGHT / 4);
+                Rectangle overlay = new Rectangle(DEFAULT_WIDTH >> 1, DEFAULT_HEIGHT >> 1, Color.BLACK);
+                overlay.setX(DEFAULT_WIDTH >> 2);
+                overlay.setY(DEFAULT_HEIGHT >> 2);
                 overlay.setOpacity(0.5);
 
                 Label winLabel = new Label("You Won!");
                 winLabel.setFont(Font.font(72));
                 winLabel.setTextFill(Color.GREEN);
-                winLabel.setLayoutX(DEFAULT_WIDTH / 2 - 150);
-                winLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 50);
+                winLabel.setLayoutX((DEFAULT_WIDTH >> 1) - 150);
+                winLabel.setLayoutY((DEFAULT_HEIGHT >> 1) - 50);
 
                 Button nextLevelBtn = new Button("Next Level");
                 nextLevelBtn.setPrefWidth(240);
                 nextLevelBtn.setPrefHeight(60);
-                nextLevelBtn.setLayoutX(DEFAULT_WIDTH / 2 - 120);
-                nextLevelBtn.setLayoutY(DEFAULT_HEIGHT / 2 + 50);
+                nextLevelBtn.setLayoutX((DEFAULT_WIDTH >> 1) - 120);
+                nextLevelBtn.setLayoutY((DEFAULT_HEIGHT >> 1) + 50);
                 applyButtonStyle(nextLevelBtn, false);
                 nextLevelBtn.setOnMouseEntered(e -> applyButtonStyle(nextLevelBtn, true));
                 nextLevelBtn.setOnMouseExited(e -> applyButtonStyle(nextLevelBtn, false));
@@ -229,23 +229,23 @@ public abstract class Level extends Application {
                 this.stop();
                 Pane root = (Pane) player.getGroup().getScene().getRoot();
 
-                Rectangle overlay = new Rectangle(DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2, Color.BLACK);
-                overlay.setX(DEFAULT_WIDTH / 4);
-                overlay.setY(DEFAULT_HEIGHT / 4);
+                Rectangle overlay = new Rectangle(DEFAULT_WIDTH >> 1, DEFAULT_HEIGHT >> 1, Color.BLACK);
+                overlay.setX(DEFAULT_WIDTH >> 2);
+                overlay.setY(DEFAULT_HEIGHT >> 2);
                 overlay.setOpacity(0.5);
 
                 Label lostLabel = new Label("Game Over\nFinal Score: " + player.getScore());
                 lostLabel.setAlignment(Pos.CENTER);
                 lostLabel.setFont(Font.font(72));
                 lostLabel.setTextFill(Color.RED);
-                lostLabel.setLayoutX(DEFAULT_WIDTH / 2 - 180);
-                lostLabel.setLayoutY(DEFAULT_HEIGHT / 2 - 150);
+                lostLabel.setLayoutX((DEFAULT_WIDTH >> 1) - 180);
+                lostLabel.setLayoutY((DEFAULT_HEIGHT >> 1) - 150);
 
                 Button retryBtn = new Button("Try Again");
                 retryBtn.setPrefWidth(240);
                 retryBtn.setPrefHeight(60);
-                retryBtn.setLayoutX(DEFAULT_WIDTH / 2 - 120);
-                retryBtn.setLayoutY(DEFAULT_HEIGHT / 2 + 50);
+                retryBtn.setLayoutX((DEFAULT_WIDTH >> 1) - 120);
+                retryBtn.setLayoutY((DEFAULT_HEIGHT >> 1) + 50);
                 applyButtonStyle(retryBtn, false);
                 retryBtn.setOnMouseEntered(e -> applyButtonStyle(retryBtn, true));
                 retryBtn.setOnMouseExited(e -> applyButtonStyle(retryBtn, false));
@@ -304,10 +304,10 @@ public abstract class Level extends Application {
         int moveY    = 0;
         double angle = player.getAngle();
 
-        if (goUp)   { moveY -= player.getSpeed();}
-        if (goDown) { moveY += player.getSpeed();}
-        if (goLeft) { moveX -= player.getSpeed();}
-        if (goRight){ moveX += player.getSpeed();}
+        if (goUp)   { moveY -= (int) player.getSpeed();}
+        if (goDown) { moveY += (int) player.getSpeed();}
+        if (goLeft) { moveX -= (int) player.getSpeed();}
+        if (goRight){ moveX += (int) player.getSpeed();}
         if (rotateL){ angle -= 0.1;}
         if (rotateR){ angle += 0.1;}
 
