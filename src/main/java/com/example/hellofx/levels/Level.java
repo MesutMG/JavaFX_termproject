@@ -21,7 +21,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public abstract class Level extends Application {
-    public ConfigReader config 	= new ConfigReader();
+    public ConfigReader config = new ConfigReader();
+    public boolean isConfig = config.readConfig("src/main/java/com/example/hellofx/config.txt");
     protected int scoreText = 0;
     protected Label scoreLabel;
     protected Label timeRemainingLabel;
@@ -74,19 +75,17 @@ public abstract class Level extends Application {
     // Utility for subclasses to generate random X inside the play area
     protected double randomX() {
         return (Math.random() * playAreaW) + playAreaX;
-        //config.txt'den alinacak-----------------------------------------------------------------------------------
     }
 
     // Utility for subclasses to generate random Y inside the play area
     protected double randomY() {
         return (Math.random() * playAreaH) + playAreaY;
-        //config.txt'den alinacak-----------------------------------------------------------------------------------
     }
 
     @Override
     public void start(Stage stage) {
 
-        if(config.readConfig("src/main/java/com/example/hellofx/config.txt")){ //if config file doesn't exist
+        if(isConfig){ //if config file doesn't exist
             //Please upload config.txt file and restart game
             Platform.exit();
         }
@@ -273,6 +272,7 @@ public abstract class Level extends Application {
                 retryBtn.setOnAction(e -> {
                     Stage stage = (Stage) root.getScene().getWindow();
                     Level retry = createRetryLevel();
+                    retry.start(stage);
                     Scene retryScene = retry.createScene(stage.getScene().getWidth(), stage.getScene().getHeight(), retry.getGhostCount(), retry.getRipperCount(), retry.getWispCount());
                     stage.setTitle(getLevelTitle());
                     stage.setScene(retryScene);

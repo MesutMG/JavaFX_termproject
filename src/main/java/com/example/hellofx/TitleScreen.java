@@ -12,7 +12,8 @@ import javafx.stage.Stage;
 import com.example.hellofx.levels.*;
 
 public class TitleScreen extends Application {
-	private LogReader 	log		= new LogReader();
+	private LogReader log = new LogReader();
+	private boolean isLog = log.readLog("src/main/java/com/example/hellofx/log.txt");
 	private static final double DEFAULT_WIDTH = 1280;
 	private static final double DEFAULT_HEIGHT = 720;
 	private final Button loadGameButton = new Button("Load Game");
@@ -22,10 +23,6 @@ public class TitleScreen extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		if(log.readLog("src/main/java/com/example/hellofx/log.txt")){//if config file doesn't exist
-			//Generate log.txt with default values 0,1
-		}
-
 		Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, stage);
 		stage.setTitle("Title Screen");
 		stage.setScene(scene);
@@ -33,6 +30,11 @@ public class TitleScreen extends Application {
 	}
 
 	public Scene createScene(double width, double height, Stage stage) {
+
+		if(isLog){//if config file doesn't exist
+			//Generate log.txt with default values 0,1
+		}
+
 		StackPane root = new StackPane();
 		root.setPadding(new Insets(24));
 		root.setBackground(buildBackgroundImage());
@@ -68,6 +70,7 @@ public class TitleScreen extends Application {
 
 	private void switchToGame(Stage stage) {
 		LevelOneScreen game = new LevelOneScreen();
+		game.start(stage);
 		double width = stage.getWidth();
 		double height = stage.getHeight();
 		Scene gameScene = game.createScene(width, height, game.getGhostCount(), game.getRipperCount(), game.getWispCount());
@@ -87,20 +90,26 @@ public class TitleScreen extends Application {
 	public void loadLastLevel(Stage stage){
 		switch (log.last_level){
 			case 1:
-				LevelOneScreen game = new LevelOneScreen();
-				Scene gameScene = game.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, game.getGhostCount(), game.getRipperCount(), game.getWispCount());
+				LevelOneScreen levelOneScreen = new LevelOneScreen();
+				levelOneScreen.start(stage);
+				Scene gameScene = levelOneScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelOneScreen.getGhostCount(), levelOneScreen.getRipperCount(), levelOneScreen.getWispCount());
 				stage.setTitle("Level 1");
 				stage.setScene(gameScene);
+				break;
 			case 2:
 				LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
+				levelTwoScreen.start(stage);
 				Scene secondLevelScene = levelTwoScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelTwoScreen.getGhostCount(), levelTwoScreen.getRipperCount(), levelTwoScreen.getWispCount());
 				stage.setTitle("Level 2");
 				stage.setScene(secondLevelScene);
+				break;
 			case 3:
 				LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
+				levelThreeScreen.start(stage);
 				Scene thirdLevelScene = levelThreeScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelThreeScreen.getGhostCount(), levelThreeScreen.getRipperCount(), levelThreeScreen.getWispCount());
 				stage.setTitle("Level 3");
 				stage.setScene(thirdLevelScene);
+				break;
 		}
 
 

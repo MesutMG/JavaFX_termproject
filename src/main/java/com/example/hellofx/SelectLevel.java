@@ -54,6 +54,7 @@ public class SelectLevel extends Application {
 
         levelOneButton.setOnAction(event -> {
             LevelOneScreen levelOneScreen = new LevelOneScreen();
+            levelOneScreen.start(stage);
             double sceneWidth = stage.getScene().getWidth();
             double sceneHeight = stage.getScene().getHeight();
             Scene firstLevelScene = levelOneScreen.createScene(sceneWidth, sceneHeight, levelOneScreen.getGhostCount(), levelOneScreen.getRipperCount(), levelOneScreen.getWispCount());
@@ -63,6 +64,7 @@ public class SelectLevel extends Application {
 
         levelTwoButton.setOnAction(event -> {
             LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
+            levelTwoScreen.start(stage);
             double sceneWidth = stage.getScene().getWidth();
             double sceneHeight = stage.getScene().getHeight();
             Scene secondLevelScene = levelTwoScreen.createScene(sceneWidth, sceneHeight, levelTwoScreen.getGhostCount(), levelTwoScreen.getRipperCount(), levelTwoScreen.getWispCount());
@@ -72,6 +74,7 @@ public class SelectLevel extends Application {
 
         levelThreeButton.setOnAction(event -> {
             LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
+            levelThreeScreen.start(stage);
             double sceneWidth = stage.getScene().getWidth();
             double sceneHeight = stage.getScene().getHeight();
             Scene thirdLevelScene = levelThreeScreen.createScene(sceneWidth, sceneHeight, levelThreeScreen.getGhostCount(), levelThreeScreen.getRipperCount(), levelThreeScreen.getWispCount());
