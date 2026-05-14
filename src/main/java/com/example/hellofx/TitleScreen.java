@@ -8,27 +8,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 import com.example.hellofx.levels.*;
 
 public class TitleScreen extends Application {
+	private LogReader 	log		= new LogReader();
 	private static final double DEFAULT_WIDTH = 1280;
 	private static final double DEFAULT_HEIGHT = 720;
+	private final Button loadGameButton = new Button("Load Game");
 	private final Button startGameButton = new Button("Start Game");
 	private final Button selectLevelButton = new Button("Select Level");
 	private final Button exitButton = new Button("Exit");
 
 	@Override
 	public void start(Stage stage) {
-		ConfigReader config = new ConfigReader();
-		if(config.readConfig("src/main/java/com/example/hellofx/config.txt")){ //if config file doesn't exist
-			//Please upload config.txt file and restart game
-			Platform.exit();
+		if(log.readLog("src/main/java/com/example/hellofx/log.txt")){//if config file doesn't exist
+			//Generate log.txt with default values 0,1
 		}
+
 		Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, stage);
 		stage.setTitle("Title Screen");
 		stage.setScene(scene);
@@ -43,30 +40,33 @@ public class TitleScreen extends Application {
 		VBox menu = new VBox(18);
 		menu.setAlignment(Pos.CENTER);
 
+		loadGameButton.setPrefWidth(200);
 		startGameButton.setPrefWidth(200);
 		selectLevelButton.setPrefWidth(200);
 		exitButton.setPrefWidth(200);
+
+		loadGameButton.setPrefHeight(64);
 		startGameButton.setPrefHeight(64);
 		selectLevelButton.setPrefHeight(64);
 		exitButton.setPrefHeight(64);
 
+		styleMenuButton(loadGameButton);
 		styleMenuButton(startGameButton);
 		styleMenuButton(selectLevelButton);
 		styleMenuButton(exitButton);
 
+		loadGameButton.setOnAction(event -> loadLastLevel(stage));
 		startGameButton.setOnAction(event -> switchToGame(stage));
 		selectLevelButton.setOnAction(event -> switchToSelectLevel(stage));
 		exitButton.setOnAction(event -> Platform.exit());
 
-		menu.getChildren().addAll(startGameButton, selectLevelButton, exitButton);
+		menu.getChildren().addAll(loadGameButton, startGameButton, selectLevelButton, exitButton);
 		root.getChildren().add(menu);
 
 		return new Scene(root, width, height);
 	}
 
 	private void switchToGame(Stage stage) {
-
-		//hangi levelde kaldigini okuyup o levele yonlendiren fonksiyon yazilacak
 		LevelOneScreen game = new LevelOneScreen();
 		double width = stage.getWidth();
 		double height = stage.getHeight();
@@ -82,6 +82,28 @@ public class TitleScreen extends Application {
 		Scene levelScene = selectLevel.createScene(stage, width, height);
 		stage.setTitle("Select Level");
 		stage.setScene(levelScene);
+	}
+
+	public void loadLastLevel(Stage stage){
+		switch (log.last_level){
+			case 1:
+				LevelOneScreen game = new LevelOneScreen();
+				Scene gameScene = game.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, game.getGhostCount(), game.getRipperCount(), game.getWispCount());
+				stage.setTitle("Level 1");
+				stage.setScene(gameScene);
+			case 2:
+				LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
+				Scene secondLevelScene = levelTwoScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelTwoScreen.getGhostCount(), levelTwoScreen.getRipperCount(), levelTwoScreen.getWispCount());
+				stage.setTitle("Level 2");
+				stage.setScene(secondLevelScene);
+			case 3:
+				LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
+				Scene thirdLevelScene = levelThreeScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelThreeScreen.getGhostCount(), levelThreeScreen.getRipperCount(), levelThreeScreen.getWispCount());
+				stage.setTitle("Level 3");
+				stage.setScene(thirdLevelScene);
+		}
+
+
 	}
 
 	private void styleMenuButton(Button button) {

@@ -5,6 +5,7 @@ import com.example.hellofx.entities.*;
 import com.example.hellofx.tokens.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,6 +21,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public abstract class Level extends Application {
+    public ConfigReader config 	= new ConfigReader();
     protected int scoreText = 0;
     protected Label scoreLabel;
     protected Label timeRemainingLabel;
@@ -27,16 +29,16 @@ public abstract class Level extends Application {
     protected int oldSecond = LocalTime.now().getSecond();
     protected int localDeviceMinute;
     protected int localDeviceSecond;
-    protected int totalMinute; //config.txt'den alinacak--------------------------------------------------------------
-    protected int totalSecond; //config.txt'den alinacak--------------------------------------------------------------
+    protected int totalMinute;
+    protected int totalSecond;
     protected static final int DEFAULT_WIDTH   = 1280;
     protected static final int DEFAULT_HEIGHT  = 720;
     protected static final int HEALTHBAR_POSX  = DEFAULT_WIDTH - 80;
     protected static final int HEALTHBAR_POSY  = 160;
     protected static final int VACUUMBAR_POSX  = 30;
     protected static final int VACUUMBAR_POSY  = 160;
-    protected int playAreaX = 240; //config.txt'den alinacak----------------------------------------------------------
-    protected int playAreaY = 60;//config.txt'den alinacak------------------------------------------------------------
+    protected int playAreaX = getPlayAreaX();
+    protected int playAreaY = getPlayAreaY();
     protected int playAreaW = getPlayAreaW();
     protected int playAreaH = getPlayAreaH();
     protected HealthBar hBar;
@@ -64,6 +66,8 @@ public abstract class Level extends Application {
     public abstract Level createNextLevel();
     public abstract Level createRetryLevel();
     public abstract String getNextLevelTitle();
+    public abstract int getPlayAreaX();
+    public abstract int getPlayAreaY();
     public abstract int getPlayAreaW();
     public abstract int getPlayAreaH();
 
@@ -81,6 +85,12 @@ public abstract class Level extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        if(config.readConfig("src/main/java/com/example/hellofx/config.txt")){ //if config file doesn't exist
+            //Please upload config.txt file and restart game
+            Platform.exit();
+        }
+
         Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, getGhostCount(), getRipperCount(), getWispCount());
         stage.setTitle(getLevelTitle());
         stage.setResizable(false);

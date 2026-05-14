@@ -6,17 +6,17 @@ public class LevelOneScreen extends Level {
     public String getLevelTitle() { return "Level 1"; }
 
     @Override
-    public int getTimeLimitMinutes() { return 1; }
+    public int getTimeLimitMinutes() { return (config.level_1_time / 60); }
 
     @Override
-    public int getTimeLimitSeconds() { return 0; }
+    public int getTimeLimitSeconds() { return (config.level_1_time % 60); }
 
     @Override
-    public String getBackgroundImagePath() { return "file:img/bg30.png"; }
+    public String getBackgroundImagePath() { return "file:img/bg10.png"; }
 
     @Override
     public String[] getOverlayImagePaths() {
-        return new String[]{"file:img/bg31.png", "file:img/bg32.png"};
+        return new String[]{"file:img/bg11.png"};
     }
 
     @Override
@@ -29,10 +29,16 @@ public class LevelOneScreen extends Level {
     public int getWispCount() { return 0; }
 
     @Override
-    public int getPlayAreaW() { return 800; }
+    public int getPlayAreaX() { return config.level_1_playable_area_x; }
 
     @Override
-    public int getPlayAreaH() { return 600; }
+    public int getPlayAreaY() { return config.level_1_playable_area_y; }
+
+    @Override
+    public int getPlayAreaW() { return config.level_1_playable_area_width; }
+
+    @Override
+    public int getPlayAreaH() { return config.level_1_playable_area_height; }
 
     @Override
     public Level createNextLevel() { return new LevelTwoScreen(); }
