@@ -50,8 +50,6 @@ public abstract class Level extends Application {
     protected long lastTokenSpawnTime;
     protected long eyeRevealEndTime = 0;
 
-    // Abstract methods subclasses must implement
-
     public abstract String getLevelTitle();
     public abstract int getTimeLimitMinutes();
     public abstract int getTimeLimitSeconds();
@@ -380,13 +378,13 @@ public abstract class Level extends Application {
             if (player.getVacuumPerc() <= 0) {
                 player.setVacuumPerc(0);
                 vBar.setBarPercentage(0);
-                player.getTriangle().setVisible(false);
+                player.getTriangle().setOpacity(0.15);
                 for (Enemy e : enemies) e.getBody().setVisible(false);
                 return;
             }
             player.setVacuumPerc(player.getVacuumPerc() - 1);
             vBar.setBarPercentage(player.getVacuumPerc());
-            player.getTriangle().setVisible(true);
+            player.getTriangle().setOpacity(1);
 
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 Enemy e = enemies.get(i);
@@ -406,7 +404,7 @@ public abstract class Level extends Application {
         } else {
             player.setVacuumPerc(Math.min(100, player.getVacuumPerc() + 0.1)); //config.txt'den alinacak--------------
             vBar.setBarPercentage(player.getVacuumPerc());
-            player.getTriangle().setVisible(false);
+            player.getTriangle().setOpacity(0.15);
             for (Enemy e : enemies) {
                 e.getBody().setVisible(false);
             }

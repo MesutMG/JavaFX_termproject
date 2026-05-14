@@ -34,8 +34,8 @@ public class Player extends Entity {
         Polygon triangle = new Polygon();
         triangle.getPoints().addAll(
                 0.0, 0.0,
-                75.0, -vacuumWidth,
-                75.0, vacuumWidth
+                100.0, -vacuumWidth,
+                100.0, vacuumWidth
         );
         triangle.setFill(Color.RED);
         triangle.setStroke(Color.WHITE);
@@ -104,11 +104,11 @@ public class Player extends Entity {
         this.triangle.getPoints().setAll(
                 0.0, 0.0,
 
-                (75 * Math.cos(angle)) - (-vacuumWidth * Math.sin(angle)),
-                (75 * Math.sin(angle)) + (-vacuumWidth * Math.cos(angle)),
+                (100 * Math.cos(angle)) - (-vacuumWidth * Math.sin(angle)),
+                (100 * Math.sin(angle)) + (-vacuumWidth * Math.cos(angle)),
 
-                (75 * Math.cos(angle)) - (vacuumWidth * Math.sin(angle)),
-                (75 * Math.sin(angle)) + (vacuumWidth * Math.cos(angle))
+                (100 * Math.cos(angle)) - (vacuumWidth * Math.sin(angle)),
+                (100 * Math.sin(angle)) + (vacuumWidth * Math.cos(angle))
         );
     }
 
