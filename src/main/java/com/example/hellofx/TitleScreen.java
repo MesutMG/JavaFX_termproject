@@ -26,6 +26,8 @@ public class TitleScreen extends Application {
 		Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, stage);
 		stage.setTitle("Title Screen");
 		stage.setScene(scene);
+		stage.sizeToScene();
+		stage.setResizable(false);
 		stage.show();
 	}
 
@@ -69,11 +71,11 @@ public class TitleScreen extends Application {
 	}
 
 	private void switchToGame(Stage stage) {
-		LevelOneScreen game = new LevelOneScreen();
-		game.start(stage);
+		LevelOneScreen levelOneScreen = new LevelOneScreen();
+		levelOneScreen.start(stage);
 		double width = stage.getWidth();
 		double height = stage.getHeight();
-		Scene gameScene = game.createScene(width, height, game.getGhostCount(), game.getRipperCount(), game.getWispCount());
+		Scene gameScene = levelOneScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelOneScreen.getGhostCount(), levelOneScreen.getRipperCount(), levelOneScreen.getWispCount());
 		stage.setTitle("Level 1");
 		stage.setScene(gameScene);
 	}
@@ -82,7 +84,7 @@ public class TitleScreen extends Application {
 		SelectLevel selectLevel = new SelectLevel();
 		double width = stage.getScene().getWidth();
 		double height = stage.getScene().getHeight();
-		Scene levelScene = selectLevel.createScene(stage, width, height);
+		Scene levelScene = selectLevel.createScene(stage, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		stage.setTitle("Select Level");
 		stage.setScene(levelScene);
 	}

@@ -8,7 +8,7 @@ level_1_playable_area_x: 200
 level_1_playable_area_y: 200
 level_1_playable_area_width: 200
 level_1_playable_area_height: 300
-level_1_time: 600
+level_1_time: 3
 level_1_ghosts: 5
 level_1_rippers: 0
 level_1_wisps: 0

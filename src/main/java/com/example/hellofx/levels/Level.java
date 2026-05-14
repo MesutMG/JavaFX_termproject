@@ -17,7 +17,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 public abstract class Level extends Application {
@@ -26,10 +25,7 @@ public abstract class Level extends Application {
     protected int scoreText = 0;
     protected Label scoreLabel;
     protected Label timeRemainingLabel;
-    protected int oldMinute = LocalTime.now().getMinute();
-    protected int oldSecond = LocalTime.now().getSecond();
-    protected int localDeviceMinute;
-    protected int localDeviceSecond;
+    protected long lastTimerUpdate = 0;
     protected int totalMinute;
     protected int totalSecond;
     protected static final int DEFAULT_WIDTH   = 1280;
@@ -93,6 +89,7 @@ public abstract class Level extends Application {
         Scene scene = createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, getGhostCount(), getRipperCount(), getWispCount());
         stage.setTitle(getLevelTitle());
         stage.setResizable(false);
+        stage.sizeToScene();
         stage.setScene(scene);
         stage.show();
     }
@@ -127,7 +124,7 @@ public abstract class Level extends Application {
         playableArea.setStroke(Color.TRANSPARENT);
         playableArea.setStrokeWidth(3);
 
-        timeRemainingLabel = new Label("Time: " + localDeviceMinute + "." + localDeviceSecond);
+        timeRemainingLabel = new Label(String.format("Time: %d:%02d", totalMinute, totalSecond));
         timeRemainingLabel.setFont(Font.font(24));
         timeRemainingLabel.setStyle("-fx-text-fill: white; ");
         scoreLabel.setFont(Font.font(24));
@@ -198,7 +195,7 @@ public abstract class Level extends Application {
         @Override
         public void handle(long now) {
             scoreHandler();
-            timeRemainingLabelHandler();
+            timeRemainingLabelHandler(now);
             handlePlayerMovement();
             handleVacuum();
 
@@ -287,13 +284,18 @@ public abstract class Level extends Application {
         scoreLabel.setText("Score: " + scoreText);
     }
 
-    private void timeRemainingLabelHandler() {
-        localDeviceMinute = LocalTime.now().getMinute();
-        localDeviceSecond = LocalTime.now().getSecond();
-        if (localDeviceSecond != oldSecond) {
+    private void timeRemainingLabelHandler(long now) {
+        if (lastTimerUpdate == 0) {
+            lastTimerUpdate = now;
+            return;
+        }
+
+        if (now - lastTimerUpdate >= 1_000_000_000L) {
+            lastTimerUpdate = now;
+
             if (totalSecond == 0) {
                 if (totalMinute == 0) {
-                    System.exit(1);
+                    Platform.exit();
                 } else {
                     totalMinute -= 1;
                     totalSecond = 59;
@@ -301,11 +303,9 @@ public abstract class Level extends Application {
             } else {
                 totalSecond -= 1;
             }
-            timeRemainingLabel.setText("Time: " + totalMinute + ":" + totalSecond);
-        }
 
-        oldMinute = localDeviceMinute;
-        oldSecond = localDeviceSecond;
+            timeRemainingLabel.setText(String.format("Time: %d:%02d", totalMinute, totalSecond));
+        }
     }
 
     protected void spawnEnemies(int n, int m, int k) {
