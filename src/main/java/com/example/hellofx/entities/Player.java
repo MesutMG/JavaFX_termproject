@@ -1,7 +1,7 @@
 package com.example.hellofx.entities;
+import com.example.hellofx.ConfigReader;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.Group;
 
@@ -12,9 +12,9 @@ public class Player extends Entity {
     private Polygon triangle;
     private final int CIRCLE_RADIUS = 20;
 
-    public Player(double posX, double posY) {
+    public Player(double posX, double posY, ConfigReader config) {
         super(posX, posY);
-        this.maxHealth  = 100;//config.txt'den alinacak---------------------------------------------------------------
+        this.maxHealth  = config.maximum_health;
         this.health     = 100;
         this.posX       = posX;
         this.posY       = posY;
@@ -111,5 +111,4 @@ public class Player extends Entity {
                 (100 * Math.sin(angle)) + (vacuumWidth * Math.cos(angle))
         );
     }
-
 }

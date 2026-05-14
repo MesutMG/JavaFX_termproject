@@ -1,5 +1,6 @@
 package com.example.hellofx.tokens;
 
+import com.example.hellofx.ConfigReader;
 import com.example.hellofx.entities.Player;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -28,8 +29,7 @@ public class RangeToken extends Token {
     }
 
     @Override
-    public void tokenUsed(Player player) {
-        player.setVacuumWidth(player.getVacuumWidth() + 20);
-        //config.txt'den alinacak------------------------------------------------------------------------------------
+    public void tokenUsed(Player player, ConfigReader config) {
+        player.setVacuumWidth(player.getVacuumWidth() + config.vacuum_increase);
     }
 }

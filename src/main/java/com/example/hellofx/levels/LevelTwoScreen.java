@@ -20,13 +20,13 @@ public class LevelTwoScreen extends Level {
     }
 
     @Override
-    public int getGhostCount() { return 4; }
+    public int getGhostCount() { return config.level_2_ghosts; }
 
     @Override
-    public int getRipperCount() { return 3; }
+    public int getRipperCount() { return config.level_2_rippers; }
 
     @Override
-    public int getWispCount() { return 0; }
+    public int getWispCount() { return config.level_2_wisps; }
 
     @Override
     public int getPlayAreaX() { return config.level_2_playable_area_x; }

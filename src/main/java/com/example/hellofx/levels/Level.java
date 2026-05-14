@@ -110,7 +110,7 @@ public abstract class Level extends Application {
                 new BackgroundSize(width, height, false, false, false, true)
         );
 
-        player = new Player(width / 2, height / 2);
+        player = new Player(width / 2, height / 2, config);
 
         spawnEnemies(ghosts, rippers, wisps);
 
@@ -138,7 +138,6 @@ public abstract class Level extends Application {
 
         for (Enemy e : enemies) {
             root.getChildren().add(e.getBody());
-            //config.txt'den alinacak-----------------------------------------------------------------------------
         }
         root.getChildren().addAll(player.getGroup());
 
@@ -171,6 +170,7 @@ public abstract class Level extends Application {
                 case RIGHT: rotateR = true; break;
                 case SPACE: vacuumState = true; break;
                 case C: cheat = true; break;
+                //case ESCAPE: = true; break; cagtay halledicek
             }
         });
 
@@ -309,15 +309,12 @@ public abstract class Level extends Application {
     protected void spawnEnemies(int n, int m, int k) {
         for (int i = 0; i < n; i++) {
             enemies.add(new Ghost(randomX(), randomY()));
-            //config.txt'den alinacak -----------------------------------------------------------------------------
         }
         for (int i = 0; i < m; i++) {
             enemies.add(new Ripper(randomX(), randomY()));
-            //config.txt'den alinacak -----------------------------------------------------------------------------
         }
         for (int i = 0; i < k; i++) {
             enemies.add(new Wisp(randomX(), randomY()));
-            //config.txt'den alinacak -----------------------------------------------------------------------------
         }
     }
 
@@ -451,10 +448,11 @@ public abstract class Level extends Application {
             double x = (Math.random() * (playAreaW - 40)) + playAreaX + 20;
             double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
 
-            int type = (int) (Math.random() * 3);
+            int type = (int) (Math.random() * 4);
             Token token = switch (type) {
                 case 0 -> new HealthToken(x, y);
                 case 1 -> new RangeToken(x, y);
+                case 2 -> new VacuumBoost(x, y);
                 default -> new EyeToken(x, y);
             };
 
@@ -470,14 +468,13 @@ public abstract class Level extends Application {
                     .intersects(token.getBody().localToScene(token.getBody().getBoundsInLocal()));
 
             if (collision) {
-                token.tokenUsed(player);
+                token.tokenUsed(player, config);
 
                 if (token instanceof HealthToken) {
                     hBar.setBarPercentage(player.getHealth());
                 }
                 if (token instanceof EyeToken) {
-                    eyeRevealEndTime = currentTime + 5000;
-                    //config.txt'den alinacak------------------------------------------------------------------------
+                    eyeRevealEndTime = currentTime + config.eye_token_duration;
                 }
 
                 gameRoot.getChildren().remove(token.getBody());

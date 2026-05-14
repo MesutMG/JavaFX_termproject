@@ -1,5 +1,6 @@
 package com.example.hellofx.tokens;
 
+import com.example.hellofx.ConfigReader;
 import com.example.hellofx.entities.Player;
 
 import javafx.scene.Group;
@@ -30,7 +31,7 @@ public abstract class Token {
         }
     }
 
-    public abstract void tokenUsed(Player player);
+    public abstract void tokenUsed(Player player, ConfigReader config);
 
     public void update() {
     }

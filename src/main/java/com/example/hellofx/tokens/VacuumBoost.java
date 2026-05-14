@@ -9,16 +9,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class HealthToken extends Token {
-    public HealthToken(double posX, double posY) {
+public class VacuumBoost extends Token {
+    public VacuumBoost(double posX, double posY) {
         super(posX, posY);
 
-        Circle circle = new Circle(15, Color.LIMEGREEN);
-        circle.setStroke(Color.DARKGREEN);
+        Circle circle = new Circle(15, Color.DODGERBLUE);
+        circle.setStroke(Color.DARKBLUE);
         circle.setStrokeWidth(2);
 
-        Text symbol = new Text("+");
-        symbol.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        Text symbol = new Text("R");
+        symbol.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         symbol.setFill(Color.WHITE);
         symbol.setTranslateX(-6);
         symbol.setTranslateY(6);
@@ -30,6 +30,6 @@ public class HealthToken extends Token {
 
     @Override
     public void tokenUsed(Player player, ConfigReader config) {
-        player.setHealth(Math.min(player.getHealth() + config.health_token_increase, config.maximum_health));
+        player.setVacuumWidth(player.getVacuumWidth() + 25);
     }
 }

@@ -20,13 +20,13 @@ public class LevelThreeScreen extends Level {
     }
 
     @Override
-    public int getGhostCount() { return 4; }
+    public int getGhostCount() { return config.level_3_ghosts; }
 
     @Override
-    public int getRipperCount() { return 3; }
+    public int getRipperCount() { return config.level_3_rippers; }
 
     @Override
-    public int getWispCount() { return 2; }
+    public int getWispCount() { return config.level_3_wisps; }
 
     @Override
     public int getPlayAreaX() { return config.level_3_playable_area_x; }
