@@ -249,12 +249,18 @@ public abstract class Level extends Application {
                 overlay.setY(DEFAULT_HEIGHT >> 2);
                 overlay.setOpacity(0.5);
 
+                VBox lostMenuBox = new VBox();
+
                 Label lostLabel = new Label("Game Over\nFinal Score: " + player.getScore());
                 lostLabel.setAlignment(Pos.CENTER);
                 lostLabel.setFont(Font.font(72));
                 lostLabel.setTextFill(Color.RED);
                 lostLabel.setLayoutX((DEFAULT_WIDTH >> 1) - 180);
                 lostLabel.setLayoutY((DEFAULT_HEIGHT >> 1) - 150);
+
+                lostMenuBox.getChildren().add(lostLabel);
+
+                HBox lostBtns = new HBox();
 
                 Button retryBtn = new Button("Try Again");
                 retryBtn.setPrefWidth(240);
@@ -273,7 +279,27 @@ public abstract class Level extends Application {
                     stage.setScene(retryScene);
                 });
 
-                root.getChildren().addAll(overlay, lostLabel, retryBtn);
+                Button mainMenuBtn = new Button("Main Menu");
+                mainMenuBtn.setPrefWidth(240);
+                mainMenuBtn.setPrefHeight(60);
+                mainMenuBtn.setLayoutX((DEFAULT_WIDTH >> 1) - 120);
+                mainMenuBtn.setLayoutY((DEFAULT_HEIGHT >> 1) + 50);
+                applyButtonStyle(mainMenuBtn, false);
+                mainMenuBtn.setOnMouseEntered(e -> applyButtonStyle(mainMenuBtn, true));
+                mainMenuBtn.setOnMouseExited(e -> applyButtonStyle(mainMenuBtn, false));
+                mainMenuBtn.setOnAction(e -> {
+                    Stage stage = (Stage) root.getScene().getWindow();
+                    TitleScreen mainMenu = new TitleScreen();
+                    mainMenu.start(stage);
+                    Scene mainMenuScene = mainMenu.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, stage);
+                    stage.setTitle("Main Menu");
+                    stage.setScene(mainMenuScene);
+                });
+
+                lostBtns.getChildren().addAll(retryBtn, mainMenuBtn);
+                lostMenuBox.getChildren().add(lostBtns);
+
+                root.getChildren().addAll(overlay, lostMenuBox);
             }
         }
     }
