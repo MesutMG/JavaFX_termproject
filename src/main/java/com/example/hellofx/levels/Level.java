@@ -589,12 +589,12 @@ public abstract class Level extends Application {
         long currentTime = System.currentTimeMillis();
 
         // Spawn a new random token every 5 seconds
-        if (currentTime - lastTokenSpawnTime >= 50) {
+        if (currentTime - lastTokenSpawnTime >= 5000) {
             lastTokenSpawnTime = currentTime;
             double x = (Math.random() * (playAreaW - 40)) + playAreaX + 20;
             double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
 
-            int type = (int) (Math.random() * 5000);
+            int type = (int) (Math.random() * 5);
             Token token = switch (type) {
                 case 0 -> new HealthToken(x, y);
                 case 1 -> new RangeToken(x, y);
