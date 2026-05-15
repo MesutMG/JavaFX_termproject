@@ -3,6 +3,8 @@ package com.example.hellofx.levels;
 import com.example.hellofx.*;
 import com.example.hellofx.entities.*;
 import com.example.hellofx.tokens.*;
+import com.example.hellofx.ui.HealthBar;
+import com.example.hellofx.ui.VacuumBar;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -10,7 +12,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -148,7 +149,7 @@ public abstract class Level extends Application {
             root.getChildren().add(iv);
         }
 
-        root.getChildren().addAll(hudTop, hBar.getRectangleBackground() ,hBar.getRectangle(), vBar.getRectangleBackground(),vBar.getRectangle());
+        root.getChildren().addAll(hudTop, hBar.getGroup(), vBar.getGroup());
 
         Scene scene = getScene(width, height, root);
 
@@ -291,7 +292,6 @@ public abstract class Level extends Application {
                 mainMenuBtn.setOnAction(e -> {
                     Stage stage = (Stage) root.getScene().getWindow();
                     TitleScreen mainMenu = new TitleScreen();
-                    mainMenu.start(stage);
                     Scene mainMenuScene = mainMenu.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, stage);
                     stage.setTitle("Main Menu");
                     stage.setScene(mainMenuScene);
@@ -320,7 +320,7 @@ public abstract class Level extends Application {
 
             if (totalSecond == 0) {
                 if (totalMinute == 0) {
-                    Platform.exit();
+                    hasLost();
                 } else {
                     totalMinute -= 1;
                     totalSecond = 59;
@@ -502,7 +502,7 @@ public abstract class Level extends Application {
                     hBar.setBarPercentage(player.getHealth());
                 }
                 if (token instanceof EyeToken) {
-                    eyeRevealEndTime = currentTime + config.eye_token_duration;
+                    eyeRevealEndTime = currentTime + (config.eye_token_duration * 1000L);
                 }
 
                 gameRoot.getChildren().remove(token.getBody());

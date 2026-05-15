@@ -1,4 +1,4 @@
-package com.example.hellofx;
+package com.example.hellofx.ui;
 
 public class ScoreAndTimeText {
     private int score;

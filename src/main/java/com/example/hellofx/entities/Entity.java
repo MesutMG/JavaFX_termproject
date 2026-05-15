@@ -33,20 +33,17 @@ public abstract class Entity {
     public void setScore(int score) { this.score = score; }
 
     public double getHealth() { return this.health; }
-
     public void setHealth(double health) {
         this.health = Math.max(0, health);
     }
 
     public double getPosX() { return posX; }
-    
     public void setPosX(double posX) {
         this.posX = posX;
         if (this.group != null) this.group.setTranslateX(posX);
     }
 
     public double getPosY() { return posY; }
-
     public void setPosY(double posY) {
         this.posY = posY;
         if (this.group != null) this.group.setTranslateY(posY);
