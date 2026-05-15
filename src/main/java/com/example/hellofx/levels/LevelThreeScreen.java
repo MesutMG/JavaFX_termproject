@@ -48,4 +48,7 @@ public class LevelThreeScreen extends Level {
 
     @Override
     public Level createRetryLevel() { return new LevelThreeScreen(); }
+
+    @Override
+    public int getLevelNumber() { return 3; }
 }

@@ -48,7 +48,7 @@ public class Player extends Entity {
         );
         triangle.setFill(Color.RED);
         triangle.setStroke(Color.WHITE);
-        triangle.setOpacity(0.7);
+        triangle.setOpacity(0);
         this.setTriangle(triangle);
 
         this.group = new Group(this.triangle, this.circle);

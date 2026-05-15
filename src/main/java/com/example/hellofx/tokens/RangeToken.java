@@ -5,25 +5,25 @@ import com.example.hellofx.entities.Player;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.shape.Polygon;
 
 public class RangeToken extends Token {
     public RangeToken(double posX, double posY) {
         super(posX, posY);
 
-        Circle circle = new Circle(15, Color.DODGERBLUE);
-        circle.setStroke(Color.DARKBLUE);
-        circle.setStrokeWidth(2);
+        Circle circle = new Circle(15, Color.YELLOW);
+        circle.setStroke(Color.BLACK);
+        circle.setStrokeWidth(1);
 
-        Text symbol = new Text("R");
-        symbol.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        symbol.setFill(Color.WHITE);
-        symbol.setTranslateX(-6);
-        symbol.setTranslateY(6);
+        Polygon triangle = new Polygon();
+        triangle.getPoints().addAll(
+                -6.0, 0.0,
+                4.0, -8.0,
+                4.0, 8.0
+        );
+        triangle.setFill(Color.BLACK);
 
-        this.group = new Group(circle, symbol);
+        this.group = new Group(circle, triangle);
         this.group.setTranslateX(posX);
         this.group.setTranslateY(posY);
     }

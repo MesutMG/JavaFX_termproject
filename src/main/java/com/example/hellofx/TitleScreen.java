@@ -73,9 +73,6 @@ public class TitleScreen extends Application {
 	private void switchToGame(Stage stage) {
 		LevelOneScreen levelOneScreen = new LevelOneScreen();
 		levelOneScreen.start(stage);
-		Scene gameScene = levelOneScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelOneScreen.getGhostCount(), levelOneScreen.getRipperCount(), levelOneScreen.getWispCount());
-		stage.setTitle("Level 1");
-		stage.setScene(gameScene);
 	}
 
 	private void switchToSelectLevel(Stage stage) {
@@ -90,23 +87,14 @@ public class TitleScreen extends Application {
 			case 1:
 				LevelOneScreen levelOneScreen = new LevelOneScreen();
 				levelOneScreen.start(stage);
-				Scene gameScene = levelOneScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelOneScreen.getGhostCount(), levelOneScreen.getRipperCount(), levelOneScreen.getWispCount());
-				stage.setTitle("Level 1");
-				stage.setScene(gameScene);
 				break;
 			case 2:
 				LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
 				levelTwoScreen.start(stage);
-				Scene secondLevelScene = levelTwoScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelTwoScreen.getGhostCount(), levelTwoScreen.getRipperCount(), levelTwoScreen.getWispCount());
-				stage.setTitle("Level 2");
-				stage.setScene(secondLevelScene);
 				break;
 			case 3:
 				LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
 				levelThreeScreen.start(stage);
-				Scene thirdLevelScene = levelThreeScreen.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, levelThreeScreen.getGhostCount(), levelThreeScreen.getRipperCount(), levelThreeScreen.getWispCount());
-				stage.setTitle("Level 3");
-				stage.setScene(thirdLevelScene);
 				break;
 		}
 

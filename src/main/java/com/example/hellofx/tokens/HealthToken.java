@@ -5,25 +5,25 @@ import com.example.hellofx.entities.Player;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.shape.Rectangle;
 
 public class HealthToken extends Token {
     public HealthToken(double posX, double posY) {
         super(posX, posY);
 
-        Circle circle = new Circle(15, Color.LIMEGREEN);
-        circle.setStroke(Color.DARKGREEN);
-        circle.setStrokeWidth(2);
+        Circle circle = new Circle(15, Color.YELLOW);
+        circle.setStroke(Color.BLACK);
+        circle.setStrokeWidth(1);
 
-        Text symbol = new Text("+");
-        symbol.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        symbol.setFill(Color.WHITE);
-        symbol.setTranslateX(-6);
-        symbol.setTranslateY(6);
+        Rectangle vertical = new Rectangle(4, 16, Color.RED);
+        vertical.setX(-2);
+        vertical.setY(-8);
 
-        this.group = new Group(circle, symbol);
+        Rectangle horizontal = new Rectangle(16, 4, Color.RED);
+        horizontal.setX(-8);
+        horizontal.setY(-2);
+
+        this.group = new Group(circle, vertical, horizontal);
         this.group.setTranslateX(posX);
         this.group.setTranslateY(posY);
     }

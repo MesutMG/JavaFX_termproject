@@ -4,11 +4,11 @@ entity_damage: 10
 vacuum_decrease: 1
 vacuum increase: 2
 
-level_1_playable_area_x: 700
-level_1_playable_area_y: 200
-level_1_playable_area_width: 500
-level_1_playable_area_height: 300
-level_1_time: 61
+level_1_playable_area_x: 200
+level_1_playable_area_y: 140
+level_1_playable_area_width: 1050
+level_1_playable_area_height: 560
+level_1_time: 60
 level_1_ghosts: 5
 level_1_rippers: 0
 level_1_wisps: 0
@@ -33,4 +33,4 @@ level_3_wisps: 2
 
 health_token_increase: 20
 vacuum_token_increase: 20
-eye_token_duration: 3
+eye_token_duration: 5

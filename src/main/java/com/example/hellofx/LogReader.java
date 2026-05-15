@@ -2,6 +2,8 @@ package com.example.hellofx;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class LogReader {
@@ -37,6 +39,22 @@ public class LogReader {
             scanner.close();
             return false;
 
-        } catch (FileNotFoundException e) {return true;}
+        } catch (FileNotFoundException e) {
+            saveLog(filePath, 0, 1);
+            return readLog(filePath);
+        }
+    }
+
+    public void saveLog(String filePath, int highScore, int lastLevel) {
+        try {
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            FileWriter writer = new FileWriter(file);
+            writer.write("high_score: " + highScore + "\n");
+            writer.write("last_level: " + lastLevel + "\n");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

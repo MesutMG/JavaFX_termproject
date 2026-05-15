@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.effect.ColorAdjust;
 import java.util.ArrayList;
 
 public abstract class Level extends Application {
@@ -32,9 +33,9 @@ public abstract class Level extends Application {
     protected int totalSecond;
     protected static final int DEFAULT_WIDTH   = 1280;
     protected static final int DEFAULT_HEIGHT  = 720;
-    protected static final int HEALTHBAR_POSX  = DEFAULT_WIDTH - 80;
+    protected static final int HEALTHBAR_POSX  = DEFAULT_WIDTH - 120;
     protected static final int HEALTHBAR_POSY  = 160;
-    protected static final int VACUUMBAR_POSX  = 30;
+    protected static final int VACUUMBAR_POSX  = 60;
     protected static final int VACUUMBAR_POSY  = 160;
     protected int playAreaX = getPlayAreaX();
     protected int playAreaY = getPlayAreaY();
@@ -45,12 +46,22 @@ public abstract class Level extends Application {
     protected Player player;
     protected ArrayList<Enemy> enemies = new ArrayList<>();
     protected Rectangle playableArea;
-    protected boolean goUp, goDown, goLeft, goRight, vacuumState, rotateL, rotateR;
+    protected boolean goUp, goDown, goLeft, goRight, vacuumState;
     protected boolean cheat = false;
     protected Pane gameRoot;
     protected ArrayList<Token> tokens = new ArrayList<>();
+    protected double mouseX, mouseY;
     protected long lastTokenSpawnTime;
     protected long eyeRevealEndTime = 0;
+    protected final ColorAdjust whiteTint = new ColorAdjust();
+    protected AnimationTimer gameTimer;
+    protected boolean isPaused = false;
+    protected VBox pauseMenuBox;
+    protected Rectangle pauseOverlay;
+
+    public Level() {
+        whiteTint.setBrightness(1.0);
+    }
 
     public abstract String getLevelTitle();
     public abstract int getTimeLimitMinutes();
@@ -62,6 +73,7 @@ public abstract class Level extends Application {
     public abstract int getWispCount();
     public abstract Level createNextLevel();
     public abstract Level createRetryLevel();
+    public abstract int getLevelNumber();
     public abstract String getNextLevelTitle();
     public abstract int getPlayAreaX();
     public abstract int getPlayAreaY();
@@ -98,6 +110,9 @@ public abstract class Level extends Application {
         totalMinute = getTimeLimitMinutes();
         totalSecond = getTimeLimitSeconds();
 
+        enemies.clear();
+        tokens.clear();
+
         scoreLabel = new Label("Score: " + scoreText);
         Pane root = new Pane();
         this.gameRoot = root;
@@ -112,7 +127,7 @@ public abstract class Level extends Application {
                 new BackgroundSize(width, height, false, false, false, true)
         );
 
-        player = new Player(width / 2, height / 2, config);
+        player = new Player(playAreaX + playAreaW / 2.0, playAreaY + playAreaH / 2.0, config);
 
         spawnEnemies(ghosts, rippers, wisps);
 
@@ -136,7 +151,6 @@ public abstract class Level extends Application {
         hudTop.getChildren().addAll(scoreLabel, timeRemainingLabel);
 
         root.setBackground(new Background(bg));
-        root.getChildren().add(playableArea);
 
         for (Enemy e : enemies) {
             root.getChildren().add(e.getBody());
@@ -149,12 +163,14 @@ public abstract class Level extends Application {
             root.getChildren().add(iv);
         }
 
+        root.getChildren().add(playableArea);
+        playableArea.setVisible(false);
         root.getChildren().addAll(hudTop, hBar.getGroup(), vBar.getGroup());
 
         Scene scene = getScene(width, height, root);
 
-        AnimationTimer timer = new GameTimer();
-        timer.start();
+        gameTimer = new GameTimer();
+        gameTimer.start();
 
         return scene;
     }
@@ -168,11 +184,9 @@ public abstract class Level extends Application {
                 case S: goDown      = true; break;
                 case A: goLeft      = true; break;
                 case D: goRight     = true; break;
-                case LEFT:  rotateL = true; break;
-                case RIGHT: rotateR = true; break;
                 case SPACE: vacuumState = true; break;
                 case C: cheat = true; break;
-                //case ESCAPE: = true; break; cagtay halledicek
+                case ESCAPE: togglePause(); break;
             }
         });
 
@@ -182,12 +196,16 @@ public abstract class Level extends Application {
                 case S: goDown      = false; break;
                 case A: goLeft      = false; break;
                 case D: goRight     = false; break;
-                case LEFT:  rotateL = false; break;
-                case RIGHT: rotateR = false; break;
                 case SPACE: vacuumState = false; break;
                 case C: cheat = false; break;
             }
         });
+
+        scene.setOnMouseMoved(event -> {
+            mouseX = event.getX();
+            mouseY = event.getY();
+        });
+
         return scene;
     }
 
@@ -195,14 +213,10 @@ public abstract class Level extends Application {
         @Override
         public void handle(long now) {
             scoreHandler();
+            playableArea.setVisible(cheat);
             timeRemainingLabelHandler(now);
             handlePlayerMovement();
             handleVacuum();
-
-            /*for (Enemy e : enemies) {
-                e.update();
-            }*/
-
             handleEnemyMovement();
             handleHealth();
             handleCheat();
@@ -217,17 +231,20 @@ public abstract class Level extends Application {
                 overlay.setY(DEFAULT_HEIGHT >> 2);
                 overlay.setOpacity(0.5);
 
+                VBox winBox = new VBox(20);
+                winBox.setAlignment(Pos.CENTER);
+                winBox.setPrefWidth(DEFAULT_WIDTH >> 1);
+                winBox.setPrefHeight(DEFAULT_HEIGHT >> 1);
+                winBox.setLayoutX(DEFAULT_WIDTH >> 2);
+                winBox.setLayoutY(DEFAULT_HEIGHT >> 2);
+
                 Label winLabel = new Label("You Won!");
                 winLabel.setFont(Font.font(72));
                 winLabel.setTextFill(Color.GREEN);
-                winLabel.setLayoutX((DEFAULT_WIDTH >> 1) - 150);
-                winLabel.setLayoutY((DEFAULT_HEIGHT >> 1) - 50);
 
                 Button nextLevelBtn = new Button("Next Level");
                 nextLevelBtn.setPrefWidth(240);
                 nextLevelBtn.setPrefHeight(60);
-                nextLevelBtn.setLayoutX((DEFAULT_WIDTH >> 1) - 120);
-                nextLevelBtn.setLayoutY((DEFAULT_HEIGHT >> 1) + 50);
                 applyButtonStyle(nextLevelBtn, false);
                 nextLevelBtn.setOnMouseEntered(e -> applyButtonStyle(nextLevelBtn, true));
                 nextLevelBtn.setOnMouseExited(e -> applyButtonStyle(nextLevelBtn, false));
@@ -239,7 +256,15 @@ public abstract class Level extends Application {
                     stage.setScene(nextScene);
                 });
 
-                root.getChildren().addAll(overlay, winLabel, nextLevelBtn);
+                winBox.getChildren().addAll(winLabel, nextLevelBtn);
+                root.getChildren().addAll(overlay, winBox);
+
+                // Save progress
+                LogReader logReader = new LogReader();
+                String logPath = "src/main/java/com/example/hellofx/log.txt";
+                logReader.readLog(logPath);
+                int currentHighScore = Math.max(logReader.high_score, player.getScore());
+                logReader.saveLog(logPath, currentHighScore, getLevelNumber() + 1);
             }
 
             if (hasLost()) {
@@ -251,30 +276,24 @@ public abstract class Level extends Application {
                 overlay.setY(DEFAULT_HEIGHT >> 2);
                 overlay.setOpacity(0.5);
 
-                VBox lostMenuBox = new VBox();
+                VBox lostMenuBox = new VBox(20);
                 lostMenuBox.setAlignment(Pos.CENTER);
-                lostMenuBox.setLayoutX((DEFAULT_WIDTH >> 1) - (lostMenuBox.getWidth() / 2));
-                lostMenuBox.setLayoutY((DEFAULT_HEIGHT >> 1) - (lostMenuBox.getHeight() / 2));
+                lostMenuBox.setPrefWidth(DEFAULT_WIDTH >> 1);
+                lostMenuBox.setPrefHeight(DEFAULT_HEIGHT >> 1);
+                lostMenuBox.setLayoutX(DEFAULT_WIDTH >> 2);
+                lostMenuBox.setLayoutY(DEFAULT_HEIGHT >> 2);
 
                 Label lostLabel = new Label("Game Over");
-                lostLabel.setAlignment(Pos.CENTER);
                 lostLabel.setFont(Font.font(72));
                 lostLabel.setTextFill(Color.RED);
-                lostLabel.setLayoutX((DEFAULT_WIDTH >> 1) - 180);
-                lostLabel.setLayoutY((DEFAULT_HEIGHT >> 1) - 150);
-                lostMenuBox.getChildren().add(lostLabel);
-
 
                 Label lostLabel2 = new Label("Final Score: " + player.getScore());
-                lostLabel2.setAlignment(Pos.CENTER);
-                lostLabel2.setFont(Font.font(72));
+                lostLabel2.setFont(Font.font(48));
                 lostLabel2.setTextFill(Color.RED);
-                lostLabel2.setLayoutX((DEFAULT_WIDTH >> 1) - 180);
-                lostLabel2.setLayoutY((DEFAULT_HEIGHT >> 1) - 150);
-                lostMenuBox.getChildren().add(lostLabel2);
 
-                HBox lostBtns = new HBox();
-                lostBtns.setLayoutX(10);
+                HBox lostBtns = new HBox(20);
+                lostBtns.setAlignment(Pos.CENTER);
+
                 Button retryBtn = new Button("Try Again");
                 retryBtn.setPrefWidth(240);
                 retryBtn.setPrefHeight(60);
@@ -285,9 +304,6 @@ public abstract class Level extends Application {
                     Stage stage = (Stage) root.getScene().getWindow();
                     Level retry = createRetryLevel();
                     retry.start(stage);
-                    Scene retryScene = retry.createScene(stage.getScene().getWidth(), stage.getScene().getHeight(), retry.getGhostCount(), retry.getRipperCount(), retry.getWispCount());
-                    stage.setTitle(getLevelTitle());
-                    stage.setScene(retryScene);
                 });
 
                 Button mainMenuBtn = new Button("Main Menu");
@@ -305,11 +321,84 @@ public abstract class Level extends Application {
                 });
 
                 lostBtns.getChildren().addAll(retryBtn, mainMenuBtn);
-                lostMenuBox.getChildren().add(lostBtns);
-
+                lostMenuBox.getChildren().addAll(lostLabel, lostLabel2, lostBtns);
                 root.getChildren().addAll(overlay, lostMenuBox);
             }
         }
+    }
+
+    private void togglePause() {
+        if (hasWon() || hasLost()) return;
+
+        isPaused = !isPaused;
+        if (isPaused) {
+            gameTimer.stop();
+            showPauseMenu();
+        } else {
+            hidePauseMenu();
+            gameTimer.start();
+        }
+    }
+
+    private void showPauseMenu() {
+        pauseOverlay = new Rectangle(DEFAULT_WIDTH, DEFAULT_HEIGHT, Color.BLACK);
+        pauseOverlay.setOpacity(0.5);
+
+        pauseMenuBox = new VBox(20);
+        pauseMenuBox.setAlignment(Pos.CENTER);
+        pauseMenuBox.setPrefWidth(DEFAULT_WIDTH >> 1);
+        pauseMenuBox.setPrefHeight(DEFAULT_HEIGHT >> 1);
+        pauseMenuBox.setLayoutX(DEFAULT_WIDTH >> 2);
+        pauseMenuBox.setLayoutY(DEFAULT_HEIGHT >> 2);
+        pauseMenuBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7); -fx-background-radius: 15;");
+
+        Label pauseLabel = new Label("PAUSED");
+        pauseLabel.setFont(Font.font(72));
+        pauseLabel.setTextFill(Color.WHITE);
+
+        Button resumeBtn = new Button("Resume");
+        resumeBtn.setPrefWidth(240);
+        resumeBtn.setPrefHeight(60);
+        applyButtonStyle(resumeBtn, false);
+        resumeBtn.setOnMouseEntered(e -> applyButtonStyle(resumeBtn, true));
+        resumeBtn.setOnMouseExited(e -> applyButtonStyle(resumeBtn, false));
+        resumeBtn.setOnAction(e -> togglePause());
+
+        Button retryBtn = new Button("Restart");
+        retryBtn.setPrefWidth(240);
+        retryBtn.setPrefHeight(60);
+        applyButtonStyle(retryBtn, false);
+        retryBtn.setOnMouseEntered(e -> applyButtonStyle(retryBtn, true));
+        retryBtn.setOnMouseExited(e -> applyButtonStyle(retryBtn, false));
+        retryBtn.setOnAction(e -> {
+            gameTimer.stop();
+            Level retry = createRetryLevel();
+            retry.start((Stage) gameRoot.getScene().getWindow());
+        });
+
+        Button mainMenuBtn = new Button("Main Menu");
+        mainMenuBtn.setPrefWidth(240);
+        mainMenuBtn.setPrefHeight(60);
+        applyButtonStyle(mainMenuBtn, false);
+        mainMenuBtn.setOnMouseEntered(e -> applyButtonStyle(mainMenuBtn, true));
+        mainMenuBtn.setOnMouseExited(e -> applyButtonStyle(mainMenuBtn, false));
+        mainMenuBtn.setOnAction(e -> {
+            gameTimer.stop();
+            Stage stage = (Stage) gameRoot.getScene().getWindow();
+            TitleScreen mainMenu = new TitleScreen();
+            Scene mainMenuScene = mainMenu.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, stage);
+            stage.setTitle("Main Menu");
+            stage.setScene(mainMenuScene);
+        });
+
+        pauseMenuBox.getChildren().addAll(pauseLabel, resumeBtn, retryBtn, mainMenuBtn);
+        gameRoot.getChildren().addAll(pauseOverlay, pauseMenuBox);
+    }
+
+    private void hidePauseMenu() {
+        gameRoot.getChildren().removeAll(pauseOverlay, pauseMenuBox);
+        pauseOverlay = null;
+        pauseMenuBox = null;
     }
 
     private void scoreHandler() {
@@ -355,14 +444,15 @@ public abstract class Level extends Application {
     private void handlePlayerMovement() {
         int moveX    = 0;
         int moveY    = 0;
-        double angle = player.getAngle();
+
+        double deltaX = mouseX - player.getPosX();
+        double deltaY = mouseY - player.getPosY();
+        double angle = Math.atan2(deltaY, deltaX);
 
         if (goUp)   { moveY -= (int) player.getSpeed();}
         if (goDown) { moveY += (int) player.getSpeed();}
         if (goLeft) { moveX -= (int) player.getSpeed();}
         if (goRight){ moveX += (int) player.getSpeed();}
-        if (rotateL){ angle -= 0.1;}
-        if (rotateR){ angle += 0.1;}
 
         // Check if anything changed
         if (moveX != 0 || moveY != 0 || angle != 0) {
@@ -409,19 +499,23 @@ public abstract class Level extends Application {
             if (player.getVacuumPerc() <= 0) {
                 player.setVacuumPerc(0);
                 vBar.setBarPercentage(0);
-                player.getTriangle().setOpacity(0.15);
-                for (Enemy e : enemies) e.getBody().setVisible(false);
+                player.getTriangle().setOpacity(0);
+                for (Enemy e : enemies) {
+                    e.getBody().setVisible(false);
+                    e.getBody().setEffect(null);
+                }
                 return;
             }
             player.setVacuum(player.getVacuum() - player.getVacuumDecrease());
             vBar.setBarPercentage(player.getVacuumPerc());
-            player.getTriangle().setOpacity(1);
+            player.getTriangle().setOpacity(0.5);
 
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 Enemy e = enemies.get(i);
                 boolean collision = player.getTriangle().localToScene(player.getTriangle().getBoundsInLocal()).intersects(e.getBody().localToScene(e.getBody().getBoundsInLocal()));
                 e.getBody().setVisible(collision);
                 if (collision) {
+                    e.getBody().setEffect(whiteTint);
                     e.setHealth(e.getHealth() - player.getAttackDamage());
                     if (!e.isAlive()) {
                         player.setScore(player.getScore() + e.getScore());
@@ -430,14 +524,17 @@ public abstract class Level extends Application {
                         gameRoot.getChildren().remove(e.getBody());
                         enemies.remove(i);
                     }
+                } else {
+                    e.getBody().setEffect(null);
                 }
             }
         } else {
             player.setVacuum(Math.min(player.getMaxVacuum(), player.getVacuum() + player.getVacuumIncrease()));
             vBar.setBarPercentage(player.getVacuumPerc());
-            player.getTriangle().setOpacity(0.15);
+            player.getTriangle().setOpacity(0);
             for (Enemy e : enemies) {
                 e.getBody().setVisible(false);
+                e.getBody().setEffect(null);
             }
         }
     }
@@ -477,7 +574,7 @@ public abstract class Level extends Application {
         long currentTime = System.currentTimeMillis();
 
         // Spawn a new random token every 5 seconds
-        if (currentTime - lastTokenSpawnTime >= 500) {
+        if (currentTime - lastTokenSpawnTime >= 5000) {
             lastTokenSpawnTime = currentTime;
             double x = (Math.random() * (playAreaW - 40)) + playAreaX + 20;
             double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
@@ -537,7 +634,8 @@ public abstract class Level extends Application {
                 "-fx-font-weight: 800;" +
                 "-fx-letter-spacing: 2px;" +
                 "-fx-background-radius: 6;" +
-                "-fx-border-radius: 6;"
+                "-fx-border-radius: 6;" +
+                "-fx-padding: 10 24 10 24;"
         );
     }
 }

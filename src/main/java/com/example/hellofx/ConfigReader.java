@@ -2,6 +2,8 @@ package com.example.hellofx;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ConfigReader {
@@ -100,6 +102,58 @@ public class ConfigReader {
             scanner.close();
             return false;
 
-        } catch (FileNotFoundException e) {return true;}
+        } catch (FileNotFoundException e) {
+            writeDefaultConfig(filePath);
+            return readConfig(filePath);
+        }
+    }
+
+    private void writeDefaultConfig(String filePath) {
+        String defaultConfig = "maximum_health: 100\n" +
+                "maximum_vacuum: 100\n" +
+                "entity_damage: 10\n" +
+                "vacuum_decrease: 1\n" +
+                "vacuum increase: 2\n" +
+                "\n" +
+                "level_1_playable_area_x: 200\n" +
+                "level_1_playable_area_y: 140\n" +
+                "level_1_playable_area_width: 1050\n" +
+                "level_1_playable_area_height: 560\n" +
+                "level_1_time: 60\n" +
+                "level_1_ghosts: 5\n" +
+                "level_1_rippers: 0\n" +
+                "level_1_wisps: 0\n" +
+                "\n" +
+                "level_2_playable_area_x: 200\n" +
+                "level_2_playable_area_y: 100\n" +
+                "level_2_playable_area_width: 1000\n" +
+                "level_2_playable_area_height: 560\n" +
+                "level_2_time: 120\n" +
+                "level_2_ghosts: 4\n" +
+                "level_2_rippers: 3\n" +
+                "level_2_wisps: 0\n" +
+                "\n" +
+                "level_3_playable_area_x: 200\n" +
+                "level_3_playable_area_y: 0\n" +
+                "level_3_playable_area_width: 800\n" +
+                "level_3_playable_area_height: 700\n" +
+                "level_3_time: 180\n" +
+                "level_3_ghosts: 4\n" +
+                "level_3_rippers: 3\n" +
+                "level_3_wisps: 2\n" +
+                "\n" +
+                "health_token_increase: 20\n" +
+                "vacuum_token_increase: 20\n" +
+                "eye_token_duration: 5\n";
+
+        try {
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            FileWriter writer = new FileWriter(file);
+            writer.write(defaultConfig);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

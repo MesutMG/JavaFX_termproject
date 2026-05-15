@@ -48,4 +48,7 @@ public class LevelOneScreen extends Level {
 
     @Override
     public Level createRetryLevel() { return new LevelOneScreen(); }
+
+    @Override
+    public int getLevelNumber() { return 1; }
 }
