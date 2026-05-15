@@ -8,6 +8,7 @@ public class HealthBar {
     private double posY;
     private double barPercentage;
     private Rectangle rectangle;
+    private Rectangle rectangleBackground;
     private Label healthLabel;
     private final double BAR_HEIGHT = 400;
     private final double BAR_WIDTH  = 50;
@@ -23,6 +24,12 @@ public class HealthBar {
 
         this.setRectangle(rect);
         this.setHealthLabel(new Label("HEALTH: "));
+
+        Rectangle rect2 = new Rectangle(BAR_WIDTH + 5, BAR_HEIGHT + 5, Color.BLACK);
+        rect.setX(posX - 2.5);
+        rect.setY(posY - 5);
+
+        this.setRectangleBackground(rect2);
     }
 
     public double getPosX() {
@@ -51,6 +58,14 @@ public class HealthBar {
 
     public void setRectangle(Rectangle rectangle) {
         this.rectangle = rectangle;
+    }
+
+    public void setRectangleBackground(Rectangle rectangle) {
+        this.rectangleBackground = rectangle;
+    }
+
+    public Rectangle getRectangleBackground() {
+        return rectangleBackground;
     }
 
     public Label getHealthLabel() {

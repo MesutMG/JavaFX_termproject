@@ -148,7 +148,7 @@ public abstract class Level extends Application {
             root.getChildren().add(iv);
         }
 
-        root.getChildren().addAll(hudTop, hBar.getRectangle(), vBar.getRectangle());
+        root.getChildren().addAll(hudTop, hBar.getRectangleBackground() ,hBar.getRectangle(), vBar.getRectangleBackground(),vBar.getRectangle());
 
         Scene scene = getScene(width, height, root);
 

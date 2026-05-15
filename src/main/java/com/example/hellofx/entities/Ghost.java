@@ -19,13 +19,13 @@ public class Ghost extends Enemy {
         Circle circle = new Circle(CIRCLE_RADIUS, Color.WHITE);
         circle.setCenterX(0);
         circle.setCenterY(0);
-        circle.setOpacity(0.5);
+        circle.setOpacity(1);
         this.setCircle(circle);
 
         Rectangle rectangle = new Rectangle(30,15, Color.WHITE);
         rectangle.setY(0);
         rectangle.setX(-CIRCLE_RADIUS);
-        rectangle.setOpacity(0.5);
+        rectangle.setOpacity(1);
         this.setRectangle(rectangle);
         
         this.group = new Group(this.rectangle, this.circle);
