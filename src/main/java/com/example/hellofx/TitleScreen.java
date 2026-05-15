@@ -33,7 +33,7 @@ public class TitleScreen extends Application {
 
 	public Scene createScene(double width, double height, Stage stage) {
 
-		if(isLog){//if config file doesn't exist
+		if(!isLog){//if config file doesn't exist
 			//Generate log.txt with default values 0,1
 		}
 
@@ -83,22 +83,16 @@ public class TitleScreen extends Application {
 	}
 
 	public void loadLastLevel(Stage stage){
-		switch (log.last_level){
-			case 1:
-				LevelOneScreen levelOneScreen = new LevelOneScreen();
-				levelOneScreen.start(stage);
-				break;
-			case 2:
-				LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
-				levelTwoScreen.start(stage);
-				break;
-			case 3:
-				LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
-				levelThreeScreen.start(stage);
-				break;
+		if(log.last_level <= 1){
+			LevelOneScreen levelOneScreen = new LevelOneScreen();
+			levelOneScreen.start(stage);
+		} else if (log.last_level == 2) {
+			LevelTwoScreen levelTwoScreen = new LevelTwoScreen();
+			levelTwoScreen.start(stage);
+		} else {
+			LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
+			levelThreeScreen.start(stage);
 		}
-
-
 	}
 
 	private void styleMenuButton(Button button) {

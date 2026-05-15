@@ -30,6 +30,6 @@ public class VacuumBoost extends Token {
 
     @Override
     public void tokenUsed(Player player, ConfigReader config) {
-        player.setVacuumWidth(player.getVacuumWidth() + 25);
+        player.setVacuumHeight(player.getVacuumHeight() + 20);
     }
 }

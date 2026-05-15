@@ -46,6 +46,13 @@ public class LogReader {
     }
 
     public void saveLog(String filePath, int highScore, int lastLevel) {
+
+        if(lastLevel >= 3){
+            lastLevel = 3;
+        } else if (lastLevel < 1) {
+            lastLevel = 1;
+        }
+
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();

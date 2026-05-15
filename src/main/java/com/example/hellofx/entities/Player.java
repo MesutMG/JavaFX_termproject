@@ -12,6 +12,7 @@ public class Player extends Entity {
     private final double vacuumIncr;
     private double  maxVacuum;
     private double  vacuumWidth = 30;
+    private double vacuumHeight = 100;
     private double  vacuumPower = 1;
     private Circle  circle;
     private Polygon triangle;
@@ -43,8 +44,8 @@ public class Player extends Entity {
         Polygon triangle = new Polygon();
         triangle.getPoints().addAll(
                 0.0, 0.0,
-                100.0, -vacuumWidth,
-                100.0, vacuumWidth
+                vacuumHeight, -vacuumWidth,
+                vacuumHeight, vacuumWidth
         );
         triangle.setFill(Color.RED);
         triangle.setStroke(Color.WHITE);
@@ -118,6 +119,10 @@ public class Player extends Entity {
 
     public void setVacuumWidth(double vacuumWidth) { this.vacuumWidth = vacuumWidth; }
 
+    public double getVacuumHeight() { return vacuumHeight; }
+
+    public void setVacuumHeight(double vacuumHeight) { this.vacuumHeight = vacuumHeight; }
+
     public void setVacuumPerc(double vacuumPerc) {
         if (vacuumPerc > 100) {
             this.vacuumPerc = 100;
@@ -158,11 +163,11 @@ public class Player extends Entity {
         this.triangle.getPoints().setAll(
                 0.0, 0.0,
 
-                (100 * Math.cos(angle)) - (-vacuumWidth * Math.sin(angle)),
-                (100 * Math.sin(angle)) + (-vacuumWidth * Math.cos(angle)),
+                (this.vacuumHeight * Math.cos(angle)) - (-vacuumWidth * Math.sin(angle)),
+                (this.vacuumHeight * Math.sin(angle)) + (-vacuumWidth * Math.cos(angle)),
 
-                (100 * Math.cos(angle)) - (vacuumWidth * Math.sin(angle)),
-                (100 * Math.sin(angle)) + (vacuumWidth * Math.cos(angle))
+                (this.vacuumHeight * Math.cos(angle)) - (vacuumWidth * Math.sin(angle)),
+                (this.vacuumHeight * Math.sin(angle)) + (vacuumWidth * Math.cos(angle))
         );
     }
 

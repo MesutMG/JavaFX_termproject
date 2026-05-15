@@ -242,19 +242,34 @@ public abstract class Level extends Application {
                 winLabel.setFont(Font.font(72));
                 winLabel.setTextFill(Color.GREEN);
 
-                Button nextLevelBtn = new Button("Next Level");
+                Button nextLevelBtn;
+
+                if(getLevelNumber() == 3){
+                    nextLevelBtn = new Button("Main Menu");
+                    nextLevelBtn.setOnAction(e -> {
+                        gameTimer.stop();
+                        Stage stage = (Stage) gameRoot.getScene().getWindow();
+                        TitleScreen mainMenu = new TitleScreen();
+                        Scene mainMenuScene = mainMenu.createScene(DEFAULT_WIDTH, DEFAULT_HEIGHT, stage);
+                        stage.setTitle("Main Menu");
+                        stage.setScene(mainMenuScene);
+                    });
+                }
+                else{
+                    nextLevelBtn = new Button("Next Level");
+                    nextLevelBtn.setOnAction(e -> {
+                        Stage stage = (Stage) root.getScene().getWindow();
+                        Level nextLevel = createNextLevel();
+                        Scene nextScene = nextLevel.createScene(stage.getScene().getWidth(), stage.getScene().getHeight(), nextLevel.getGhostCount(), nextLevel.getRipperCount(), nextLevel.getWispCount());
+                        stage.setTitle(getNextLevelTitle());
+                        stage.setScene(nextScene);
+                    });
+                }
                 nextLevelBtn.setPrefWidth(240);
                 nextLevelBtn.setPrefHeight(60);
                 applyButtonStyle(nextLevelBtn, false);
                 nextLevelBtn.setOnMouseEntered(e -> applyButtonStyle(nextLevelBtn, true));
                 nextLevelBtn.setOnMouseExited(e -> applyButtonStyle(nextLevelBtn, false));
-                nextLevelBtn.setOnAction(e -> {
-                    Stage stage = (Stage) root.getScene().getWindow();
-                    Level nextLevel = createNextLevel();
-                    Scene nextScene = nextLevel.createScene(stage.getScene().getWidth(), stage.getScene().getHeight(), nextLevel.getGhostCount(), nextLevel.getRipperCount(), nextLevel.getWispCount());
-                    stage.setTitle(getNextLevelTitle());
-                    stage.setScene(nextScene);
-                });
 
                 winBox.getChildren().addAll(winLabel, nextLevelBtn);
                 root.getChildren().addAll(overlay, winBox);
@@ -574,12 +589,12 @@ public abstract class Level extends Application {
         long currentTime = System.currentTimeMillis();
 
         // Spawn a new random token every 5 seconds
-        if (currentTime - lastTokenSpawnTime >= 5000) {
+        if (currentTime - lastTokenSpawnTime >= 50) {
             lastTokenSpawnTime = currentTime;
             double x = (Math.random() * (playAreaW - 40)) + playAreaX + 20;
             double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
 
-            int type = (int) (Math.random() * 5);
+            int type = (int) (Math.random() * 5000);
             Token token = switch (type) {
                 case 0 -> new HealthToken(x, y);
                 case 1 -> new RangeToken(x, y);
