@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -119,8 +120,8 @@ public abstract class Level extends Application {
 
         playableArea = new Rectangle(playAreaX, playAreaY, playAreaW, playAreaH);
         playableArea.setFill(Color.TRANSPARENT);
-        playableArea.setStroke(Color.TRANSPARENT);
-        playableArea.setStrokeWidth(3);
+        playableArea.setStroke(Color.RED);
+        playableArea.setStrokeWidth(2);
 
         timeRemainingLabel = new Label(String.format("Time: %d:%02d", totalMinute, totalSecond));
         timeRemainingLabel.setFont(Font.font(24));
@@ -450,10 +451,10 @@ public abstract class Level extends Application {
 
     private void handleCheat() {
         if (cheat) {
-            playableArea.setStroke(Color.RED);
+            playableArea.setOpacity(1);
             for (Enemy e : enemies) e.getBody().setVisible(true);
         } else {
-            playableArea.setStroke(Color.TRANSPARENT);
+            playableArea.setOpacity(0.7);
         }
     }
 
