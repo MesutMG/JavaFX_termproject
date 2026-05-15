@@ -3,6 +3,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 
 public class Bar{
     private double posX;
@@ -25,7 +26,16 @@ public class Bar{
         rect.setY(0);
 
         this.setRectangleBar(rect);
-        this.barLabel = new Label(labelText);
+        Label textLabel =  new Label(labelText);
+        textLabel.setStyle(
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 20px;" +
+                        "-fx-font-weight: 800;" +
+                        "-fx-letter-spacing: 1px;"
+        );
+        textLabel.setTranslateX(-13);
+        textLabel.setTranslateY(-30);
+        this.barLabel = textLabel;
 
         Rectangle rect2 = new Rectangle(BAR_WIDTH + 10, BAR_HEIGHT + 10, Color.BLACK);
         rect2.setX(- 5);
@@ -33,7 +43,7 @@ public class Bar{
 
         this.setRectangleBackground(rect2);
 
-        this.group = new Group(this.rectangleBackground, this.rectangleBar);
+        this.group = new Group(this.rectangleBackground, this.rectangleBar, this.barLabel);
         this.group.setTranslateX(posX);
         this.group.setTranslateY(posY);
     }

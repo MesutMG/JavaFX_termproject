@@ -252,23 +252,32 @@ public abstract class Level extends Application {
                 overlay.setOpacity(0.5);
 
                 VBox lostMenuBox = new VBox();
+                lostMenuBox.setAlignment(Pos.CENTER);
+                lostMenuBox.setLayoutX((DEFAULT_WIDTH >> 1) - (lostMenuBox.getWidth() / 2));
+                lostMenuBox.setLayoutY((DEFAULT_HEIGHT >> 1) - (lostMenuBox.getHeight() / 2));
 
-                Label lostLabel = new Label("Game Over\nFinal Score: " + player.getScore());
+                Label lostLabel = new Label("Game Over");
                 lostLabel.setAlignment(Pos.CENTER);
                 lostLabel.setFont(Font.font(72));
                 lostLabel.setTextFill(Color.RED);
                 lostLabel.setLayoutX((DEFAULT_WIDTH >> 1) - 180);
                 lostLabel.setLayoutY((DEFAULT_HEIGHT >> 1) - 150);
-
                 lostMenuBox.getChildren().add(lostLabel);
 
-                HBox lostBtns = new HBox();
 
+                Label lostLabel2 = new Label("Final Score: " + player.getScore());
+                lostLabel2.setAlignment(Pos.CENTER);
+                lostLabel2.setFont(Font.font(72));
+                lostLabel2.setTextFill(Color.RED);
+                lostLabel2.setLayoutX((DEFAULT_WIDTH >> 1) - 180);
+                lostLabel2.setLayoutY((DEFAULT_HEIGHT >> 1) - 150);
+                lostMenuBox.getChildren().add(lostLabel2);
+
+                HBox lostBtns = new HBox();
+                lostBtns.setLayoutX(10);
                 Button retryBtn = new Button("Try Again");
                 retryBtn.setPrefWidth(240);
                 retryBtn.setPrefHeight(60);
-                retryBtn.setLayoutX((DEFAULT_WIDTH >> 1) - 120);
-                retryBtn.setLayoutY((DEFAULT_HEIGHT >> 1) + 50);
                 applyButtonStyle(retryBtn, false);
                 retryBtn.setOnMouseEntered(e -> applyButtonStyle(retryBtn, true));
                 retryBtn.setOnMouseExited(e -> applyButtonStyle(retryBtn, false));
@@ -284,8 +293,6 @@ public abstract class Level extends Application {
                 Button mainMenuBtn = new Button("Main Menu");
                 mainMenuBtn.setPrefWidth(240);
                 mainMenuBtn.setPrefHeight(60);
-                mainMenuBtn.setLayoutX((DEFAULT_WIDTH >> 1) - 120);
-                mainMenuBtn.setLayoutY((DEFAULT_HEIGHT >> 1) + 50);
                 applyButtonStyle(mainMenuBtn, false);
                 mainMenuBtn.setOnMouseEntered(e -> applyButtonStyle(mainMenuBtn, true));
                 mainMenuBtn.setOnMouseExited(e -> applyButtonStyle(mainMenuBtn, false));
