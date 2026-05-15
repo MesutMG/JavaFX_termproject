@@ -1,4 +1,4 @@
-maximum_health: 1000
+maximum_health: 100
 maximum_vacuum: 100
 entity_damage: 10
 vacuum_decrease: 1
@@ -33,4 +33,4 @@ level_3_wisps: 2
 
 health_token_increase: 20
 vacuum_token_increase: 20
-eye_token_duration: 5
+eye_token_duration: 3

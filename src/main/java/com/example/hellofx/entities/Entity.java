@@ -37,6 +37,14 @@ public abstract class Entity {
         this.health = Math.max(0, health);
     }
 
+    public double getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(double maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
     public double getPosX() { return posX; }
     public void setPosX(double posX) {
         this.posX = posX;

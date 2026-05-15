@@ -499,7 +499,7 @@ public abstract class Level extends Application {
                 token.tokenUsed(player, config);
 
                 if (token instanceof HealthToken) {
-                    hBar.setBarPercentage(player.getHealth());
+                    hBar.setBarPercentage(player.getHealthPerc());
                 }
                 if (token instanceof EyeToken) {
                     eyeRevealEndTime = currentTime + (config.eye_token_duration * 1000L);

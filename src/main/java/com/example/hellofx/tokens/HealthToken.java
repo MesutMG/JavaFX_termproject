@@ -30,6 +30,6 @@ public class HealthToken extends Token {
 
     @Override
     public void tokenUsed(Player player, ConfigReader config) {
-        player.setHealth(player.getHealth() + config.health_token_increase);
+        player.setHealth(Math.min(player.getHealth() + config.health_token_increase, player.getMaxHealth()));
     }
 }
