@@ -32,7 +32,7 @@ public abstract class Entity {
     public int getScore() { return score; }
     public void setScore(int score) { this.score = score; }
 
-    public double getHealth() { return health; }
+    public double getHealth() { return this.health; }
 
     public void setHealth(double health) {
         this.health = Math.max(0, health);

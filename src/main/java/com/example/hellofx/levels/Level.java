@@ -405,7 +405,7 @@ public abstract class Level extends Application {
                 for (Enemy e : enemies) e.getBody().setVisible(false);
                 return;
             }
-            player.setCurrVacuum(player.getCurrVacuum() - player.getVacuumDecrease());
+            player.setVacuum(player.getVacuum() - player.getVacuumDecrease());
             vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setOpacity(1);
 
@@ -425,7 +425,7 @@ public abstract class Level extends Application {
                 }
             }
         } else {
-            player.setCurrVacuum(Math.min(player.getMaxVacuum(), player.getCurrVacuum() + player.getVacuumIncrease()));
+            player.setVacuum(Math.min(player.getMaxVacuum(), player.getVacuum() + player.getVacuumIncrease()));
             vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setOpacity(0.15);
             for (Enemy e : enemies) {
@@ -443,7 +443,7 @@ public abstract class Level extends Application {
                     player.setHealth(0);
                     player.setAlive(false);
                 }
-                hBar.setBarPercentage(player.getHealth());
+                hBar.setBarPercentage(player.getHealthPerc());
             }
         }
     }

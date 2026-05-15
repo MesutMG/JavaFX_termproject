@@ -7,7 +7,7 @@ import javafx.scene.Group;
 
 public class Player extends Entity {
     private double  vacuumPerc;
-    private double  currVacuum;
+    private double vacuum;
     private final double vacuumDecr;
     private final double vacuumIncr;
     private double  maxVacuum;
@@ -20,14 +20,14 @@ public class Player extends Entity {
     public Player(double posX, double posY, ConfigReader config) {
         super(posX, posY);
         this.maxHealth  = config.maximum_health;
-        this.health     = 100;
+        this.health     = config.maximum_health;
         this.posX       = posX;
         this.posY       = posY;
         this.score      = 0;
         this.isAlive    = true;
         this.vacuumPerc = 100;
         this.maxVacuum  = config.maximum_vacuum;
-        this.currVacuum = this.maxVacuum;
+        this.vacuum = this.maxVacuum;
         this.vacuumDecr = config.vacuum_decrease;
         this.vacuumIncr = config.vacuum_increase;
         this.angle      = 0;
@@ -84,12 +84,12 @@ public class Player extends Entity {
         this.triangle = triangle;
     }
 
-    public double getCurrVacuum() {
-        return currVacuum;
+    public double getVacuum() {
+        return vacuum;
     }
 
-    public void setCurrVacuum(double currVacuum) {
-        this.currVacuum = currVacuum;
+    public void setVacuum(double vacuum) {
+        this.vacuum = vacuum;
     }
 
     public double getMaxVacuum() {
@@ -129,7 +129,22 @@ public class Player extends Entity {
     }
 
     public double getVacuumPerc() {
-        return ((this.currVacuum / this.maxVacuum) * 100);
+        return ((this.vacuum / this.maxVacuum) * 100);
+    }
+
+    @Override
+    public void setHealth(double health) {
+        if((health <= this.maxHealth) && (health >= 0)){
+            this.health = health;
+        } else if (health < 0) {
+            this.health = 0;
+        } else if (health > this.maxHealth) {
+            this.health = this.maxHealth;
+        }
+    }
+
+    public double getHealthPerc() {
+        return((this.health / this.maxHealth) * 100);
     }
 
     public void updatePosition(double newX, double newY, double newAngle) {
