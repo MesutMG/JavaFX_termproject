@@ -405,7 +405,7 @@ public abstract class Level extends Application {
                 for (Enemy e : enemies) e.getBody().setVisible(false);
                 return;
             }
-            player.setVacuumPerc(player.getVacuumPerc() - 1);
+            player.setCurrVacuum(player.getCurrVacuum() - player.getVacuumDecrease());
             vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setOpacity(1);
 
@@ -425,7 +425,7 @@ public abstract class Level extends Application {
                 }
             }
         } else {
-            player.setVacuumPerc(Math.min(100, player.getVacuumPerc() + 0.1)); //config.txt'den alinacak--------------
+            player.setCurrVacuum(Math.min(player.getMaxVacuum(), player.getCurrVacuum() + player.getVacuumIncrease()));
             vBar.setBarPercentage(player.getVacuumPerc());
             player.getTriangle().setOpacity(0.15);
             for (Enemy e : enemies) {
@@ -469,16 +469,17 @@ public abstract class Level extends Application {
         long currentTime = System.currentTimeMillis();
 
         // Spawn a new random token every 5 seconds
-        if (currentTime - lastTokenSpawnTime >= 5000) {
+        if (currentTime - lastTokenSpawnTime >= 500) {
             lastTokenSpawnTime = currentTime;
             double x = (Math.random() * (playAreaW - 40)) + playAreaX + 20;
             double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
 
-            int type = (int) (Math.random() * 4);
+            int type = (int) (Math.random() * 5);
             Token token = switch (type) {
                 case 0 -> new HealthToken(x, y);
                 case 1 -> new RangeToken(x, y);
                 case 2 -> new VacuumBoost(x, y);
+                case 3 -> new VacuumPower(x, y);
                 default -> new EyeToken(x, y);
             };
 

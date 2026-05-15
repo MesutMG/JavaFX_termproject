@@ -1,8 +1,8 @@
 maximum_health: 100
 maximum_vacuum: 100
 entity_damage: 10
-vacuum_decrease: 2
-vacuum increase: 5
+vacuum_decrease: 1
+vacuum increase: 2
 
 level_1_playable_area_x: 700
 level_1_playable_area_y: 200

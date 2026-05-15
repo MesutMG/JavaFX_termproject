@@ -7,7 +7,12 @@ import javafx.scene.Group;
 
 public class Player extends Entity {
     private double  vacuumPerc;
+    private double  currVacuum;
+    private final double vacuumDecr;
+    private final double vacuumIncr;
+    private double  maxVacuum;
     private double  vacuumWidth = 30;
+    private double  vacuumPower = 1;
     private Circle  circle;
     private Polygon triangle;
     private final int CIRCLE_RADIUS = 20;
@@ -20,7 +25,11 @@ public class Player extends Entity {
         this.posY       = posY;
         this.score      = 0;
         this.isAlive    = true;
-        this.vacuumPerc = 100;//config.txt'den alinacak (bu 100 kalsin ama decreasing amountu degistirsin)-------------
+        this.vacuumPerc = 100;
+        this.maxVacuum  = config.maximum_vacuum;
+        this.currVacuum = this.maxVacuum;
+        this.vacuumDecr = config.vacuum_decrease;
+        this.vacuumIncr = config.vacuum_increase;
         this.angle      = 0;
         this.speed      = 5;
         this.attackDamage = 1;
@@ -75,9 +84,35 @@ public class Player extends Entity {
         this.triangle = triangle;
     }
 
-    public double getVacuumPerc() {
-        return vacuumPerc;
+    public double getCurrVacuum() {
+        return currVacuum;
     }
+
+    public void setCurrVacuum(double currVacuum) {
+        this.currVacuum = currVacuum;
+    }
+
+    public double getMaxVacuum() {
+        return maxVacuum;
+    }
+
+    public void setMaxVacuum(double maxVacuum) {
+        this.maxVacuum = maxVacuum;
+    }
+
+    public double getVacuumPower() {
+        return vacuumPower;
+    }
+
+    public void setVacuumPower(double vacuumPower) {
+        this.vacuumPower = vacuumPower;
+    }
+
+    public double getVacuumDecrease(){
+        return this.vacuumDecr;
+    }
+
+    public double getVacuumIncrease() { return this.vacuumIncr;}
 
     public double getVacuumWidth() { return vacuumWidth; }
 
@@ -91,6 +126,10 @@ public class Player extends Entity {
         } else {
             this.vacuumPerc = vacuumPerc;
         }
+    }
+
+    public double getVacuumPerc() {
+        return ((this.currVacuum / this.maxVacuum) * 100);
     }
 
     public void updatePosition(double newX, double newY, double newAngle) {
@@ -111,4 +150,5 @@ public class Player extends Entity {
                 (100 * Math.sin(angle)) + (vacuumWidth * Math.cos(angle))
         );
     }
+
 }
