@@ -51,8 +51,15 @@ public class EditConfig extends Application {
             double hBoxSpacing = 5;
             String fontName = "Arial";
             double fontSize = 19;
-            String textColor = "black";
+            String textColor = "white";
             String labelStyle = "-fx-font-family: '" + fontName + "'; -fx-font-size: " + fontSize + "px; -fx-text-fill: " + textColor + ";";
+
+            String hBoxStyle = "-fx-background-color: rgba(0, 0, 0, 0.5);" +
+                "-fx-border-color: white;" + // Change border color as needed
+                "-fx-border-width: 2px;" +
+                "-fx-border-radius: 5px;" +
+                "-fx-background-radius: 5px;" + // Matches border radius
+                "-fx-padding: 5px;";
 
             String[] names = {
                     "Max Health: ", "Max Vacuum: ", "Entity Damage: ", "Vacuum Decrease: ", "Vacuum Increase: ", "Health Token Inc: ", "Vacuum Token Inc: ", "Eye Token Dur: ",
@@ -72,10 +79,10 @@ public class EditConfig extends Application {
                 Button plus = new Button("+");
 
                 /*using 10+ 10- for:
-                max health, max vacuum, healthtoken, vacuumtoken ve level alanlari icin
+                max health, max vacuum, healthtoken, vacuumtoken, zamanlar ve level alanlari icin
                 */
                 int step;
-                if((i == 0) || (i == 1) || (i == 5) || (i == 6) || (i >= 8 && i <= 11) || (i >= 16 && i <= 19) || (i >= 24 && i <= 27)){
+                if((i == 0) || (i == 1) || (i == 5) || (i == 6) || (i >= 8 && i <= 12) || (i >= 16 && i <= 20) || (i >= 24 && i <= 28)){
                     step = 10;
                 } else { step = 1; }
 
@@ -83,8 +90,13 @@ public class EditConfig extends Application {
                 //java muhtesem
 
                 min.setOnAction(e -> {
-                    setValue(finalI, getValue(finalI) - step);
-                    labels[finalI].setText(names[finalI] + getValue(finalI));
+                    if((getValue(finalI) - step) <= 0){
+                        setValue(finalI, 0);
+                        labels[finalI].setText(names[finalI] + getValue(finalI));
+                    } else {
+                        setValue(finalI, getValue(finalI) - step);
+                        labels[finalI].setText(names[finalI] + getValue(finalI));
+                    }
                 });
 
                 plus.setOnAction(e -> {
@@ -95,7 +107,11 @@ public class EditConfig extends Application {
                 //griddeki pozisyon
                 int col = i / 8;
                 int row = i % 8;
-                root.add(new HBox(hBoxSpacing, labels[i], min, plus), col, row);
+
+                HBox hbox = new HBox(hBoxSpacing, labels[i], min, plus);
+                hbox.setStyle(hBoxStyle);
+
+                root.add(hbox, col, row);
             }
         }
 

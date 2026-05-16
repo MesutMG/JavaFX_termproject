@@ -71,11 +71,7 @@ public class SelectLevel extends Application {
 
         backButton.setOnAction(event -> {
             TitleScreen titleScreen = new TitleScreen();
-            double sceneWidth = stage.getScene().getWidth();
-            double sceneHeight = stage.getScene().getHeight();
-            Scene titleScene = titleScreen.createScene(sceneWidth, sceneHeight, stage);
-            stage.setTitle("Title Screen");
-            stage.setScene(titleScene);
+            titleScreen.start(stage);
         });
 
         menu.getChildren().addAll(levelOneButton, levelTwoButton, levelThreeButton, backButton);

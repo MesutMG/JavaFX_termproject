@@ -9,7 +9,7 @@ level_1_playable_area_y: 140
 level_1_playable_area_width: 1050
 level_1_playable_area_height: 560
 level_1_time: 60
-level_1_ghosts: 5
+level_1_ghosts: 3
 level_1_rippers: 0
 level_1_wisps: 0
 
