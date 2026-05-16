@@ -19,6 +19,7 @@ public class TitleScreen extends Application {
 	private final Button loadGameButton = new Button("Load Game");
 	private final Button startGameButton = new Button("Start Game");
 	private final Button selectLevelButton = new Button("Select Level");
+	private final Button editConfigButton = new Button("Edit Config");
 	private final Button exitButton = new Button("Exit");
 
 	@Override
@@ -33,7 +34,7 @@ public class TitleScreen extends Application {
 
 	public Scene createScene(double width, double height, Stage stage) {
 
-		if(!isLog){//if config file doesn't exist
+		if(!isLog){//if log file doesn't exist
 			//Generate log.txt with default values 0,1
 		}
 
@@ -47,24 +48,28 @@ public class TitleScreen extends Application {
 		loadGameButton.setPrefWidth(200);
 		startGameButton.setPrefWidth(200);
 		selectLevelButton.setPrefWidth(200);
+		editConfigButton.setPrefWidth(200);
 		exitButton.setPrefWidth(200);
 
 		loadGameButton.setPrefHeight(64);
 		startGameButton.setPrefHeight(64);
 		selectLevelButton.setPrefHeight(64);
+		editConfigButton.setPrefHeight(64);
 		exitButton.setPrefHeight(64);
 
 		styleMenuButton(loadGameButton);
 		styleMenuButton(startGameButton);
 		styleMenuButton(selectLevelButton);
+		styleMenuButton(editConfigButton);
 		styleMenuButton(exitButton);
 
 		loadGameButton.setOnAction(event -> loadLastLevel(stage));
 		startGameButton.setOnAction(event -> switchToGame(stage));
 		selectLevelButton.setOnAction(event -> switchToSelectLevel(stage));
+		editConfigButton.setOnAction(event -> switchToEditConfig(stage));
 		exitButton.setOnAction(event -> Platform.exit());
 
-		menu.getChildren().addAll(loadGameButton, startGameButton, selectLevelButton, exitButton);
+		menu.getChildren().addAll(loadGameButton, startGameButton, selectLevelButton, editConfigButton, exitButton);
 		root.getChildren().add(menu);
 
 		return new Scene(root, width, height);
@@ -93,6 +98,13 @@ public class TitleScreen extends Application {
 			LevelThreeScreen levelThreeScreen = new LevelThreeScreen();
 			levelThreeScreen.start(stage);
 		}
+	}
+
+	public void switchToEditConfig(Stage stage){
+		EditConfig editConfig = new EditConfig();
+		Scene editConfigScene = editConfig.createScene(stage, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		stage.setTitle("Edit Config");
+		stage.setScene(editConfigScene);
 	}
 
 	private void styleMenuButton(Button button) {

@@ -156,4 +156,54 @@ public class ConfigReader {
             e.printStackTrace();
         }
     }
+
+    public void saveCustomConfig(String filePath) {
+        StringBuilder configText = new StringBuilder();
+
+        configText.append("maximum_health: ").append(maximum_health).append("\n");
+        configText.append("maximum_vacuum: ").append(maximum_vacuum).append("\n");
+        configText.append("entity_damage: ").append(entity_damage).append("\n");
+        configText.append("vacuum_decrease: ").append(vacuum_decrease).append("\n");
+        configText.append("vacuum increase: ").append(vacuum_increase).append("\n\n");
+        configText.append("level_1_playable_area_x: ").append(level_1_playable_area_x).append("\n");
+        configText.append("level_1_playable_area_y: ").append(level_1_playable_area_y).append("\n");
+        configText.append("level_1_playable_area_width: ").append(level_1_playable_area_width).append("\n");
+        configText.append("level_1_playable_area_height: ").append(level_1_playable_area_height).append("\n");
+        configText.append("level_1_time: ").append(level_1_time).append("\n");
+        configText.append("level_1_ghosts: ").append(level_1_ghosts).append("\n");
+        configText.append("level_1_rippers: ").append(level_1_rippers).append("\n");
+        configText.append("level_1_wisps: ").append(level_1_wisps).append("\n\n");
+        configText.append("level_2_playable_area_x: ").append(level_2_playable_area_x).append("\n");
+        configText.append("level_2_playable_area_y: ").append(level_2_playable_area_y).append("\n");
+        configText.append("level_2_playable_area_width: ").append(level_2_playable_area_width).append("\n");
+        configText.append("level_2_playable_area_height: ").append(level_2_playable_area_height).append("\n");
+        configText.append("level_2_time: ").append(level_2_time).append("\n");
+        configText.append("level_2_ghosts: ").append(level_2_ghosts).append("\n");
+        configText.append("level_2_rippers: ").append(level_2_rippers).append("\n");
+        configText.append("level_2_wisps: ").append(level_2_wisps).append("\n\n");
+        configText.append("level_3_playable_area_x: ").append(level_3_playable_area_x).append("\n");
+        configText.append("level_3_playable_area_y: ").append(level_3_playable_area_y).append("\n");
+        configText.append("level_3_playable_area_width: ").append(level_3_playable_area_width).append("\n");
+        configText.append("level_3_playable_area_height: ").append(level_3_playable_area_height).append("\n");
+        configText.append("level_3_time: ").append(level_3_time).append("\n");
+        configText.append("level_3_ghosts: ").append(level_3_ghosts).append("\n");
+        configText.append("level_3_rippers: ").append(level_3_rippers).append("\n");
+        configText.append("level_3_wisps: ").append(level_3_wisps).append("\n\n");
+        configText.append("health_token_increase: ").append(health_token_increase).append("\n");
+        configText.append("vacuum_token_increase: ").append(vacuum_token_increase).append("\n");
+        configText.append("eye_token_duration: ").append(eye_token_duration).append("\n");
+
+        try {
+            File file = new File(filePath);
+            if (file.getParentFile() != null) {
+                file.getParentFile().mkdirs();
+            }
+            FileWriter writer = new FileWriter(file);
+            writer.write(configText.toString());
+            writer.close();
+            System.out.println("Config successfully saved to: " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
