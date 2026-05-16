@@ -1,4 +1,5 @@
-package fxproject.ui;
+package ghosthunterinc.ui;
+
 import javafx.scene.paint.Color;
 
 public class VacuumBar  extends Bar{

@@ -1,4 +1,5 @@
-package fxproject.entities;
+package ghosthunterinc.entities;
+
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;

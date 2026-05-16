@@ -1,4 +1,4 @@
-package fxproject.levels;
+package ghosthunterinc.levels;
 
 public class LevelOneScreen extends Level {
 
@@ -12,11 +12,11 @@ public class LevelOneScreen extends Level {
     public int getTimeLimitSeconds() { return (config.level_1_time % 60); }
 
     @Override
-    public String getBackgroundImagePath() { return "file:img/bg10.png"; }
+    public String getBackgroundImagePath() { return "/img/bg10.png"; }
 
     @Override
     public String[] getOverlayImagePaths() {
-        return new String[]{"file:img/bg11.png"};
+        return new String[]{"/img/bg11.png"};
     }
 
     @Override

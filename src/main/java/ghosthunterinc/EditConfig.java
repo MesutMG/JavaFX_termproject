@@ -1,4 +1,4 @@
-package fxproject;
+package ghosthunterinc;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -13,7 +13,7 @@ public class EditConfig extends Application {
     private static final double DEFAULT_WIDTH = 1280;
     private static final double DEFAULT_HEIGHT = 720;
     private ConfigReader config = new ConfigReader();
-    private boolean isConfig = config.readConfig("src/main/java/com/example/hellofx/config.txt");
+    private boolean isConfig = config.readConfig("config.txt");
 
     @Override
     public void start(Stage stage) {
@@ -173,7 +173,7 @@ public class EditConfig extends Application {
     private Button getButton(Stage stage) {
         Button saveBtn = new Button("Save And Exit");
         saveBtn.setOnAction(e -> {
-            config.saveCustomConfig("src/main/java/com/example/hellofx/config.txt");
+            config.saveCustomConfig("config.txt");
             TitleScreen titleScreen = new TitleScreen();
             double sceneWidth = stage.getScene().getWidth();
             double sceneHeight = stage.getScene().getHeight();

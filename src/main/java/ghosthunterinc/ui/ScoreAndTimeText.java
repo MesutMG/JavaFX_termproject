@@ -1,4 +1,4 @@
-package fxproject.ui;
+package ghosthunterinc.ui;
 
 public class ScoreAndTimeText {
     private int score;

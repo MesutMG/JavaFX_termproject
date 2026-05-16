@@ -1,4 +1,4 @@
-package fxproject;
+package ghosthunterinc;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -148,7 +148,9 @@ public class ConfigReader {
 
         try {
             File file = new File(filePath);
-            file.getParentFile().mkdirs();
+            if (file.getParentFile() != null) { // Add this check
+                file.getParentFile().mkdirs();
+            }
             FileWriter writer = new FileWriter(file);
             writer.write(defaultConfig);
             writer.close();

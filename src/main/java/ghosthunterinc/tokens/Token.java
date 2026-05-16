@@ -1,7 +1,7 @@
-package fxproject.tokens;
+package ghosthunterinc.tokens;
 
-import fxproject.ConfigReader;
-import fxproject.entities.Player;
+import ghosthunterinc.ConfigReader;
+import ghosthunterinc.entities.Player;
 
 import javafx.scene.Group;
 

@@ -1,5 +1,6 @@
-package fxproject.entities;
-import fxproject.ConfigReader;
+package ghosthunterinc.entities;
+
+import ghosthunterinc.ConfigReader;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;

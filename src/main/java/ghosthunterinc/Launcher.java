@@ -1,4 +1,4 @@
-package fxproject;
+package ghosthunterinc;
 
 import javafx.application.Application;
 

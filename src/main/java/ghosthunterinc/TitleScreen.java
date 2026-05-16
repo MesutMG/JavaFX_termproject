@@ -1,8 +1,6 @@
-package fxproject;
+package ghosthunterinc;
 
-import fxproject.levels.LevelOneScreen;
-import fxproject.levels.LevelThreeScreen;
-import fxproject.levels.LevelTwoScreen;
+import ghosthunterinc.levels.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -12,11 +10,10 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import com.example.hellofx.levels.*;
 
 public class TitleScreen extends Application {
 	private LogReader log = new LogReader();
-	private boolean isLog = log.readLog("src/main/java/com/example/hellofx/log.txt");
+	private boolean isLog = log.readLog("log.txt");
 	private static final double DEFAULT_WIDTH = 1280;
 	private static final double DEFAULT_HEIGHT = 720;
 	private final Button loadGameButton = new Button("Load Game");

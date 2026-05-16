@@ -1,8 +1,6 @@
-package fxproject;
+package ghosthunterinc;
 
-import fxproject.levels.LevelOneScreen;
-import fxproject.levels.LevelThreeScreen;
-import fxproject.levels.LevelTwoScreen;
+import ghosthunterinc.levels.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,7 +13,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
-import com.example.hellofx.levels.*;
 
 public class SelectLevel extends Application {
     private static final double DEFAULT_WIDTH = 1280;
@@ -108,7 +105,7 @@ public class SelectLevel extends Application {
     }
 
     private Background buildBackgroundImage() {
-        var imageUrl = getClass().getResource("/com/example/hellofx/images/background.png");
+        var imageUrl = getClass().getResource("img/mainmenu.png");
         if (imageUrl != null) {
             Image image = new Image(imageUrl.toExternalForm());
             BackgroundImage backgroundImage = new BackgroundImage(

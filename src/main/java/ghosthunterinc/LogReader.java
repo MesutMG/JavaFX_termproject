@@ -1,4 +1,4 @@
-package fxproject;
+package ghosthunterinc;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,7 +55,9 @@ public class LogReader {
 
         try {
             File file = new File(filePath);
-            file.getParentFile().mkdirs();
+            if (file.getParentFile() != null) { // Add this check
+                file.getParentFile().mkdirs();
+            }
             FileWriter writer = new FileWriter(file);
             writer.write("high_score: " + highScore + "\n");
             writer.write("last_level: " + lastLevel + "\n");

@@ -1,4 +1,4 @@
-package fxproject.entities;
+package ghosthunterinc.entities;
 
 import javafx.scene.Group;
 

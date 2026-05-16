@@ -1,4 +1,5 @@
-package fxproject.ui;
+package ghosthunterinc.ui;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;

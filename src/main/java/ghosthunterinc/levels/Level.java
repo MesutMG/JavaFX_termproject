@@ -1,15 +1,9 @@
-package fxproject.levels;
+package ghosthunterinc.levels;
 
-import fxproject.*;
-import fxproject.entities.*;
-import fxproject.tokens.*;
-import fxproject.ConfigReader;
-import fxproject.LogReader;
-import fxproject.TitleScreen;
-import fxproject.entities.*;
-import fxproject.tokens.*;
-import fxproject.ui.HealthBar;
-import fxproject.ui.VacuumBar;
+import ghosthunterinc.*;
+import ghosthunterinc.ui.*;
+import ghosthunterinc.entities.*;
+import ghosthunterinc.tokens.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -29,7 +23,7 @@ import java.util.ArrayList;
 
 public abstract class Level extends Application {
     public ConfigReader config = new ConfigReader();
-    public boolean isConfig = config.readConfig("src/main/java/com/example/hellofx/config.txt");
+    public boolean isConfig = config.readConfig("config.txt");
     protected int scoreText = 0;
     protected Label scoreLabel;
     protected Label timeRemainingLabel;
@@ -281,7 +275,7 @@ public abstract class Level extends Application {
 
                 // Save progress
                 LogReader logReader = new LogReader();
-                String logPath = "src/main/java/com/example/hellofx/log.txt";
+                String logPath = "log.txt";
                 logReader.readLog(logPath);
                 int currentHighScore = Math.max(logReader.high_score, player.getScore());
                 logReader.saveLog(logPath, currentHighScore, getLevelNumber() + 1);
