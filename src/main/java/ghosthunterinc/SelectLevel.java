@@ -14,6 +14,8 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class SelectLevel extends Application {
     private static final double DEFAULT_WIDTH = 1280;
     private static final double DEFAULT_HEIGHT = 720;
@@ -93,37 +95,26 @@ public class SelectLevel extends Application {
         String borderColor = hover ? "#5e0b8a" : "#4f007a";
         button.setStyle(
                 "-fx-background-color: " + backgroundColor + ";" +
-                "-fx-border-color: " + borderColor + ";" +
-                "-fx-border-width: 3;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 24px;" +
-                "-fx-font-weight: 800;" +
-                "-fx-letter-spacing: 2px;" +
-                "-fx-background-radius: 6;" +
-                "-fx-border-radius: 6;"
+                        "-fx-border-color: " + borderColor + ";" +
+                        "-fx-border-width: 3;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 24px;" +
+                        "-fx-font-weight: 800;" +
+                        "-fx-letter-spacing: 2px;" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-border-radius: 6;"
         );
     }
 
     private Background buildBackgroundImage() {
-        var imageUrl = getClass().getResource("img/mainmenu.png");
-        if (imageUrl != null) {
-            Image image = new Image(imageUrl.toExternalForm());
-            BackgroundImage backgroundImage = new BackgroundImage(
-                    image,
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.CENTER,
-                    new BackgroundSize(100, 100, true, true, true, true)
-            );
-            return new Background(backgroundImage);
-        }
-
-        LinearGradient gradient = new LinearGradient(
-                0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
-                new Stop(0, Color.web("#3a1f6b")),
-                new Stop(1, Color.web("#2a124f"))
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/img/mainmenu.png")).toExternalForm());
+        BackgroundImage backgroundImage = new BackgroundImage(
+                image,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(100, 100, true, true, true, true)
         );
-
-        return new Background(new BackgroundFill(gradient, CornerRadii.EMPTY, Insets.EMPTY));
+        return new Background(backgroundImage);
     }
 }

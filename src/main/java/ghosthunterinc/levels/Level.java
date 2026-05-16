@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.effect.ColorAdjust;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class Level extends Application {
     public ConfigReader config = new ConfigReader();
@@ -117,7 +118,7 @@ public abstract class Level extends Application {
         this.gameRoot = root;
         this.lastTokenSpawnTime = System.currentTimeMillis();
 
-        Image bgImage = new Image(getBackgroundImagePath());
+        Image bgImage = new Image(Objects.requireNonNull(getClass().getResource(getBackgroundImagePath())).toExternalForm());
         BackgroundImage bg = new BackgroundImage(
                 bgImage,
                 BackgroundRepeat.NO_REPEAT,
@@ -158,7 +159,8 @@ public abstract class Level extends Application {
 
         String[] overlays = getOverlayImagePaths();
         for (String path : overlays) {
-            ImageView iv = new ImageView(new Image(path, false));
+            String imageUrl = Objects.requireNonNull(getClass().getResource(path)).toExternalForm();
+            ImageView iv = new ImageView(new Image(imageUrl, false));
             root.getChildren().add(iv);
         }
 

@@ -11,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class TitleScreen extends Application {
 	private LogReader log = new LogReader();
 	private boolean isLog = log.readLog("log.txt");
@@ -130,7 +132,7 @@ public class TitleScreen extends Application {
 	}
 
 	private Background buildBackgroundImage() {
-		Image image = new Image("file:img/mainmenu.png");
+		Image image = new Image(Objects.requireNonNull(getClass().getResource("/img/mainmenu.png")).toExternalForm());
 		BackgroundImage backgroundImage = new BackgroundImage(
 				image,
 				BackgroundRepeat.NO_REPEAT,

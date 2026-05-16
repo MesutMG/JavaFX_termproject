@@ -1,2 +1,2 @@
-high_score: 0
-last_level: 1
+high_score: 160
+last_level: 3
