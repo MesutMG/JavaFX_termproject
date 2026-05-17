@@ -7,6 +7,7 @@ import ghosthunterinc.tokens.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -528,7 +529,11 @@ public abstract class Level extends Application {
 
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 Enemy e = enemies.get(i);
-                boolean collision = player.getTriangle().localToScene(player.getTriangle().getBoundsInLocal()).intersects(e.getBody().localToScene(e.getBody().getBoundsInLocal()));
+
+                Bounds enemyBoundsInScene = e.getBody().localToScene(e.getBody().getBoundsInLocal());
+                Bounds enemyBoundsInLocal = player.getTriangle().sceneToLocal(enemyBoundsInScene);
+                boolean collision = player.getTriangle().intersects(enemyBoundsInLocal);
+
                 e.getBody().setVisible(collision);
                 if (collision) {
                     e.getBody().setEffect(whiteTint);
