@@ -61,7 +61,7 @@ public abstract class Level extends Application {
     protected Rectangle pauseOverlay;
 
     public Level() {
-        whiteTint.setBrightness(1.0);
+        whiteTint.setSaturation(-1);
     }
 
     public abstract String getLevelTitle();
