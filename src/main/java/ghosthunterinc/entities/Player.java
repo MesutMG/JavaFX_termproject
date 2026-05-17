@@ -7,7 +7,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.Group;
 
 public class Player extends Entity {
-    private double  vacuumPerc;
     private double vacuum;
     private final double vacuumDecr;
     private final double vacuumIncr;
@@ -27,7 +26,6 @@ public class Player extends Entity {
         this.posY       = posY;
         this.score      = 0;
         this.isAlive    = true;
-        this.vacuumPerc = 100;
         this.maxVacuum  = config.maximum_vacuum;
         this.vacuum = this.maxVacuum;
         this.vacuumDecr = config.vacuum_decrease;
@@ -123,16 +121,6 @@ public class Player extends Entity {
     public double getVacuumHeight() { return vacuumHeight; }
 
     public void setVacuumHeight(double vacuumHeight) { this.vacuumHeight = vacuumHeight; }
-
-    public void setVacuumPerc(double vacuumPerc) {
-        if (vacuumPerc > 100) {
-            this.vacuumPerc = 100;
-        } else if (vacuumPerc < 0){
-            this.vacuumPerc = 0;
-        } else {
-            this.vacuumPerc = vacuumPerc;
-        }
-    }
 
     public double getVacuumPerc() {
         return ((this.vacuum / this.maxVacuum) * 100);

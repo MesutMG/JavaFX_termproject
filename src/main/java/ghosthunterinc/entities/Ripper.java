@@ -4,6 +4,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.Group;
+import ghosthunterinc.ConfigReader;
 
 public class Ripper extends Enemy {
     private Circle  circleFace;
@@ -13,12 +14,12 @@ public class Ripper extends Enemy {
     private Polygon triangle1;
     private Polygon triangle2;
 
-    public Ripper(double posX, double posY) {
+    public Ripper(double posX, double posY, ConfigReader config) {
         super(posX, posY);
-        super.attackDamage = 3;
         this.maxHealth = 150;
         this.health = this.maxHealth;
         this.score = 20;
+        super.attackDamage = (0.10) * config.entity_damage;
 
         Circle circleFace = new Circle(20, Color.BLACK);
         circleFace.setCenterX(0);

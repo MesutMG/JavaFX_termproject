@@ -1,3 +1,8 @@
+/*
+Entity class has the subclasses Enemy and Player.
+it has the basic values every entity has.
+ */
+
 package ghosthunterinc.entities;
 
 import javafx.scene.Group;
@@ -32,6 +37,7 @@ public abstract class Entity {
     public int getScore() { return score; }
     public void setScore(int score) { this.score = score; }
 
+    //current health
     public double getHealth() { return this.health; }
     public void setHealth(double health) {
         this.health = Math.max(0, health);
@@ -60,5 +66,6 @@ public abstract class Entity {
     public boolean isAlive() { return isAlive; }
     public void setAlive(boolean alive) { this.isAlive = alive; }
 
+    //group is used for grouping the geometric shapes
     public Group getGroup() { return group; }
 }

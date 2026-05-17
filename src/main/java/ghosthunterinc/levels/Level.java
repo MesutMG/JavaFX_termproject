@@ -448,13 +448,13 @@ public abstract class Level extends Application {
 
     protected void spawnEnemies(int n, int m, int k) {
         for (int i = 0; i < n; i++) {
-            enemies.add(new Ghost(randomX(), randomY()));
+            enemies.add(new Ghost(randomX(), randomY(), config));
         }
         for (int i = 0; i < m; i++) {
-            enemies.add(new Ripper(randomX(), randomY()));
+            enemies.add(new Ripper(randomX(), randomY(), config));
         }
         for (int i = 0; i < k; i++) {
-            enemies.add(new Wisp(randomX(), randomY()));
+            enemies.add(new Wisp(randomX(), randomY(), config));
         }
     }
 
@@ -513,8 +513,8 @@ public abstract class Level extends Application {
 
     private void handleVacuum() {
         if (vacuumState) {
-            if (player.getVacuumPerc() <= 0) {
-                player.setVacuumPerc(0);
+            if (player.getVacuum() <= 0) {
+                player.setVacuum(0);
                 vBar.setBarPercentage(0);
                 player.getTriangle().setOpacity(0);
                 for (Enemy e : enemies) {

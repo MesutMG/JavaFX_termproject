@@ -1,5 +1,6 @@
 package ghosthunterinc.entities;
 
+import ghosthunterinc.ConfigReader;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -12,12 +13,12 @@ public class Wisp extends Enemy {
     private Line[]  rays;
     private Group raysGroup;
 
-    public Wisp(double posX, double posY) {
+    public Wisp(double posX, double posY, ConfigReader config) {
         super(posX, posY);
-        super.attackDamage = 5;
         this.maxHealth = 200;
         this.health = this.maxHealth;
         this.score = 30;
+        super.attackDamage = (0.15) * config.entity_damage;
 
         circleFace = new Circle(20, Color.RED);
         circleFace.setCenterX(0);

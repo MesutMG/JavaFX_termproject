@@ -4,6 +4,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Group;
+import ghosthunterinc.ConfigReader;
 
 public class Ghost extends Enemy {
     private Circle  circle;
@@ -14,12 +15,12 @@ public class Ghost extends Enemy {
     private Rectangle rectangle;
     private final int CIRCLE_RADIUS = 15;
 
-    public Ghost(double posX, double posY) {
+    public Ghost(double posX, double posY, ConfigReader config) {
         super(posX, posY);
         this.maxHealth = 100;
         this.health = this.maxHealth;
         this.score = 10;
-        this.attackDamage = 0.5;
+        this.attackDamage = (0.05) * config.entity_damage;
 
         Circle circle = new Circle(CIRCLE_RADIUS, Color.WHITE);
         circle.setCenterX(0);

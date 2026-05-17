@@ -1,3 +1,8 @@
+/*
+Enemy class has the subclasses Ghost, Ripper and Wisp and is a subclass of Entity.
+it has a random angle and speed constructor
+ */
+
 package ghosthunterinc.entities;
 
 import javafx.scene.Group;
@@ -5,6 +10,8 @@ import javafx.scene.Group;
 public abstract class Enemy extends Entity {
     public Enemy(double posX, double posY) {
         super(posX, posY);
+
+        //random angle and speed so that the enemies can go in random directions
         this.angle = Math.random() * Math.PI * 2;
         this.speed = Math.random() * 2 + 0.2 ;
     }
@@ -27,6 +34,8 @@ public abstract class Enemy extends Entity {
     @Override
     public void setHealth(double health) {
         super.setHealth(health);
+
+        //health scale used for size
         double scale = this.health / this.maxHealth;
         
         if (this.group != null) {
@@ -34,6 +43,7 @@ public abstract class Enemy extends Entity {
             this.group.setScaleY(scale);
         }
 
+        //if enemy is small enough, it dies
         if (this.health <= 30) { //30%
             this.health = 0;
             this.isAlive = false;
