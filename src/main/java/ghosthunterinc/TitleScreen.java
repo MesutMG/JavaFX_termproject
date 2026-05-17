@@ -47,11 +47,11 @@ public class TitleScreen extends Application {
 		VBox menu = new VBox(18);
 		menu.setAlignment(Pos.CENTER);
 
-		loadGameButton.setPrefWidth(200);
-		startGameButton.setPrefWidth(200);
-		selectLevelButton.setPrefWidth(200);
-		editConfigButton.setPrefWidth(200);
-		exitButton.setPrefWidth(200);
+		loadGameButton.setPrefWidth(300);
+		startGameButton.setPrefWidth(300);
+		selectLevelButton.setPrefWidth(300);
+		editConfigButton.setPrefWidth(300);
+		exitButton.setPrefWidth(300);
 
 		loadGameButton.setPrefHeight(64);
 		startGameButton.setPrefHeight(64);
@@ -125,6 +125,7 @@ public class TitleScreen extends Application {
 				"-fx-text-fill: white;" +
 				"-fx-font-size: 26px;" +
 				"-fx-font-weight: 800;" +
+				"-fx-font-family: 'Chalkduster';" +
 				"-fx-letter-spacing: 2px;" +
 				"-fx-background-radius: 6;" +
 				"-fx-border-radius: 6;"

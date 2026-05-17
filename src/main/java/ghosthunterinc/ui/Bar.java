@@ -27,8 +27,9 @@ public class Bar{
         this.barLabel = new Label(labelText);
         barLabel.setStyle(
                 "-fx-text-fill: white;" +
-                "-fx-font-size: 20px;" +
+                "-fx-font-size: 24px;" +
                 "-fx-font-weight: 800;" +
+                "-fx-font-family: 'Chalkduster';" +
                 "-fx-letter-spacing: 1px;"
         );
 

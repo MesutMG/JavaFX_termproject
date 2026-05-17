@@ -40,10 +40,10 @@ public class SelectLevel extends Application {
         VBox menu = new VBox(18);
         menu.setAlignment(Pos.CENTER);
 
-        levelOneButton.setPrefWidth(240);
-        levelTwoButton.setPrefWidth(240);
-        levelThreeButton.setPrefWidth(240);
-        backButton.setPrefWidth(240);
+        levelOneButton.setPrefWidth(300);
+        levelTwoButton.setPrefWidth(300);
+        levelThreeButton.setPrefWidth(300);
+        backButton.setPrefWidth(300);
         levelOneButton.setPrefHeight(60);
         levelTwoButton.setPrefHeight(60);
         levelThreeButton.setPrefHeight(60);
@@ -96,6 +96,7 @@ public class SelectLevel extends Application {
                         "-fx-text-fill: white;" +
                         "-fx-font-size: 24px;" +
                         "-fx-font-weight: 800;" +
+                        "-fx-font-family: 'Chalkduster';" +
                         "-fx-letter-spacing: 2px;" +
                         "-fx-background-radius: 6;" +
                         "-fx-border-radius: 6;"

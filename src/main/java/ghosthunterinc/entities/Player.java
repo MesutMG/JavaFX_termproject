@@ -46,7 +46,7 @@ public class Player extends Entity {
                 vacuumHeight, -vacuumWidth,
                 vacuumHeight, vacuumWidth
         );
-        triangle.setFill(Color.RED);
+        triangle.setFill(Color.PURPLE);
         triangle.setStroke(Color.WHITE);
         triangle.setOpacity(0);
         this.setTriangle(triangle);

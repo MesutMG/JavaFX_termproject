@@ -141,9 +141,9 @@ public abstract class Level extends Application {
         playableArea.setStrokeWidth(2);
 
         timeRemainingLabel = new Label(String.format("Time: %d:%02d", totalMinute, totalSecond));
-        timeRemainingLabel.setFont(Font.font(24));
+        timeRemainingLabel.setFont(Font.font("Chalkduster", 24));
         timeRemainingLabel.setStyle("-fx-text-fill: white; ");
-        scoreLabel.setFont(Font.font(24));
+        scoreLabel.setFont(Font.font("Chalkduster", 24));
         scoreLabel.setStyle("-fx-text-fill: white; ");
 
         VBox hudTop = new VBox(15);
@@ -241,7 +241,7 @@ public abstract class Level extends Application {
                 winBox.setLayoutY(DEFAULT_HEIGHT >> 2);
 
                 Label winLabel = new Label("You Won!");
-                winLabel.setFont(Font.font(72));
+                winLabel.setFont(Font.font("Chalkduster", 72));
                 winLabel.setTextFill(Color.GREEN);
 
                 Button nextLevelBtn;
@@ -267,7 +267,7 @@ public abstract class Level extends Application {
                         stage.setScene(nextScene);
                     });
                 }
-                nextLevelBtn.setPrefWidth(240);
+                nextLevelBtn.setPrefWidth(300);
                 nextLevelBtn.setPrefHeight(60);
                 applyButtonStyle(nextLevelBtn, false);
                 nextLevelBtn.setOnMouseEntered(e -> applyButtonStyle(nextLevelBtn, true));
@@ -301,18 +301,18 @@ public abstract class Level extends Application {
                 lostMenuBox.setLayoutY(DEFAULT_HEIGHT >> 2);
 
                 Label lostLabel = new Label("Game Over");
-                lostLabel.setFont(Font.font(72));
+                lostLabel.setFont(Font.font("Chalkduster", 72));
                 lostLabel.setTextFill(Color.RED);
 
                 Label lostLabel2 = new Label("Final Score: " + player.getScore());
-                lostLabel2.setFont(Font.font(48));
+                lostLabel2.setFont(Font.font("Chalkduster", 48));
                 lostLabel2.setTextFill(Color.RED);
 
                 HBox lostBtns = new HBox(20);
                 lostBtns.setAlignment(Pos.CENTER);
 
                 Button retryBtn = new Button("Try Again");
-                retryBtn.setPrefWidth(240);
+                retryBtn.setPrefWidth(300);
                 retryBtn.setPrefHeight(60);
                 applyButtonStyle(retryBtn, false);
                 retryBtn.setOnMouseEntered(e -> applyButtonStyle(retryBtn, true));
@@ -324,7 +324,7 @@ public abstract class Level extends Application {
                 });
 
                 Button mainMenuBtn = new Button("Main Menu");
-                mainMenuBtn.setPrefWidth(240);
+                mainMenuBtn.setPrefWidth(300);
                 mainMenuBtn.setPrefHeight(60);
                 applyButtonStyle(mainMenuBtn, false);
                 mainMenuBtn.setOnMouseEntered(e -> applyButtonStyle(mainMenuBtn, true));
@@ -370,11 +370,11 @@ public abstract class Level extends Application {
         pauseMenuBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7); -fx-background-radius: 15;");
 
         Label pauseLabel = new Label("PAUSED");
-        pauseLabel.setFont(Font.font(72));
+        pauseLabel.setFont(Font.font("Chalkduster", 72));
         pauseLabel.setTextFill(Color.WHITE);
 
         Button resumeBtn = new Button("Resume");
-        resumeBtn.setPrefWidth(240);
+        resumeBtn.setPrefWidth(300);
         resumeBtn.setPrefHeight(60);
         applyButtonStyle(resumeBtn, false);
         resumeBtn.setOnMouseEntered(e -> applyButtonStyle(resumeBtn, true));
@@ -382,7 +382,7 @@ public abstract class Level extends Application {
         resumeBtn.setOnAction(e -> togglePause());
 
         Button retryBtn = new Button("Restart");
-        retryBtn.setPrefWidth(240);
+        retryBtn.setPrefWidth(300);
         retryBtn.setPrefHeight(60);
         applyButtonStyle(retryBtn, false);
         retryBtn.setOnMouseEntered(e -> applyButtonStyle(retryBtn, true));
@@ -394,7 +394,7 @@ public abstract class Level extends Application {
         });
 
         Button mainMenuBtn = new Button("Main Menu");
-        mainMenuBtn.setPrefWidth(240);
+        mainMenuBtn.setPrefWidth(300);
         mainMenuBtn.setPrefHeight(60);
         applyButtonStyle(mainMenuBtn, false);
         mainMenuBtn.setOnMouseEntered(e -> applyButtonStyle(mainMenuBtn, true));
@@ -561,8 +561,10 @@ public abstract class Level extends Application {
     }
 
     private void handleHealth() {
+        boolean takingDamage = false;
         for (Enemy e : enemies) {
             if (player.getCircle().localToScene(player.getCircle().getBoundsInLocal()).intersects(e.getBody().localToScene(e.getBody().getBoundsInLocal()))) {
+                takingDamage = true;
                 player.setHealth(player.getHealth() - e.getAttackDamage());
 
                 if (player.getHealth() <= 0) {
@@ -571,6 +573,12 @@ public abstract class Level extends Application {
                 }
                 hBar.setBarPercentage(player.getHealthPerc());
             }
+        }
+        
+        if (takingDamage) {
+            player.getCircle().setFill(Color.RED);
+        } else {
+            player.getCircle().setFill(Color.ORANGE);
         }
     }
 
@@ -597,20 +605,24 @@ public abstract class Level extends Application {
         // Spawn a new random token every 5 seconds
         if (currentTime - lastTokenSpawnTime >= 5000) {
             lastTokenSpawnTime = currentTime;
-            double x = (Math.random() * (playAreaW - 40)) + playAreaX + 20;
-            double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
+            
+            // Only generate a new token if there are less than 2 tokens currently on the map
+            if (tokens.size() < 2) {
+                double x = (Math.random() * (playAreaW - 40)) + playAreaX + 20;
+                double y = (Math.random() * (playAreaH - 40)) + playAreaY + 20;
 
-            int type = (int) (Math.random() * 5);
-            Token token = switch (type) {
-                case 0 -> new HealthToken(x, y);
-                case 1 -> new RangeToken(x, y);
-                case 2 -> new VacuumBoost(x, y);
-                case 3 -> new VacuumPower(x, y);
-                default -> new EyeToken(x, y);
-            };
+                int type = (int) (Math.random() * 5);
+                Token token = switch (type) {
+                    case 0 -> new HealthToken(x, y);
+                    case 1 -> new RangeToken(x, y);
+                    case 2 -> new VacuumBoost(x, y);
+                    case 3 -> new VacuumPower(x, y);
+                    default -> new EyeToken(x, y);
+                };
 
-            tokens.add(token);
-            gameRoot.getChildren().add(token.getBody());
+                tokens.add(token);
+                gameRoot.getChildren().add(token.getBody());
+            }
         }
 
         // Check collision with player and collect tokens
@@ -653,6 +665,7 @@ public abstract class Level extends Application {
                 "-fx-text-fill: white;" +
                 "-fx-font-size: 26px;" +
                 "-fx-font-weight: 800;" +
+                "-fx-font-family: 'Chalkduster';" +
                 "-fx-letter-spacing: 2px;" +
                 "-fx-background-radius: 6;" +
                 "-fx-border-radius: 6;" +
